@@ -1,0 +1,39 @@
+mask 			value			pointer
+F8008000		F0000000		-8	(Data processing:immediate)
+EE000000		EA000000		-13	(Data processing; no immedeiate)
+FE000000		F8000000		-21	(Load & Store single data item)
+FE400000		E8400000		-31	(Load & Store Double and Exclusive)
+FE400000		E8000000		-34	(Load & Store Multiple)
+F8008000		F0008000		-36	(Branches & miscellaneous control)
+EF000000		EF000000		-44	(Coprocessor)
+00000000		00000000		ErrorHandler
+FA000000		F0000000		Function_Point (data_pro_modified_12m)
+FB400000		F2000000		Fucntion_Point (data_pro_add_12m)
+FB400000		F2400000		Function_Point (data_pro_mov_16m)
+FB100000		F3000000		Function_Point (data_pro_bitoperation)
+FB100000		F3100000		Function_Point (data_pro_reserved)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Todo List
+1) add to the Translator Table
+2) add a head file
+3) add Makefile
+
+
