@@ -67,30 +67,43 @@ void cle_flag_v(){
 }
 void cle_flag_q(){
 	registers[REG_SIZE]&=(~REG_Q);
-
 }
 
 int get_flag_n(){
-	return state_register.n;
+	int n = registers[REG_SIZE];
+	n&=REG_N;
+	return n;
 }
 
 int get_flag_z(){
-	return state_register.z;
+	int n = registers[REG_SIZE];
+	n&=REG_Z;
+	return n;
 }
 
 
 int get_flag_c(){
-	return state_register.c;
+	int n = registers[REG_SIZE];
+	n&=REG_C;
+	return n;
+
+
 }
 
 
 int get_flag_v(){
-	return state_register.v;
+	int n = registers[REG_SIZE];
+	n&=REG_V;
+	return n;
+
 }
 
 
 int get_flag_q(){
-	return state_register.q;
+	int n = registers[REG_SIZE];
+	n&=REG_Q;
+	return n;
+
 }
 
 
