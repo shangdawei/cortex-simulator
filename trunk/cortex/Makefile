@@ -1,5 +1,5 @@
-decode:main.o fetch.o decode.o data_process_imm.o miscellaneous.o immediate_decode.o register.o
-	gcc -o decode main.o fetch.o decode.o data_process_imm.o miscellaneous.o immediate_decode.o register.o
+decode:main.o fetch.o decode.o data_process_imm.o miscellaneous.o immediate_decode.o register.o memory.o
+	gcc -o decode main.o fetch.o decode.o data_process_imm.o miscellaneous.o immediate_decode.o register.o memory.o
 main.o:main.c fetch.h decode.h 
 	gcc -c main.c
 fetch.o:fetch.c fetch.h
@@ -14,3 +14,5 @@ immediate_decode.o:immediate_decode.c instruction.h
 	gcc -c immediate_decode.c
 register.o:register.c register.h
 	gcc -c register.c
+memory.o:memory.c memory.h
+	gcc -c memory.c
