@@ -2,6 +2,7 @@
 #define _INSTRUCTION
 #include <stdio.h>
 #include "register.h"
+#include "memory.h"
 #include <string.h>
 
 /**
