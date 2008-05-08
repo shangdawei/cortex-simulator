@@ -21,13 +21,13 @@ typedef void (*func_ptr)(int);
 
 TranslateTable table[MAXSIZE] = {
 	//*************************************************************************************************
-          {0xF8008000,0xF0000000,(void *)table+8*4},	//go to entry 8,  which is to define Data Processing :immediate
-          {0xEE000000,0xEA000000,(void *)table+13*4},   //go to entry 13, which is to define Data Processing :no immdiate
-          {0xFE000000,0xF8000000,(void *)table+21*4},	//go to entry 21, which is to define Load & Store signle data item 
-          {0xEF400000,0xE8400000,(void *)table+31*4},	//go to entry 31, which is to define Load & Store Double and Exclusive
-          {0xEF400000,0xE8000000,(void *)table+34*4},	//go to entry 34, which is to define Load & Store Multible
-          {0xF8008000,0xF0008000,(void *)table+36*4},	//go to entry 36, which is to define Brnaches, Miscellaneous control
-          {0xEF000000,0xF0000000,(void *)table+44*4},	//go to entry 44, which is to define Coprocessor
+          {0xF8008000,0xF0000000,(unsigned char *)table+8*4},	//go to entry 8,  which is to define Data Processing :immediate
+          {0xEE000000,0xEA000000,(unsigned char *)table+13*4},   //go to entry 13, which is to define Data Processing :no immdiate
+          {0xFE000000,0xF8000000,(unsigned char *)table+21*4},	//go to entry 21, which is to define Load & Store signle data item 
+          {0xEF400000,0xE8400000,(unsigned char *)table+31*4},	//go to entry 31, which is to define Load & Store Double and Exclusive
+          {0xEF400000,0xE8000000,(unsigned char *)table+34*4},	//go to entry 34, which is to define Load & Store Multible
+          {0xF8008000,0xF0008000,(unsigned char *)table+36*4},	//go to entry 36, which is to define Brnaches, Miscellaneous control
+          {0xEF000000,0xF0000000,(unsigned char *)table+44*4},	//go to entry 44, which is to define Coprocessor
 	      //these 7 entries is to define the 7 types in the Thumb-2 Instruction Architectur, which is on the Page 74
          
 		 {0xFA000000,0xF0000000,(void *)error_message}, //no entries is matched, go the function to handle error; 
