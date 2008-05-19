@@ -72,7 +72,7 @@ int ThumbExpandImm12(int i1,int i3,int i8){
                         }
        imm32 = n;
                  } 
-   //printf(" imm32 = %x",imm32);
+   printf(" imm32 = %x",imm32);
    return imm32;  //didn't consider C
 }
 #endif

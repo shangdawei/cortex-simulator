@@ -35,6 +35,7 @@ int get_lp(){
 
 void set_flag_n(){
 	registers[$APSR]|=REG_N;
+	printf("mmmm %X",registers[$APSR]);
 }
 void set_flag_z(){
 	registers[$APSR]|=REG_Z;
