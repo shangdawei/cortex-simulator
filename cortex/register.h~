@@ -28,20 +28,23 @@
 
 //static int registers[REG_SIZE]={0};
 
-void set_general_register(int Rn, int value);
-int get_general_register();
+void set_general_register(int rn, int value);
+int get_general_register(int rn);
 void set_pc(int value);
 int get_pc();
 void set_sp(int value);
 int get_sp();
-void set_lp(int value);
-int get_lp();
+void set_lr(int value);
+int get_lr();
+void set_apsr(int value);
+int get_apsr();
 
 void set_flag_n();
 void set_flag_z();
 void set_flag_c();
 void set_flag_v();
 void set_flag_q();
+void set_carry(int value);
 
 void cle_flag_n();
 void cle_flag_z();
@@ -54,6 +57,7 @@ int get_flag_z();
 int get_flag_c();
 int get_flag_v();
 int get_flag_q();
+int get_carry();
 
 
 #endif

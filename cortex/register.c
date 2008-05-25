@@ -1,7 +1,9 @@
 #include "register.h"
 #include "stdio.h"
 static int registers[REG_SIZE]={0};
-
+static int imm_carry = 0;//ImmExpand will product it. it is a template
+static int calculate_carry = 0;//It is a template carry
+static int calculate_overflow = 0;// It is a template overflow
 
 void set_general_register(int rn, int value){
 	registers[rn]=value;
@@ -23,14 +25,30 @@ void set_sp(int value){
 }
 
 int get_sp(){
-	registers[$SP];
+	return registers[$SP];
 }
-void set_lp(int value){
+void set_lr(int value){
 	registers[$LR]=value;
 } 
 
-int get_lp(){
-	registers[$LR];
+int get_lr(){
+	return registers[$LR];
+}
+
+void set_apsr(int value){
+	registers[$APSR]=value;
+}
+
+int get_apsr(){
+	return registers[$APSR];
+}
+
+void set_carry(int value){
+   imm_carry = value;
+}
+
+int get_carry(){
+   return imm_carry;
 }
 
 void set_flag_n(){
@@ -48,7 +66,13 @@ void set_flag_v(){
 void set_flag_q(){
 	registers[$APSR]|=REG_Q;
 }
- 
+void set_calculate_carry(){
+	calculate_carry = 1;
+}
+void set_calculate_overflow(){
+	calculate_overflow = 1;
+}
+
 void cle_flag_n(){
 	registers[$APSR]&=(~REG_N);
 
@@ -67,6 +91,12 @@ void cle_flag_v(){
 }
 void cle_flag_q(){
 	registers[$APSR]&=(~REG_Q);
+}
+void cle_calculate_carry(){
+	calculate_carry = 0;
+}
+void cle_calculate_overflow(){
+	calculate_overflow = 0;
 }
 
 int get_flag_n(){
@@ -107,5 +137,13 @@ int get_flag_q(){
 }
 
 
+int get_calculate_carry(){
+	return calculate_carry;
+}
+
+
+int get_calculate_overflow(){
+	return calculate_overflow;
+}
 
 
