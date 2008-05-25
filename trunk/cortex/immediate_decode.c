@@ -1,8 +1,8 @@
 #ifndef _IMMEDIATEDECODE
 #define _IMMEDIATEDECODE
-#include "immediate_decode.h"
 #include "instruction.h"
 #include "stdio.h"
+//#include "register.h"
 int decode_imm12(int i1,int i3,int i8){
 	int i = (i1<<11)+(i3<<8)+i8;
 	return i;
@@ -29,8 +29,10 @@ struct IMM12{
   unsigned seg4 :20;
 }imm12;
 
-int ThumbExpandImm12(int i1,int i3,int i8){
+//immediate expand with Carry
+int ThumbExpandImm12WithC(int i1,int i3,int i8){
    int imm32;
+   int temp;
    int i = decode_imm12(i1,i3,i8);
    *((int *)(&imm12)) = i;
    if(imm12.seg3==0)
@@ -55,24 +57,23 @@ int ThumbExpandImm12(int i1,int i3,int i8){
               imm32 = (imm12.seg1<<24)+(imm12.seg1<<16)+(imm12.seg1<<8)+imm12.seg1;
            }break;
                         }
+      temp = get_flag_c();
+      set_carry(temp);
                 } 
    else
-      {int m = ((i & 0x00000F80) >> 7);
+		{int m = ((i & 0x00000F80) >> 7);
        //printf(" m = %x",m);
-       int n = ((i & 0x000000FF)|0x00000080);
+		int n = ((i & 0x000000FF)|0x00000080);
        //printf(" n = %x",n);
-       int j;
-       for(;m > 0;m--)
-         {if((n & 0x00000001)==1)
-            {j = n >> 1;
-             n = j|0x80000000;}
-          else
-            {j = n >> 1;
-             n = j&0x7FFFFFFF;}
-                        }
-       imm32 = n;
-                 } 
+		imm32 = ror_c(n,m);
+		} 
    //printf(" imm32 = %x",imm32);
-   return imm32;  //didn't consider C
+	return imm32;
+}
+
+//immediate expand with Carry
+int ThumbExpandImm12(int i1,int i3,int i8){
+   int imm32 = ThumbExpandImm12WithC(i1,i3,i8);
+   return imm32;
 }
 #endif

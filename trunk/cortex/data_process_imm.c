@@ -7,10 +7,9 @@
  */
 #ifndef _DATAPROCESSIMM
 #define _DATAPROCESSIMM
-#include <stdio.h>
+#include "stdio.h"
 #include "instruction.h"
-#include "register.h"
-#include "immediate_decode.h"
+//#include "register.h"
 /**
  *
  *To define the struct to handle the instruction
@@ -190,68 +189,293 @@ void logical_add(){
 }
 
 
-
-void add_with_carry(){
+//Add with Carry (immediate) adds an immediate value and the carry flag value to a register value, and writes the result to the destination register. 
+void add_with_carry(int i){
+	*((int *)(&dataProModified)) = i;
+	int imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);//immediate expand without imm_carry
+	//printf(" imm = %X",imm);
+   int source = get_general_register(dataProModified.rn);//get data from source register
+	//printf(" source = %X",source);
+	unsigned apsr_c = get_flag_c();
+	//printf(" apsr_c = %X",apsr_c);
+	apsr_c = apsr_c >> 29;
+	int result = addwithcarry(source,imm,apsr_c);
+	set_general_register(dataProModified.rd, result);//send data to destination register
+	if(dataProModified.s==1){
+		if(result & 0x80000000)//whether negative
+			set_flag_n();
+		else
+			cle_flag_n();
+		if(result==0)//whether zero
+			set_flag_z();
+			//printf(" kkkkk ");}
+		else
+			cle_flag_z();
+			//printf(" kkkkk ");}
+		if(get_calculate_carry())//whether carry
+			set_flag_c();
+		else
+			cle_flag_c();
+		if(get_calculate_overflow())//whether overflow
+			set_flag_v();
+		else
+			cle_flag_v();
+	}
+   printf(" APSR = %X",get_apsr());
+   printf(" rd = %X",get_general_register(dataProModified.rd));
 	printf("	***add with carry\n");	
 	printf("********ADC{s}<c><q>	{<Rd>,} <Rn>, #<const>******* \n");
-	
+
+}
+
+//This instruction adds an immediate value to a register value, and writes the result to the destination register.
+void add(int i){
+	*((int *)(&dataProModified)) = i;
+	int imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+   int source = get_general_register(dataProModified.rn);
+	int result = addwithcarry(source,imm,0);
+	set_general_register(dataProModified.rd, result);
+	if(dataProModified.s==1){
+		if(result & 0x80000000)
+			set_flag_n();
+		else
+			cle_flag_n();
+		if(result==0)
+			set_flag_z();
+			//printf(" kkkkk ");}
+		else
+			cle_flag_z();
+			//printf(" kkkkk ");}
+		if(get_calculate_carry())
+			set_flag_c();
+		else
+			cle_flag_c();
+		if(get_calculate_overflow())
+			set_flag_v();
+		else
+			cle_flag_v();
 	}
-void add(){
-		printf("	***add\n");	
+   printf(" APSR = %X",get_apsr());
+   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf("	***add\n");	
 
 }
-void logical_and(){
-		printf("	***logical and\n");	
+
+//This instruction performs a bitwise AND of a register value and an immediate value, and writes the result to the destination register.
+void logical_and(int i){
+	*((int *)(&dataProModified)) = i;
+	int imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+   int source = get_general_register(dataProModified.rn);
+	int result = source & imm;
+	//int a = result & 0x80000000;
+	//printf(" a = %x",a);
+	set_general_register(dataProModified.rd, result);
+	//printf(" a = %x",result);
+	if(dataProModified.s==1){
+		if(result & 0x80000000)
+			set_flag_n();
+		else
+			cle_flag_n();
+		if(result==0)
+			set_flag_z();
+		else
+			cle_flag_z();
+		if(get_carry()==0)
+			cle_flag_c();
+		else
+			set_flag_c();
+	}
+   printf(" APSR = %X",get_apsr());
+   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf("	***logical and\n");	
 
 }
-void bit_clear(){
-		printf("	***bit_clear\n");	
+
+//Bit Clear (immediate) performs a bitwise AND of a register value and the complement of an immediate value, and writes the result to the destination register. 
+void bit_clear(int i){
+	*((int *)(&dataProModified)) = i;
+	int imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+   int source = get_general_register(dataProModified.rn);
+	int result = source & (~imm);
+	//int a = result & 0x80000000;
+	//printf(" a = %x",a);
+	set_general_register(dataProModified.rd, result);
+	//printf(" a = %x",result);
+	if(dataProModified.s==1){
+		if(result & 0x80000000)
+			set_flag_n();
+		else
+			cle_flag_n();
+		if(result==0)
+			set_flag_z();
+		else
+			cle_flag_z();
+		if(get_carry()==0)
+			cle_flag_c();
+		else
+			set_flag_c();
+	}
+   printf(" APSR = %X",get_apsr());
+   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf("	***bit_clear\n");	
 
 }
-void compare_negative(){
-		printf("	***compare_negative\n");	
+
+//Compare Negative (immediate) adds a register value and an immediate value. It updates the condition flags based on the result, and discards the result.
+void compare_negative(int i){
+	*((int *)(&dataProModified)) = i;
+	int imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+   int source = get_general_register(dataProModified.rn);
+	int result = addwithcarry(source,imm,0);
+	if(result & 0x80000000)
+		set_flag_n();
+	else
+		cle_flag_n();
+	if(result==0)
+		set_flag_z();
+	else
+		cle_flag_z();
+	if(get_calculate_carry())
+		set_flag_c();
+	else
+		cle_flag_c();
+	if(get_calculate_overflow())
+		set_flag_v();
+	else
+		cle_flag_v();
+   printf(" APSR = %X",get_apsr());
+   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf("	***compare_negative\n");	
 
 }
-void compare(){
-		printf("	***compare\n");	
+
+//Compare (immediate) subtracts an immediate value from a register value. It updates the condition flags based on the result, and discards the result.
+void compare(int i){
+	*((int *)(&dataProModified)) = i;
+	int imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+   int source = get_general_register(dataProModified.rn);
+	int result = addwithcarry(source,~imm,1);
+	if(result & 0x80000000)
+		set_flag_n();
+	else
+		cle_flag_n();
+	if(result==0)
+		set_flag_z();
+	else
+		cle_flag_z();
+	if(get_calculate_carry())
+		set_flag_c();
+	else
+		cle_flag_c();
+	if(get_calculate_overflow())
+		set_flag_v();
+	else
+		cle_flag_v();
+   printf(" APSR = %X",get_apsr());
+   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf("	***compare\n");	
 
 }
-void exclusive_or(){
-		printf("	***exclusive or\n");	
+
+//Exclusive OR (immediate) performs a bitwise Exclusive OR of a register value and an immediate value, and writes the result to the destination register. 
+void exclusive_or(int i){
+	*((int *)(&dataProModified)) = i;
+	int imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+   int source = get_general_register(dataProModified.rn);
+	int result = source ^ imm;
+	//int a = result & 0x80000000;
+	//printf(" a = %x",a);
+	set_general_register(dataProModified.rd, result);
+	//printf(" a = %x",result);
+	if(dataProModified.s==1){
+		if(result & 0x80000000) //it's a problem.
+			set_flag_n();
+		else
+			cle_flag_n();
+		if(result==0)
+			set_flag_z();
+		else
+			cle_flag_z();
+		if(get_carry()==0)
+			cle_flag_c();
+		else
+			set_flag_c();
+	}
+   printf(" APSR = %X",get_apsr());
+   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf("	***exclusive or\n");	
 
 }
-void move(){
-		printf("	***move\n");	
+
+//Move (immediate) writes an immediate value to the destination register. 
+void move(int i){
+	*((int *)(&dataProModified)) = i;
+	int imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+	int result = imm;
+	set_general_register(dataProModified.rd, result);
+	if(dataProModified.s==1){
+		if(result & 0x80000000) //it's a problem.
+			set_flag_n();
+			//printf(" kkkk");}
+		else
+			cle_flag_n();
+			//printf(" rrrr");}
+		if(result==0)
+			set_flag_z();
+		else
+			cle_flag_z();
+		if(get_carry()==0)
+			cle_flag_c();
+		else
+			set_flag_c();
+	}
+   printf(" APSR = %X",get_apsr());
+   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf("	***move\n");	
 
 }
+
+//Move Negative (immediate) writes the logical ones complement of an immediate value to the destination register. 
 void move_negative(int i){
-   *((int *)(&dataProModified)) = i;
-   int imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-   int result = ~imm;
-   set_general_register(dataProModified.rd, result);
-   if(dataProModified.s==1)
-     {if(result&0x80000000==0x80000000)
-        set_flag_n();
-      else
-        cle_flag_n();
-      if(result==0)
-        set_flag_z();
-      else
-        cle_flag_z();
-              }
-   printf(" APSR = %X",get_flag_n());
+	*((int *)(&dataProModified)) = i;
+	int imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+	//printf(" imm = %x",imm);
+	int result = ~imm;
+	//int a = result & 0x80000000;
+	//printf(" a = %x",a);
+	set_general_register(dataProModified.rd, result);
+	//printf(" a = %x",result);
+	if(dataProModified.s==1){
+		if(result & 0x80000000) //it's a problem.
+			set_flag_n();
+			//printf(" kkkk");}
+		else
+			cle_flag_n();
+			//printf(" kkkk");}
+		if(result==0)
+			set_flag_z();
+		else
+			cle_flag_z();
+		if(get_carry()==0)
+			cle_flag_c();
+		else
+			set_flag_c();
+	}
+   printf(" APSR = %X",get_apsr());
    printf(" rd = %X",get_general_register(dataProModified.rd));
    printf("	***move negative\n");	
 
 }
+
+//Logical OR NOT (immediate) performs a bitwise (inclusive) OR of a register value and the complement of an immediate value, and writes the result to the destination register.
 void logical_or_not(int i){
    *((int *)(&dataProModified)) = i;
-   int imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+   int imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
    int source = get_general_register(dataProModified.rn);
    int result = source|(~imm);
    set_general_register(dataProModified.rd, result);
    if(dataProModified.s==1)
-     {if(result&0x80000000==0x80000000)
+     {if(result & 0x80000000)
         set_flag_n();
       else
         cle_flag_n();
@@ -259,20 +483,26 @@ void logical_or_not(int i){
         set_flag_z();
       else
         cle_flag_z();
+		if(get_carry()==0)
+			cle_flag_c();
+		else
+			set_flag_c();
               }
-   printf(" APSR = %X",get_flag_n());
+   printf(" APSR = %X",get_apsr());
    printf(" rd = %X",get_general_register(dataProModified.rd));
 	printf("	***logical or not\n");	
 
 }
+
+//Logical OR (immediate) performs a bitwise (inclusive) OR of a register value and an immediate value, and writes the result to the destination register. 
 void logical_or(int i){
    *((int *)(&dataProModified)) = i;
-   int imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+   int imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
    int source = get_general_register(dataProModified.rn);
    int result = source|imm;
    set_general_register(dataProModified.rd, result);
    if(dataProModified.s==1)
-     {if(result&0x80000000==0x80000000)
+     {if(result & 0x80000000)
         set_flag_n();
       else
         cle_flag_n();
@@ -280,30 +510,121 @@ void logical_or(int i){
         set_flag_z();
       else
         cle_flag_z();
+		if(get_carry()==0)
+			cle_flag_c();
+		else
+			set_flag_c();
               }
-   printf(" APSR = %X",get_flag_n());
+   printf(" APSR = %X",get_apsr());
    printf(" rd = %X",get_general_register(dataProModified.rd));
 	printf("	***logical or\n");	
 
 }
-void reverse_subtract(){
-		printf("	***reverse subtract\n");	
+
+//Reverse Subtract (immediate) subtracts a register value from an immediate value, and writes the result to the destination register. 
+void reverse_subtract(int i){
+	*((int *)(&dataProModified)) = i;
+	int imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+   int source = get_general_register(dataProModified.rn);
+	int result = addwithcarry(~source,imm,1);
+	set_general_register(dataProModified.rd, result);
+	if(dataProModified.s==1){
+		if(result & 0x80000000)
+			set_flag_n();
+		else
+			cle_flag_n();
+		if(result==0)
+			set_flag_z();
+			//printf(" kkkkk ");}
+		else
+			cle_flag_z();
+			//printf(" kkkkk ");}
+		if(get_calculate_carry())
+			set_flag_c();
+		else
+			cle_flag_c();
+		if(get_calculate_overflow())
+			set_flag_v();
+		else
+			cle_flag_v();
+	}
+   printf(" APSR = %X",get_apsr());
+   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf("	***reverse subtract\n");	
 
 }
-void subtract_with_carry(){
-		printf("	***subtract with carry \n");	
+
+//Subtract with Carry (immediate) subtracts an immediate value and the value of NOT(Carry flag) from a register value, and writes the result to the destination register. 
+void subtract_with_carry(int i){
+	*((int *)(&dataProModified)) = i;
+	int imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+   int source = get_general_register(dataProModified.rn);
+	unsigned apsr_c = get_flag_c();
+	apsr_c = apsr_c >> 29;
+	int result = addwithcarry(source,~imm,apsr_c);
+	set_general_register(dataProModified.rd, result);
+	if(dataProModified.s==1){
+		if(result & 0x80000000)
+			set_flag_n();
+		else
+			cle_flag_n();
+		if(result==0)
+			set_flag_z();
+		else
+			cle_flag_z();
+		if(get_calculate_carry())
+			set_flag_c();
+		else
+			cle_flag_c();
+		if(get_calculate_overflow())
+			set_flag_v();
+		else
+			cle_flag_v();
+	}
+   printf(" APSR = %X",get_apsr());
+   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf("	***subtract with carry \n");	
 
 }
-void subtract(){
-		printf("	***subtract\n");	
+
+//This instruction subtracts an immediate value from a register value, and writes the result to the destination register. 
+void subtract(int i){
+	*((int *)(&dataProModified)) = i;
+	int imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+   int source = get_general_register(dataProModified.rn);
+	int result = addwithcarry(source,~imm,1);
+	set_general_register(dataProModified.rd, result);
+	if(dataProModified.s==1){
+		if(result & 0x80000000)
+			set_flag_n();
+		else
+			cle_flag_n();
+		if(result==0)
+			set_flag_z();
+		else
+			cle_flag_z();
+		if(get_calculate_carry())
+			set_flag_c();
+		else
+			cle_flag_c();
+		if(get_calculate_overflow())
+			set_flag_v();
+		else
+			cle_flag_v();
+	}
+   printf(" APSR = %X",get_apsr());
+   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf("	***subtract\n");	
 
 }
+
+//Test Equivalence (immediate) performs an exclusive OR operation on a register value and an immediate value. 
 void test_equal(int i){
    *((int *)(&dataProModified)) = i;
-   int imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+   int imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
    int source = get_general_register(dataProModified.rn);
    int result = source ^ imm;
-   if(result&0x80000000==0x80000000)
+   if(result & 0x80000000)
      set_flag_n();
    else
      cle_flag_n();
@@ -311,16 +632,22 @@ void test_equal(int i){
      set_flag_z();
    else
      cle_flag_z();
-   printf(" APSR = %X",get_flag_n());
+	if(get_carry()==0)
+		cle_flag_c();
+	else
+		set_flag_c();
+   printf(" APSR = %X",get_apsr());
 	printf("	***test equal\n");	
 
 }
+
+//Test (immediate) performs a logical AND operation on a register value and an immediate value.
 void test(int i){
    *((int *)(&dataProModified)) = i;
-   int imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+   int imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
    int source = get_general_register(dataProModified.rn);
    int result = source & imm;
-   if(result&0x80000000==0x80000000)
+   if(result & 0x80000000)
      set_flag_n();
    else
      cle_flag_n();
@@ -328,26 +655,13 @@ void test(int i){
      set_flag_z();
    else
      cle_flag_z();
-   printf(" APSR = %X",get_flag_n());
+	if(get_carry()==0)
+		cle_flag_c();
+	else
+		set_flag_c();
+   printf(" APSR = %X",get_apsr());
 	printf("	***test\n");	
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #endif

@@ -6,6 +6,20 @@
 #include <string.h>
 
 /**
+ *to handle the shift_rotate
+ *
+ */ 
+int lsl_c(int x,unsigned n);
+int lsr_c(int x,unsigned n);
+int lsl(int x,unsigned n);
+int lsr(int x,unsigned n);
+int ror_c(int x,unsigned n);
+/**
+ *to handle the calculate
+ *
+ */ 
+unsigned addwithcarry(unsigned m,unsigned n,unsigned carry_in);
+/**
  *to handle the immediate decode
  *
  */ 
@@ -13,6 +27,8 @@ int decode_imm12(int i1,int i3,int i8);
 int decode_imm16(int i1,int i4,int i3,int i8);
 int decode_bitOperation(int i3,int i2,int i5);
 int decode_shift(int i3,int i2);
+int ThumbExpandImm12WithC(int i1,int i3,int i8);
+int ThumbExpandImm12(int i1,int i3,int i8);
 /**
  *
  *to handle the error message
