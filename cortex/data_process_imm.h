@@ -10,13 +10,12 @@
 #include <stdio.h>
 #include "instruction.h"
 
-typedef void (*func)();
-
 /**
  *
- *To define the struct to handle the instruction
- *
+ *To define the table for execute for these instructions
  */ 
+typedef void (*func)(int);
+
 struct DATAPROMODIFIED{
 	unsigned imm8 :8;
 	unsigned rd   :4;
@@ -72,10 +71,7 @@ struct DATAPROBIT{
 	unsigned pass4	:8;
 }dataProBit;
 
-/**
- *
- *To define the table for execute for these instructions
- */ 
+
 
 void* data_pro_m[30]={
 	(void *)logical_and,
@@ -111,10 +107,4 @@ void* data_pro_m[30]={
 	(void *)opcode_error,
 	(void *)compare,//29
 	};
-
-
-
-
-
-
 #endif
