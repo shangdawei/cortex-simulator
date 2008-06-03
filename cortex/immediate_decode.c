@@ -8,7 +8,7 @@ int decode_imm12(int i1,int i3,int i8){
 	return i;
 }
 int decode_imm16(int i1,int i4,int i3,int i8){
-	int i =(i1<<15)+(i4<<11)+(i3<<8)+i8;
+	int i =(i4<<12)+(i1<<11)+(i3<<8)+i8;
 	return i;
 }
 
