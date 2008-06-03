@@ -74,37 +74,72 @@ struct DATAPROBIT{
 
 
 void* data_pro_m[30]={
-	(void *)logical_and,
-	(void *)bit_clear,
-	(void *)logical_or,
-	(void *)logical_or_not,
-	(void *)exclusive_or,//4
+	(void *)logical_and_imm,
+	(void *)bit_clear_imm,
+	(void *)logical_or_imm,
+	(void *)logical_or_not_imm,
+	(void *)exclusive_or_imm,//4
 	(void *)opcode_error,
 	(void *)opcode_error,
 	(void *)opcode_error,
 
-	(void *)add, //8
+	(void *)add_imm, //8
 	(void *)opcode_error,
-	(void *)add_with_carry,//10
-	(void *)subtract_with_carry,//11
+	(void *)add_with_carry_imm,//10
+	(void *)subtract_with_carry_imm,//11
 	(void *)opcode_error,
-	(void *)subtract,
-	(void *)reverse_subtract,//14
+	(void *)subtract_imm,
+	(void *)reverse_subtract_imm,//14
 	(void *)opcode_error,
-	(void *)test,//16
+	(void *)test_imm,//16
 	(void *)opcode_error,
-	(void *)move,//18
-	(void *)move_negative,//19
-	(void *)test_equal,//20
+	(void *)move_imm,//18
+	(void *)move_negative_imm,//19
+	(void *)test_equal_imm,//20
 	(void *)opcode_error,
 	(void *)opcode_error,
 	(void *)opcode_error,
 
-	(void *)compare_negative,//24
+	(void *)compare_negative_imm,//24
 	(void *)opcode_error,
 	(void *)opcode_error,
 	(void *)opcode_error,
 	(void *)opcode_error,
-	(void *)compare,//29
+	(void *)compare_imm,//29
+	};
+
+void* data_pro_p[10]={
+	(void *)add_wide_imm,//0
+	(void *)opcode_error,
+	(void *)address_before_current,//2
+	(void *)opcode_error,
+	(void *)address_after_current,//4
+	(void *)opcode_error,
+	(void *)sub_wide_imm,//6
+	(void *)opcode_error,
+	(void *)opcode_error,
+	(void *)opcode_error,
+	};
+
+void* move_p[8]={
+	(void *)move_wide_imm,//0
+	(void *)opcode_error,
+	(void *)opcode_error,
+	(void *)opcode_error,
+	(void *)move_top_imm,//4
+	(void *)opcode_error,
+	(void *)opcode_error,
+	(void *)opcode_error,
+	};
+
+void* bitfield_saturate[8]={
+	(void *)signed_lsl,//0
+	(void *)signed_asr,//1
+	(void *)signed_bit_field_extract,//2
+	(void *)bit_field_inset,//3
+	(void *)unsigned_lsl,//4
+	(void *)unsigned_asr,//5
+	(void *)unsinged_bit_field_extract,//6
+	(void *)bit_field_clear,//7
 	};
 #endif

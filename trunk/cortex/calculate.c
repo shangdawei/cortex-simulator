@@ -30,4 +30,12 @@ unsigned addwithcarry(unsigned m,unsigned n,unsigned carry_in){
 		cle_calculate_overflow();
 	return sum;
 }
+
+//word-aligned operation
+unsigned align(unsigned x,unsigned y){
+	unsigned m,n;
+	m = x/y;
+	n = m*y;
+	return n;
+}
 #endif
