@@ -22,7 +22,7 @@ typedef void (*func_ptr)(int);
 TranslateTable table[MAXSIZE] = {
 	//*************************************************************************************************
           {0xF8008000,0xF0000000,(unsigned char *)table+8*4},	//go to entry 8,  which is to define Data Processing :immediate
-          {0xEE000000,0xEA000000,(unsigned char *)table+13*4},   //go to entry 13, which is to define Data Processing :no immdiate
+          {0xEE000000,0xEA000000,(unsigned char *)table+13*4},  //go to entry 13, which is to define Data Processing :no immdiate
           {0xFE000000,0xF8000000,(unsigned char *)table+21*4},	//go to entry 21, which is to define Load & Store signle data item 
           {0xEF400000,0xE8400000,(unsigned char *)table+31*4},	//go to entry 31, which is to define Load & Store Double and Exclusive
           {0xEF400000,0xE8000000,(unsigned char *)table+34*4},	//go to entry 34, which is to define Load & Store Multible
@@ -42,6 +42,8 @@ TranslateTable table[MAXSIZE] = {
     	//these 5 entries is to define Data Processing :immediate, which is on Page 75
 	//*************************************************************************************************
 	//Entry 13: there should be 8 functions
+		  {0xFE000000,0xEA000000,(void *)data_pro_con_shift},
+		  //{0xFF800000,0xFA000000,(void *)
 
     	//these 8 entries is to define Data Processing :no immdiate, which is on Page 80
 	//*************************************************************************************************

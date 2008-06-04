@@ -3,6 +3,10 @@
 #include "instruction.h"
 #include "stdio.h"
 //#include "register.h"
+int decode_imm5(int i3,int i2){
+	int i = (i3<<2)+i2;
+	return i;
+}
 int decode_imm12(int i1,int i3,int i8){
 	int i = (i1<<11)+(i3<<8)+i8;
 	return i;
