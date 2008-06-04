@@ -203,7 +203,7 @@ int max(int x,int y){
 int signedSatQ(int i,unsigned j){
 	int saturated_i,result,k,m;
 	m = 1;
-	saturated_i = min(max(i,-(2^(j-1))),(2^(j-1))-1);
+	saturated_i = min(max(i,-(2^(j-1))),(2^(j-1))-1);		
 	for(k = j-1;k > 0;k--){
 		m = m << 1;
 		m = m + 1;

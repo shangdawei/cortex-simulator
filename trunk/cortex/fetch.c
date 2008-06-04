@@ -1,5 +1,6 @@
 #include "fetch.h"
 int testcase[21]={
+
 	0xF43171F0,//11110100001100010111001011110000,
 	0xF15172F0,//add with carry
 	0xF10172F0,//add
