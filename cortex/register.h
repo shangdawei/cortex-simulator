@@ -17,7 +17,7 @@
 #define $SP 	13
 #define $LR	 	14
 #define $PC 	15
-#define $APSR  16
+#define $APSR	16
 #define REG_SIZE 17
 
 #define REG_N	0x80000000

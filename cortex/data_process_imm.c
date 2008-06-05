@@ -724,7 +724,7 @@ void bit_field_clear(int i){
 //Bit Field Insert copies any number of low order bits from a register into the same number of adjacent bits at any position in the destination register.
 void bit_field_inset(int i){
 	int msbit,lsbit,source,result,j,m,n,p,temp;
-	n=0;													//modified by Jacky on 08.6.4 for assembling warning : havn't initialized local variable "n"
+//	n=0;													//modified by Jacky on 08.6.4 for assembling warning : havn't initialized local variable "n"
 	*((int *)(&dataProBit)) = i;
 	msbit = dataProBit.imm5;
 	lsbit = decode_shift(dataProBit.imm3,dataProBit.imm2);

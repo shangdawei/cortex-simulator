@@ -141,4 +141,43 @@ void* data_pro_con_s[30]={
 	(void *)err_reg,
 	(void *)cmp_reg,//29
 	};
+
+void* reg_ctrl_s[4]={
+	(void *)lsl_reg,
+	(void *)lsr_reg,
+	(void *)asr_reg,
+	(void *)ror_reg,
+};
+
+void* sign_unsign_e[4]={
+	(void *)sxtb,
+	(void *)sxth,
+	(void *)uxtb,
+	(void *)uxth,
+};
+
+void* other_three_reg_data_p[5]={
+	(void *)clz,
+	(void *)rbit,
+	(void *)rev,
+	(void *)rev16,
+	(void *)revsh,
+};
+
+void* bit32_multiply_a[3]={
+	(void *)mla,
+	(void *)mls,
+	(void *)mul,
+};
+
+void* bit64_mul[7]={
+	(void *)smull,
+	(void *)sdiv,
+	(void *)umull,
+	(void *)udiv,
+	(void *)smlal,
+	(void *)umlal,
+};
+
+
 #endif

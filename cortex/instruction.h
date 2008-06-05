@@ -124,12 +124,13 @@ void simd_add_sub(int instruction);
 void other_three_reg_data_pro(int instruction);
 void bit32_multiply_acc(int instruction);
 void bit64_multiply(int instruction);
+void data_pro_nonimm_reserved(int instruction);
 
 /*
  *
- *Table for data processing: constant shift
+ *Table for data processing instructions with constant shift 
  *
- */ 
+ */							//opcode
 void and_reg();				//00000		0
 void bic_reg();				//00001		1
 void orr_reg();				//00010		2
@@ -147,12 +148,56 @@ void teq_reg();				//10100		4+16
 void cmn_reg();				//11000		8+16
 void cmp_reg();				//11101		13+16
 
+/*
+ *
+ *Table for register-controlled shift instructions
+ *
+ */ 
+void lsl_reg();
+void lsr_reg();
+void asr_reg();
+void ror_reg();
 
+/*
+ *
+ *Table for Sign and unsigned extend instructions with optional addition
+ *
+ */ 
+void sxtb();
+void sxth();
+void uxtb();
+void uxth();
 
+/*
+ *
+ *Table for other three-register data processing instrucions 
+ *
+ */
+void clz();
+void rbit();
+void rev();
+void rev16();
+void revsh();
 
-
-
-
+/*
+ *
+ *Table for 32-bit multiplies, with or without accumulate
+ *
+ */
+void mla();
+void mls();
+void mul();
+/*
+ *
+ *Table for 64-bit multiply, multiply-accumulate, and divide instrucions 
+ *
+ */
+void smull();
+void sdiv();
+void umull();
+void udiv();
+void smlal();
+void umlal();
 
 #endif
 
