@@ -30,7 +30,7 @@ TranslateTable table[MAXSIZE] = {
           {0xEF000000,0xF0000000,(unsigned char *)table+44*4},	//go to entry 44, which is to define Coprocessor
 	      //these 7 entries is to define the 7 types in the Thumb-2 Instruction Architectur, which is on the Page 74
          
-		 {0xFA000000,0xF0000000,(void *)error_message}, //no entries is matched, go the function to handle error; 
+		{0xFA000000,0xF0000000,(void *)error_message}, //no entries is matched, go the function to handle error; 
 
 	//*************************************************************************************************
 	//Entry 8: there should be 5 functions
@@ -43,7 +43,14 @@ TranslateTable table[MAXSIZE] = {
 	//*************************************************************************************************
 	//Entry 13: there should be 8 functions
 		  {0xFE000000,0xEA000000,(void *)data_pro_con_shift},
-		  //{0xFF800000,0xFA000000,(void *)
+		  {0xFF80F080,0xFA00F000,(void *)reg_ctrl_shift},
+		  {0xFF80F080,0xFA00F080,(void *)sign_unsign_extend},
+		  {0xFF80F080,0xFA80F000,(void *)simd_add_sub},
+		  {0xFF80F080,0xFA80F080,(void *)other_three_reg_data_pro},
+		  {0xFF800000,0xFB000000,(void *)bit32_multiply_acc},
+		  {0xFF800000,0xFB800000,(void *)bit64_multiply},
+		  {0xFF000000,0xFA000000,(void *)data_pro_nonimm_reserved},
+
 
     	//these 8 entries is to define Data Processing :no immdiate, which is on Page 80
 	//*************************************************************************************************

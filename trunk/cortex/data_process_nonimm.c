@@ -29,11 +29,11 @@ void data_pro_con_shift(int instruction)
 	printf("shift: 0x%x \n",shift);
 
 	index = dataProConShift.op;
-//	printf("index : %d", index);
+	printf("index : %d", index);
 
 	if((dataProConShift.op == 0x8) &&(dataProConShift.rd ==0xf)&&(dataProConShift.s==0x1 )){
 		index = dataProConShift.op+16;
-	}else if((dataProConShift.op == 0x0) &&(dataProConShift.rd ==0xf)&&(dataProConShift.s==1 )){
+	}else if((dataProConShift.op == 0x0) &&(dataProConShift.rd ==0xf)&&(dataProConShift.s==0x1 )){
 		index = dataProConShift.op+16;
 	}else if((dataProConShift.op == 0x2) &&(dataProConShift.rn ==0xf)){
 		index = dataProConShift.op+16;
@@ -49,24 +49,36 @@ void data_pro_con_shift(int instruction)
 	f_ptr(instruction);
 }
 
-//void reg_ctrl_shift(int instuction)
-//void sign_unsign_extend(int instruction)
-//void simd_add_sub(int instruction)
-//void other_three_reg_data_pro(int instruction)
-//void bit32_multiply_acc(int instruction)
-//void bit64_multiply(int instruction)
+
+void reg_ctrl_shift(int instuction){}
+void sign_unsign_extend(int instruction){}
+void simd_add_sub(int instruction){}
+void other_three_reg_data_pro(int instruction){}
+void bit32_multiply_acc(int instruction){}
+void bit64_multiply(int instruction){}
+void data_pro_nonimm_reserved(int instruction){}
 
 void err_reg(){
 	printf("opcode error\n");
 }
 
+
+
+/*
+ *
+ *function of data processing: constant shift
+ *
+ */	
 void and_reg()
 {}
 
 void bic_reg()
 {}
 
-void orr_reg(){}
+void orr_reg()
+{}
+
+
 void orn_reg(){}
 void eor_reg(){}
 void add_reg(){}
@@ -80,6 +92,61 @@ void mvn_reg(){}
 void teq_reg(){}
 void cmn_reg(){}
 void cmp_reg(){}
+
+
+/*
+ *
+ *function of Register-controlled shift
+ *
+ */	
+
+void lsl_reg(){}
+void lsr_reg(){}
+void asr_reg(){}
+void ror_reg(){}
+
+/*
+ *
+ *function of Sign and unsigned extend instructions with optional addition
+ *
+ */	
+
+void sxtb(){}
+void sxth(){}
+void uxtb(){}
+void uxth(){}
+
+/*
+ *
+ *functions of other three-register data processing instructions
+ *
+ */
+void clz(){}
+void rbit(){}
+void rev(){}
+void rev16(){}
+void revsh(){}
+
+/*
+ *
+ *functions of 32-bit multiplies instuctions, with or without accumulate
+ *
+ */
+void mla(){}
+void mls(){}
+void mul(){}
+/*
+ *
+ *functions of 64-bit multiply, multiply-accumulate, and divide instrucions 
+ *
+ */
+void smull(){}
+void sdiv(){}
+void umull(){}
+void udiv(){}
+void smlal(){}
+void umlal(){}
+
 
 /*
 void data_pro_modified_12m(int instruction){
