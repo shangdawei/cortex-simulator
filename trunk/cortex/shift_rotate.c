@@ -200,7 +200,7 @@ int max(int x,int y){
 	return z;
 }
 
-int signedSatQ(int i,unsigned j){
+int signedSatQ(int i,int j){
 	int saturated_i,result,k,m;
 	m = 1;
 	saturated_i = min(max(i,-(2^(j-1))),(2^(j-1))-1);		
@@ -216,7 +216,7 @@ int signedSatQ(int i,unsigned j){
 	return result;
 }
 
-int unsignedSatQ(int i,unsigned j){
+int unsignedSatQ(int i,int j){
 	int saturated_i,result,k,m;
 	m = 1;
 	saturated_i = min(max(i,0),(2^j)-1);
@@ -232,13 +232,13 @@ int unsignedSatQ(int i,unsigned j){
 	return result;
 }
 
-int signedSat(int i,unsigned j){
+int signedSat(int i,int j){
 	int result;
 	result = signedSatQ(i,j);
 	return result;
 }
 
-int unsignedSat(int i,unsigned j){
+int unsignedSat(int i,int j){
 	int result;
 	result = unsignedSatQ(i,j);
 	return result;

@@ -1,4 +1,5 @@
 #include "register.h"
+#include "string.h"
 #include "stdio.h"
 static int registers[REG_SIZE]={0};
 static int imm_carry = 0;//ImmExpand will product it. it is a template
@@ -12,6 +13,7 @@ void set_general_register(int rn, int value){
 }
 
 int get_general_register(int rn){
+	memset(registers,'2',REG_SIZE*sizeof(int));
 	return registers[rn];
 }
 
