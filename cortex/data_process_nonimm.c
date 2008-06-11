@@ -6,7 +6,6 @@
  *
  */
 #include "data_process_nonimm.h" 
-//#include "register.h"
 /**
  *
  *To define the struct to handle the instruction
@@ -69,180 +68,307 @@ void err_reg(){
  *function of data processing: constant shift
  *
  */	
-void and_reg()
-{}
-
-void bic_reg()
-{}
-
-void orr_reg()
-{}
-
-
-void orn_reg(){}
-void eor_reg(){}
-void add_reg(){}
-void adc_reg(){}
-void sbc_reg(){}
-void sub_reg(){}
-void rsb_reg(){}
-void tst_reg(){}
-void mov_reg(){}
-void mvn_reg(){}
-void teq_reg(){}
-void cmn_reg(){}
-void cmp_reg(){}
-
 
 /*
- *
- *function of Register-controlled shift
- *
- */	
-
-void lsl_reg(){}
-void lsr_reg(){}
-void asr_reg(){}
-void ror_reg(){}
-
-/*
- *
- *function of Sign and unsigned extend instructions with optional addition
- *
- */	
-
-void sxtb(){}
-void sxth(){}
-void uxtb(){}
-void uxth(){}
-
-/*
- *
- *functions of other three-register data processing instructions
- *
- */
-void clz(){}
-void rbit(){}
-void rev(){}
-void rev16(){}
-void revsh(){}
-
-/*
- *
- *functions of 32-bit multiplies instuctions, with or without accumulate
- *
- */
-void mla(){}
-void mls(){}
-void mul(){}
-/*
- *
- *functions of 64-bit multiply, multiply-accumulate, and divide instrucions 
- *
- */
-void smull(){}
-void sdiv(){}
-void umull(){}
-void udiv(){}
-void smlal(){}
-void umlal(){}
-
-
-/*
-void data_pro_modified_12m(int instruction){
-	int imm12,index;
-	func f_ptr;
-	*((int *)(&dataProModified)) = instruction;
-	printf("data_pro_modified_12m: 0x%X \n",instruction);
-	printf("Operate Code : 0x%x \n", dataProModified.op);
-	printf("S: 0x%x \n", dataProModified.s);
-	printf("Rn: 0x%x \n", dataProModified.rn);
-	printf("Rd: 0x%x \n", dataProModified.rd);
-	imm12=decode_imm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-	printf("imm 12: 0x%x \n",imm12);
-	index=0;
-
-	index = dataProModified.op;
-//	printf("index : %d", index);
-
-	if((dataProModified.op == 0x8) &&(dataProModified.rd ==0xf)&&(dataProModified.s==0x1 )){
-		index = dataProModified.op+0x10;
-		printf("entering for op+16");
-	}else if((dataProModified.op == 13) &&(dataProModified.rd ==15)&&(dataProModified.s==1 )){
-		index = dataProModified.op+16;
-	}else if((dataProModified.op == 2) &&(dataProModified.rn ==15)){
-		 index = dataProModified.op+16;
-	}else if((dataProModified.op == 3) &&(dataProModified.rn ==15)){
-		 index = dataProModified.op+16;
-	}else if((dataProModified.op == 4) &&(dataProModified.rd ==15)&&(dataProModified.s==1 )){
-		index = dataProModified.op+16;
-	}else if((dataProModified.op == 0) &&(dataProModified.rd ==15)&&(dataProModified.s==1 )){
-		 index = dataProModified.op+16;
-	}
-	printf("index is %d", index);
-	f_ptr=(void *)data_pro_m[index];
-	f_ptr(instruction);
-}
-
-void data_pro_add_12m(int instruction){
-	int op,imm12;
-	printf("data_pro_add_12m: 0x%X \n",instruction);
-	*((int *)(&dataProAdd)) = instruction;
-	op=(dataProAdd.op<<2)+dataProAdd.op2;
-	printf("Operate Code : 0x%x \n", op);
-	printf("Rn: 0x%x \n", dataProAdd.rn);
-	printf("Rd: 0x%x \n", dataProAdd.op);
-	imm12=decode_imm12(dataProAdd.imm1, dataProAdd.imm3,dataProAdd.imm8);
-	printf("imm 12: 0x%x \n",imm12);
-
-}
-void data_pro_mov_16m(int instruction){
-	int op, imm12;
-	printf("data_pro_mov_16m: 0x%X \n",instruction);
-	*((int *)(&dataProMov)) = instruction;
-	op = (dataProMov.op<<2)+dataProMov.op2;
-	printf("Operate Code : 0x%x \n",op);
-	printf("Rn: 0x%x \n", dataProModified.rn);
-	printf("Rd: 0x%x \n", dataProMov.op);
-	imm12=decode_imm16(dataProMov.imm1,dataProMov.imm4, dataProMov.imm3,dataProMov.imm8);
-	printf("imm 12: 0x%x \n",imm12);
-
-}
-void data_pro_bitoperation(int instruction){
-	int imm12;
-	printf("data_pro_bitoperation: 0x%X \n",instruction);
-	*((int *)(&dataProBit)) = instruction;
-	printf("Operate Code : 0x%x \n", dataProBit.op);
-	printf("Rn: 0x%x \n", dataProBit.rn);
-	printf("Rd: 0x%x \n", dataProBit.op);
-	imm12=decode_bitOperation(dataProBit.imm3, dataProBit.imm2,dataProBit.imm5);
-	printf("imm 12: 0x%x \n",imm12);
-
-}
-void data_pro_reserved(int instruction){
-	printf("data_pro_reserved: 0x%X \n",instruction);
-
-}
-void logical_add(){
-	printf("	***logical add\n");	
-}
-
-
-//Add with Carry (immediate) adds an immediate value and the carry flag value to a register value, and writes the result to the destination register. 
-void add_with_carry(int i){
-	int imm,source,result;
+if ConditionPassed() then
+EncodingSpecificOperations();
+(shifted, carry) = Shift_C(R[m], shift_t, shift_n, APSR.C);
+result = R[n] AND shifted;
+R[d] = result;
+if setflags then
+APSR.N = result<31>;
+APSR.Z = IsZeroBit(result);
+APSR.C = carry;
+// APSR.V unchanged
+*/
+void and_reg(int i)
+{
+	int shifted,source,result,shift_n;
 	unsigned apsr_c;
-	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);//immediate expand without imm_carry
-	//printf(" imm = %X",imm);
-    source = get_general_register(dataProModified.rn);//get data from source register
-	//printf(" source = %X",source);
+	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
-	//printf(" apsr_c = %X",apsr_c);
 	apsr_c = apsr_c >> 29;
-	result = addwithcarry(source,imm,apsr_c);
-	set_general_register(dataProModified.rd, result);//send data to destination register
-	if(dataProModified.s==1){
+	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
+	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
+    source = get_general_register(dataProConShift.rn);//get data from source register
+#if DEBUG_I
+	printf(" shifted = %d",shifted);
+	printf(" source = %c",source);
+	printf(" apsr_c = %c",apsr_c);
+#endif
+	result = source & shifted;
+	set_general_register(dataProConShift.rd, result);//send data to destination register
+	if(dataProConShift.s==1){
+		if(result & 0x80000000)//whether negative
+			set_flag_n();
+		else
+			cle_flag_n();
+		if(result==0)//whether zero
+			set_flag_z();
+			//printf(" kkkkk ");}
+		else
+			cle_flag_z();
+			//printf(" kkkkk ");}
+		if(get_calculate_carry())//whether carry
+			set_flag_c();
+		else
+			cle_flag_c();
+	}
+#if DEBUG_I
+	printf(" APSR = %c",get_apsr());
+	printf(" rd = %c",get_general_register(dataProConShift.rd));
+	printf("	***and_reg\n");	
+	printf("********AND {S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
+#endif
+}
+
+void bic_reg(int i)
+{
+/*  
+	BIC
+if ConditionPassed() then
+EncodingSpecificOperations();
+(shifted, carry) = Shift_C(R[m], shift_t, shift_n, APSR.C);
+result = R[n] AND NOT(shifted);
+R[d] = result;
+if setflags then
+APSR.N = result<31>;
+APSR.Z = IsZeroBit(result);
+APSR.C = carry;
+// APSR.V unchanged
+*/
+	int shifted,source,result,shift_n;
+	unsigned apsr_c;
+	*((int *)(&dataProConShift)) = i;
+	apsr_c = get_flag_c();
+	apsr_c = apsr_c >> 29;
+	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
+	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
+    source = get_general_register(dataProConShift.rn);//get data from source register
+	result = source & (~shifted);
+#if DEBUG_I
+	printf(" shifted = %x",shifted);
+	printf(" source = %x",source);
+	printf(" apsr_c = %c",apsr_c);
+	printf(" result = %x", result);
+#endif
+	set_general_register(dataProConShift.rd, result);//send data to destination register
+	if(dataProConShift.s==1){
+		if(result & 0x80000000)//whether negative
+			set_flag_n();
+		else
+			cle_flag_n();
+		if(result==0)//whether zero
+			set_flag_z();
+			//printf(" kkkkk ");}
+		else
+			cle_flag_z();
+			//printf(" kkkkk ");}
+		if(get_calculate_carry())//whether carry
+			set_flag_c();
+		else
+			cle_flag_c();
+	}
+#if DEBUG_I
+	printf(" APSR = %c",get_apsr());
+	printf(" rd = %c",get_general_register(dataProConShift.rd));
+	printf("	***bic_reg\n");	
+	printf("********BIC{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
+#endif
+}
+void orr_reg(int i)
+{
+/*
+if ConditionPassed() then
+EncodingSpecificOperations();
+(shifted, carry) = Shift_C(R[m], shift_t, shift_n, APSR.C);
+result = R[n] OR shifted;
+R[d] = result;
+if setflags then
+APSR.N = result<31>;
+APSR.Z = IsZeroBit(result);
+APSR.C = carry;
+// APSR.V unchanged
+*/
+	int shifted,source,result,shift_n;
+	unsigned apsr_c;
+	*((int *)(&dataProConShift)) = i;
+	apsr_c = get_flag_c();
+	apsr_c = apsr_c >> 29;
+	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
+	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
+    source = get_general_register(dataProConShift.rn);//get data from source register
+	result = source|shifted;
+#if DEBUG_I
+	printf(" shifted = %x",shifted);
+	printf(" source = %x",source);
+	printf(" apsr_c = %c",apsr_c);
+	printf(" result = %x", result);
+#endif
+	set_general_register(dataProConShift.rd, result);//send data to destination register
+	if(dataProConShift.s==1){
+		if(result & 0x80000000)//whether negative
+			set_flag_n();
+		else
+			cle_flag_n();
+		if(result==0)//whether zero
+			set_flag_z();
+			//printf(" kkkkk ");}
+		else
+			cle_flag_z();
+			//printf(" kkkkk ");}
+		if(get_calculate_carry())//whether carry
+			set_flag_c();
+		else
+			cle_flag_c();
+	}
+#if DEBUG_I
+	printf(" APSR = %c",get_apsr());
+	printf(" rd = %c",get_general_register(dataProConShift.rd));
+	printf("	***orr_reg\n");	
+	printf("********ORR{S}<c><q> {<Rd>,} <Rn>, <Rm> {,<shift>}******* \n");
+#endif
+}
+
+
+void orn_reg(int i)
+{
+/*
+if ConditionPassed() then
+EncodingSpecificOperations();
+(shifted, carry) = Shift_C(R[m], shift_t, shift_n, APSR.C);
+result = R[n] OR NOT(shifted);
+R[d] = result;
+if setflags then
+APSR.N = result<31>;
+APSR.Z = IsZeroBit(result);
+APSR.C = carry;
+// APSR.V unchanged
+*/
+	int shifted,source,result,shift_n;
+	unsigned apsr_c;
+	*((int *)(&dataProConShift)) = i;
+	apsr_c = get_flag_c();
+	apsr_c = apsr_c >> 29;
+	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
+	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
+    source = get_general_register(dataProConShift.rn);//get data from source register
+	result = source|(~shifted);
+#if DEBUG_I
+	printf(" shifted = %x",shifted);
+	printf(" source = %x",source);
+	printf(" apsr_c = %c",apsr_c);
+	printf(" result = %x", result);
+#endif
+	set_general_register(dataProConShift.rd, result);//send data to destination register
+	if(dataProConShift.s==1){
+		if(result & 0x80000000)//whether negative
+			set_flag_n();
+		else
+			cle_flag_n();
+		if(result==0)//whether zero
+			set_flag_z();
+			//printf(" kkkkk ");}
+		else
+			cle_flag_z();
+			//printf(" kkkkk ");}
+		if(get_calculate_carry())//whether carry
+			set_flag_c();
+		else
+			cle_flag_c();
+	}
+#if DEBUG_I
+	printf(" APSR = %c",get_apsr());
+	printf(" rd = %c",get_general_register(dataProConShift.rd));
+	printf("	***orn_reg\n");	
+	printf("********ORN{S}<c><q> {<Rd>,} <Rn>, <Rm> {,<shift>}******* \n");
+#endif
+}
+void eor_reg(int i)
+{
+/*if ConditionPassed() then
+EncodingSpecificOperations();
+(shifted, carry) = Shift_C(R[m], shift_t, shift_n, APSR.C);
+result = R[n] EOR shifted;
+R[d] = result;
+if setflags then
+APSR.N = result<31>;
+APSR.Z = IsZeroBit(result);
+APSR.C = carry;
+// APSR.V unchanged*/
+	int shifted,source,result,shift_n;
+	unsigned apsr_c;
+	*((int *)(&dataProConShift)) = i;
+	apsr_c = get_flag_c();
+	apsr_c = apsr_c >> 29;
+	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
+	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
+    source = get_general_register(dataProConShift.rn);//get data from source register
+	result = source^shifted;
+#if DEBUG_I
+	printf(" shifted = %x",shifted);
+	printf(" source = %x",source);
+	printf(" apsr_c = %c",apsr_c);
+	printf(" result = %x", result);
+#endif
+	set_general_register(dataProConShift.rd, result);//send data to destination register
+	if(dataProConShift.s==1){
+		if(result & 0x80000000)//whether negative
+			set_flag_n();
+		else
+			cle_flag_n();
+		if(result==0)//whether zero
+			set_flag_z();
+			//printf(" kkkkk ");}
+		else
+			cle_flag_z();
+			//printf(" kkkkk ");}
+		if(get_calculate_carry())//whether carry
+			set_flag_c();
+		else
+			cle_flag_c();
+	}
+#if DEBUG_I
+	printf(" APSR = %c",get_apsr());
+	printf(" rd = %c",get_general_register(dataProConShift.rd));
+	printf("	***eor_reg\n");	
+	printf("********EOR{S}<c><q> {<Rd>,} <Rn>, <Rm> {,<shift>}******* \n");
+#endif
+}
+void add_reg(int i)
+{
+/*
+if ConditionPassed() then
+EncodingSpecificOperations();
+shifted = Shift(R[m], shift_t, shift_n, APSR.C);
+(result, carry, overflow) = AddWithCarry(R[n], shifted, '0');
+if d == 15 then
+ALUWritePC(result); // setflags is always FALSE here
+else
+R[d] = result;
+if setflags then
+APSR.N = result<31>;
+APSR.Z = IsZeroBit(result);
+APSR.C = carry;
+APSR.V = overflow;
+*/
+	int shifted,source,result,shift_n;
+	unsigned apsr_c;
+	*((int *)(&dataProConShift)) = i;
+	apsr_c = get_flag_c();
+	apsr_c = apsr_c >> 29;
+	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
+	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
+    source = get_general_register(dataProConShift.rn);//get data from source register
+	result = addwithcarry(source,shifted,0);
+#if DEBUG_I
+	printf(" shifted = %c",shifted);
+	printf(" source = %c",source);
+	printf(" apsr_c = %c",apsr_c);
+	printf(" result = %x",result);
+#endif
+	set_general_register(dataProConShift.rd, result);//send data to destination register
+	if(dataProConShift.s==1){
 		if(result & 0x80000000)//whether negative
 			set_flag_n();
 		else
@@ -262,462 +388,186 @@ void add_with_carry(int i){
 		else
 			cle_flag_v();
 	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
-	printf("	***add with carry\n");	
-	printf("********ADC{s}<c><q>	{<Rd>,} <Rn>, #<const>******* \n");
-
+#if DEBUG_I
+	printf(" APSR = %c",get_apsr());
+	printf(" rd = %c",get_general_register(dataProConShift.rd));
+	printf("	***adc_reg\n");	
+	printf("********ADC{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
+#endif
 }
 
-//This instruction adds an immediate value to a register value, and writes the result to the destination register.
-void add(int i){
-	int imm, result,source;
-	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-    source = get_general_register(dataProModified.rn);
-	result = addwithcarry(source,imm,0);
-	set_general_register(dataProModified.rd, result);
-	if(dataProModified.s==1){
-		if(result & 0x80000000)
-			set_flag_n();
-		else
-			cle_flag_n();
-		if(result==0)
-			set_flag_z();
-			//printf(" kkkkk ");}
-		else
-			cle_flag_z();
-			//printf(" kkkkk ");}
-		if(get_calculate_carry())
-			set_flag_c();
-		else
-			cle_flag_c();
-		if(get_calculate_overflow())
-			set_flag_v();
-		else
-			cle_flag_v();
-	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
-	printf("	***add\n");	
-
-}
-
-//This instruction performs a bitwise AND of a register value and an immediate value, and writes the result to the destination register.
-void logical_and(int i){
-	int imm,source,result;
-	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-    source = get_general_register(dataProModified.rn);
-	result = source & imm;
-	//int a = result & 0x80000000;
-	//printf(" a = %x",a);
-	set_general_register(dataProModified.rd, result);
-	//printf(" a = %x",result);
-	if(dataProModified.s==1){
-		if(result & 0x80000000)
-			set_flag_n();
-		else
-			cle_flag_n();
-		if(result==0)
-			set_flag_z();
-		else
-			cle_flag_z();
-		if(get_carry()==0)
-			cle_flag_c();
-		else
-			set_flag_c();
-	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
-	printf("	***logical and\n");	
-
-}
-
-//Bit Clear (immediate) performs a bitwise AND of a register value and the complement of an immediate value, and writes the result to the destination register. 
-void bit_clear(int i){
-	int imm,source,result;
-	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-    source = get_general_register(dataProModified.rn);
-	result = source & (~imm);
-	//int a = result & 0x80000000;
-	//printf(" a = %x",a);
-	set_general_register(dataProModified.rd, result);
-	//printf(" a = %x",result);
-	if(dataProModified.s==1){
-		if(result & 0x80000000)
-			set_flag_n();
-		else
-			cle_flag_n();
-		if(result==0)
-			set_flag_z();
-		else
-			cle_flag_z();
-		if(get_carry()==0)
-			cle_flag_c();
-		else
-			set_flag_c();
-	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
-	printf("	***bit_clear\n");	
-
-}
-
-//Compare Negative (immediate) adds a register value and an immediate value. It updates the condition flags based on the result, and discards the result.
-void compare_negative(int i){
-	int imm,source,result;
-	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-    source = get_general_register(dataProModified.rn);
-	result = addwithcarry(source,imm,0);
-	if(result & 0x80000000)
-		set_flag_n();
-	else
-		cle_flag_n();
-	if(result==0)
-		set_flag_z();
-	else
-		cle_flag_z();
-	if(get_calculate_carry())
-		set_flag_c();
-	else
-		cle_flag_c();
-	if(get_calculate_overflow())
-		set_flag_v();
-	else
-		cle_flag_v();
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
-	printf("	***compare_negative\n");	
-
-}
-
-//Compare (immediate) subtracts an immediate value from a register value. It updates the condition flags based on the result, and discards the result.
-void compare(int i){
-	int imm,source,result;
-	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-    source = get_general_register(dataProModified.rn);
-	result = addwithcarry(source,~imm,1);
-	if(result & 0x80000000)
-		set_flag_n();
-	else
-		cle_flag_n();
-	if(result==0)
-		set_flag_z();
-	else
-		cle_flag_z();
-	if(get_calculate_carry())
-		set_flag_c();
-	else
-		cle_flag_c();
-	if(get_calculate_overflow())
-		set_flag_v();
-	else
-		cle_flag_v();
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
-	printf("	***compare\n");	
-
-}
-
-//Exclusive OR (immediate) performs a bitwise Exclusive OR of a register value and an immediate value, and writes the result to the destination register. 
-void exclusive_or(int i){
-	int imm,source,result;
-	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-    source = get_general_register(dataProModified.rn);
-	result = source ^ imm;
-	//int a = result & 0x80000000;
-	//printf(" a = %x",a);
-	set_general_register(dataProModified.rd, result);
-	//printf(" a = %x",result);
-	if(dataProModified.s==1){
-		if(result & 0x80000000) //it's a problem.
-			set_flag_n();
-		else
-			cle_flag_n();
-		if(result==0)
-			set_flag_z();
-		else
-			cle_flag_z();
-		if(get_carry()==0)
-			cle_flag_c();
-		else
-			set_flag_c();
-	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
-	printf("	***exclusive or\n");	
-
-}
-
-//Move (immediate) writes an immediate value to the destination register. 
-void move(int i){
-	int imm,result;
-	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-	result = imm;
-	set_general_register(dataProModified.rd, result);
-	if(dataProModified.s==1){
-		if(result & 0x80000000) //it's a problem.
-			set_flag_n();
-			//printf(" kkkk");}
-		else
-			cle_flag_n();
-			//printf(" rrrr");}
-		if(result==0)
-			set_flag_z();
-		else
-			cle_flag_z();
-		if(get_carry()==0)
-			cle_flag_c();
-		else
-			set_flag_c();
-	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
-	printf("	***move\n");	
-
-}
-
-//Move Negative (immediate) writes the logical ones complement of an immediate value to the destination register. 
-void move_negative(int i){
-	int imm,result;
-	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-	//printf(" imm = %x",imm);
-	result = ~imm;
-	//int a = result & 0x80000000;
-	//printf(" a = %x",a);
-	set_general_register(dataProModified.rd, result);
-	//printf(" a = %x",result);
-	if(dataProModified.s==1){
-		if(result & 0x80000000) //it's a problem.
-			set_flag_n();
-			//printf(" kkkk");}
-		else
-			cle_flag_n();
-			//printf(" kkkk");}
-		if(result==0)
-			set_flag_z();
-		else
-			cle_flag_z();
-		if(get_carry()==0)
-			cle_flag_c();
-		else
-			set_flag_c();
-	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
-   printf("	***move negative\n");	
-
-}
-
-//Logical OR NOT (immediate) performs a bitwise (inclusive) OR of a register value and the complement of an immediate value, and writes the result to the destination register.
-void logical_or_not(int i){
-	int imm,source,result;
-	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-	source = get_general_register(dataProModified.rn);
-	result = source|(~imm);
-	set_general_register(dataProModified.rd, result);
-	if(dataProModified.s==1)
-     {if(result & 0x80000000)
-        set_flag_n();
-      else
-        cle_flag_n();
-      if(result==0)
-        set_flag_z();
-      else
-        cle_flag_z();
-		if(get_carry()==0)
-			cle_flag_c();
-		else
-			set_flag_c();
-              }
-	printf(" APSR = %X",get_apsr());
-	printf(" rd = %X",get_general_register(dataProModified.rd));
-	printf("	***logical or not\n");	
-
-}
-
-//Logical OR (immediate) performs a bitwise (inclusive) OR of a register value and an immediate value, and writes the result to the destination register. 
-void logical_or(int i){
-	int imm,source,result;
-	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-	source = get_general_register(dataProModified.rn);
-	result = source|imm;
-	set_general_register(dataProModified.rd, result);
-	if(dataProModified.s==1)
-     {if(result & 0x80000000)
-        set_flag_n();
-      else
-        cle_flag_n();
-      if(result==0)
-        set_flag_z();
-      else
-        cle_flag_z();
-		if(get_carry()==0)
-			cle_flag_c();
-		else
-			set_flag_c();
-              }
-	printf(" APSR = %X",get_apsr());
-	printf(" rd = %X",get_general_register(dataProModified.rd));
-	printf("	***logical or\n");	
-
-}
-
-//Reverse Subtract (immediate) subtracts a register value from an immediate value, and writes the result to the destination register. 
-void reverse_subtract(int i){
-	int imm,source,result;
-	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-	source = get_general_register(dataProModified.rn);
-	result = addwithcarry(~source,imm,1);
-	set_general_register(dataProModified.rd, result);
-	if(dataProModified.s==1){
-		if(result & 0x80000000)
-			set_flag_n();
-		else
-			cle_flag_n();
-		if(result==0)
-			set_flag_z();
-			//printf(" kkkkk ");}
-		else
-			cle_flag_z();
-			//printf(" kkkkk ");}
-		if(get_calculate_carry())
-			set_flag_c();
-		else
-			cle_flag_c();
-		if(get_calculate_overflow())
-			set_flag_v();
-		else
-			cle_flag_v();
-	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
-	printf("	***reverse subtract\n");	
-
-}
-
-//Subtract with Carry (immediate) subtracts an immediate value and the value of NOT(Carry flag) from a register value, and writes the result to the destination register. 
-void subtract_with_carry(int i){
-	int imm,source,result;
+void adc_reg(int i)
+{
+/*if ConditionPassed() then
+EncodingSpecificOperations();
+shifted = Shift(R[m], shift_t, shift_n, APSR.C);
+(result, carry, overflow) = AddWithCarry(R[n], shifted, APSR.C);
+R[d] = result;
+if setflags then
+APSR.N = result<31>;
+APSR.Z = IsZeroBit(result);
+APSR.C = carry;
+APSR.V = overflow;*/
+	int shifted,source,result,shift_n;
 	unsigned apsr_c;
-	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-	source = get_general_register(dataProModified.rn);
+	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	result = addwithcarry(source,~imm,apsr_c);
-	set_general_register(dataProModified.rd, result);
-	if(dataProModified.s==1){
-		if(result & 0x80000000)
+	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
+	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
+    source = get_general_register(dataProConShift.rn);//get data from source register
+	result = addwithcarry(source,shifted,apsr_c);
+#if DEBUG_I
+	printf(" shifted = %c",shifted);
+	printf(" source = %c",source);
+	printf(" apsr_c = %c",apsr_c);
+	printf(" result = %x",result);
+#endif
+	set_general_register(dataProConShift.rd, result);//send data to destination register
+	if(dataProConShift.s==1){
+		if(result & 0x80000000)//whether negative
 			set_flag_n();
 		else
 			cle_flag_n();
-		if(result==0)
+		if(result==0)//whether zero
 			set_flag_z();
+			//printf(" kkkkk ");}
 		else
 			cle_flag_z();
-		if(get_calculate_carry())
+			//printf(" kkkkk ");}
+		if(get_calculate_carry())//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
-		if(get_calculate_overflow())
+		if(get_calculate_overflow())//whether overflow
 			set_flag_v();
 		else
 			cle_flag_v();
 	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
-	printf("	***subtract with carry \n");	
-
+#if DEBUG_I
+	printf(" APSR = %c",get_apsr());
+	printf(" rd = %c",get_general_register(dataProConShift.rd));
+	printf("	***adc_reg\n");	
+	printf("********ADC{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
+#endif
 }
-
-//This instruction subtracts an immediate value from a register value, and writes the result to the destination register. 
-void subtract(int i){
-	int imm,source,result;
-	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-	source = get_general_register(dataProModified.rn);
-	result = addwithcarry(source,~imm,1);
-	set_general_register(dataProModified.rd, result);
-	if(dataProModified.s==1){
-		if(result & 0x80000000)
-			set_flag_n();
-		else
-			cle_flag_n();
-		if(result==0)
-			set_flag_z();
-		else
-			cle_flag_z();
-		if(get_calculate_carry())
-			set_flag_c();
-		else
-			cle_flag_c();
-		if(get_calculate_overflow())
-			set_flag_v();
-		else
-			cle_flag_v();
-	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
-	printf("	***subtract\n");	
-
-}
-
-//Test Equivalence (immediate) performs an exclusive OR operation on a register value and an immediate value. 
-void test_equal(int i){
-	int imm,source,result;
-	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-	source = get_general_register(dataProModified.rn);
-	result = source ^ imm;
-	if(result & 0x80000000)
-		set_flag_n();
-	else
-		cle_flag_n();
-	if(result==0)
-		set_flag_z();
-	else
-		cle_flag_z();
-	if(get_carry()==0)
-		cle_flag_c();
-	else
-		set_flag_c();
-	printf(" APSR = %X",get_apsr());
-	printf("	***test equal\n");	
-
-}
-
-//Test (immediate) performs a logical AND operation on a register value and an immediate value.
-void test(int i){
-	int imm,source,result;
-	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-	source = get_general_register(dataProModified.rn);
-	result = source & imm;
-	if(result & 0x80000000)
-		set_flag_n();
-	else
-		cle_flag_n();
-	if(result==0)
-		set_flag_z();
-	else
-		cle_flag_z();
-	if(get_carry()==0)
-		cle_flag_c();
-	else
-		set_flag_c();
-	printf(" APSR = %X",get_apsr());
-	printf("	***test\n");	
-
-}
+void sbc_reg(int i)
+{
+/*
+if ConditionPassed() then
+EncodingSpecificOperations();
+shifted = Shift(R[m], shift_t, shift_n, APSR.C);
+(result, carry, overflow) = AddWithCarry(R[n], NOT(shifted), APSR.C);
+R[d] = result;
+if setflags then
+APSR.N = result<31>;
+APSR.Z = IsZeroBit(result);
+APSR.C = carry;
+APSR.V = overflow;
 */
+	int shifted,source,result,shift_n;
+	unsigned apsr_c;
+	*((int *)(&dataProConShift)) = i;
+	apsr_c = get_flag_c();
+	apsr_c = apsr_c >> 29;
+	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
+	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
+    source = get_general_register(dataProConShift.rn);//get data from source register
+	result = addwithcarry(source,~shifted,apsr_c);
+#if DEBUG_I
+	printf(" shifted = %c",shifted);
+	printf(" source = %c",source);
+	printf(" apsr_c = %c",apsr_c);
+	printf(" result = %x",result);
+#endif
+	set_general_register(dataProConShift.rd, result);//send data to destination register
+	if(dataProConShift.s==1){
+		if(result & 0x80000000)//whether negative
+			set_flag_n();
+		else
+			cle_flag_n();
+		if(result==0)//whether zero
+			set_flag_z();
+			//printf(" kkkkk ");}
+		else
+			cle_flag_z();
+			//printf(" kkkkk ");}
+		if(get_calculate_carry())//whether carry
+			set_flag_c();
+		else
+			cle_flag_c();
+		if(get_calculate_overflow())//whether overflow
+			set_flag_v();
+		else
+			cle_flag_v();
+	}
+#if DEBUG_I
+	printf(" APSR = %c",get_apsr());
+	printf(" rd = %c",get_general_register(dataProConShift.rd));
+	printf("	***sbc_reg\n");	
+	printf("********SBC{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
+#endif
+}
+void sub_reg(int i){}
+void rsb_reg(int i){}
+void tst_reg(int i){}
+void mov_reg(int i){}
+void mvn_reg(int i){}
+void teq_reg(int i){}
+void cmn_reg(int i){}
+void cmp_reg(int i){}
+
+
+/*
+ *
+ *function of Register-controlled shift
+ *
+ */	
+
+void lsl_reg(int i){}
+void lsr_reg(int i){}
+void asr_reg(int i){}
+void ror_reg(int i){}
+
+/*
+ *
+ *function of Sign and unsigned extend instructions with optional addition
+ *
+ */	
+
+void sxtb(int i){}
+void sxth(int i){}
+void uxtb(int i){}
+void uxth(int i){}
+
+/*
+ *
+ *functions of other three-register data processing instructions
+ *
+ */
+void clz(int i){}
+void rbit(int i){}
+void rev(int i){}
+void rev16(int i){}
+void revsh(int i){}
+
+/*
+ *
+ *functions of 32-bit multiplies instuctions, with or without accumulate
+ *
+ */
+void mla(int i){}
+void mls(int i){}
+void mul(int i){}
+/*
+ *
+ *functions of 64-bit multiply, multiply-accumulate, and divide instrucions 
+ *
+ */
+void smull(int i){}
+void sdiv(int i){}
+void umull(int i){}
+void udiv(int i){}
+void smlal(int i){}
+void umlal(int i){}
+

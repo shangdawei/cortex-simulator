@@ -735,7 +735,7 @@ void bit_field_inset(int i){
 			m = m +1;
 		}
 		source = get_general_register(dataProBit.rn);
-		source = source & n;
+		source = source & m;
 		p = 0xFFFFFFFF;
 		for(j = msbit;j > 0;j--)
 			p = p << 1;

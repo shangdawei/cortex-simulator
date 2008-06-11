@@ -7,6 +7,7 @@
  */
 #ifndef _DATA_PROCESS_NONIMM
 #define _DATA_PROCESS_NONIMM
+#define DEBUG_I 1
 #include <stdio.h>
 #include "instruction.h"
 

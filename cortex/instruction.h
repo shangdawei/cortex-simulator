@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "register.h"
 #include "memory.h"
+#include "helper_procedures.h"
 #include <string.h>
 
 /**
@@ -26,10 +27,10 @@ int shift_c(int value,int type,int n,int carry_in);
 int shift(int value,int type,int n,int carry_in);
 int min(int x,int y);
 int max(int x,int y);
-int signedSatQ(int i,unsigned j);
-int unsignedSatQ(int i,unsigned j);
-int signedSat(int i,unsigned j);
-int unsignedSat(int i,unsigned j);
+int signedSatQ(int i,int j);
+int unsignedSatQ(int i,int j);
+int signedSat(int i,int j);
+int unsignedSat(int i,int j);
 /**
  *to handle the calculate
  *
@@ -130,74 +131,74 @@ void data_pro_nonimm_reserved(int instruction);
  *
  *Table for data processing instructions with constant shift 
  *
- */							//opcode
-void and_reg();				//00000		0
-void bic_reg();				//00001		1
-void orr_reg();				//00010		2
-void orn_reg();				//00011		3
-void eor_reg();				//00100		4
-void add_reg();				//01000		8
-void adc_reg();				//01010		10
-void sbc_reg();				//01011		11
-void sub_reg();				//01101		13
-void rsb_reg();				//01110		14
-void tst_reg();				//10000		0+16
-void mov_reg();				//10010		2+16
-void mvn_reg();				//10011		3+16
-void teq_reg();				//10100		4+16
-void cmn_reg();				//11000		8+16
-void cmp_reg();				//11101		13+16
+ */							//Opcode
+void and_reg(int i);		//00000		0
+void bic_reg(int i);		//00001		1
+void orr_reg(int i);		//00010		2
+void orn_reg(int i);		//00011		3
+void eor_reg(int i);		//00100		4
+void add_reg(int i);		//01000		8
+void adc_reg(int i);		//01010		10
+void sbc_reg(int i);		//01011		11
+void sub_reg(int i);		//01101		13
+void rsb_reg(int i);		//01110		14
+void tst_reg(int i);		//10000		0+16
+void mov_reg(int i);		//10010		2+16
+void mvn_reg(int i);		//10011		3+16
+void teq_reg(int i);		//10100		4+16
+void cmn_reg(int i);		//11000		8+16
+void cmp_reg(int i);		//11101		13+16
 
 /*
  *
  *Table for register-controlled shift instructions
  *
  */ 
-void lsl_reg();
-void lsr_reg();
-void asr_reg();
-void ror_reg();
+void lsl_reg(int i);
+void lsr_reg(int i);
+void asr_reg(int i);
+void ror_reg(int i);
 
 /*
  *
  *Table for Sign and unsigned extend instructions with optional addition
  *
  */ 
-void sxtb();
-void sxth();
-void uxtb();
-void uxth();
+void sxtb(int i);
+void sxth(int i);
+void uxtb(int i);
+void uxth(int i);
 
 /*
  *
  *Table for other three-register data processing instrucions 
  *
  */
-void clz();
-void rbit();
-void rev();
-void rev16();
-void revsh();
+void clz(int i);
+void rbit(int i);
+void rev(int i);
+void rev16(int i);
+void revsh(int i);
 
 /*
  *
  *Table for 32-bit multiplies, with or without accumulate
  *
  */
-void mla();
-void mls();
-void mul();
+void mla(int i);
+void mls(int i);
+void mul(int i);
 /*
  *
  *Table for 64-bit multiply, multiply-accumulate, and divide instrucions 
  *
  */
-void smull();
-void sdiv();
-void umull();
-void udiv();
-void smlal();
-void umlal();
+void smull(int i);
+void sdiv(int i);
+void umull(int i);
+void udiv(int i);
+void smlal(int i);
+void umlal(int i);
 
 #endif
 
