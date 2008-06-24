@@ -26,6 +26,13 @@
 #define REG_V	0x10000000
 #define REG_Q	0x08000000
 
+#define SRType_None 0
+#define SRType_LSL	1
+#define SRType_LSR	2
+#define SRType_ASR	3
+#define SRType_ROR	4
+#define SRType_RRX	5
+
 struct RESULTCARRY{
 	int result;
 	int carry;

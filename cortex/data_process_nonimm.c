@@ -664,8 +664,8 @@ APSR.C = carry;
 #if DEBUG_I
 	printf(" APSR = %c",get_apsr());
 	printf(" rd = %c",get_general_register(dataProConShift.rd));
-	printf("	***rsb_reg\n");	
-	printf("********RSB{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
+	printf("	***tst_reg\n");	
+	printf("********TST{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
 #endif
 }
 void mov_reg(int i)
@@ -675,6 +675,7 @@ in fact, this function includes 6 different instructions(MOV,LSL,LSR,ASR,ROR,RRX
 */
 	int shifted,source,result,shift_n;
 	unsigned apsr_c;
+	struct RESULTCARRY* result_shiftc;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
@@ -736,6 +737,23 @@ APSR.Z = IsZeroBit(result);
 APSR.C = carry;
 // APSR.V unchanged
 */
+			result_shiftc = shift_c(dataProConShift.rm,SRType_LSL,shift_n,apsr_c);
+			set_general_register(dataProConShift.rd, result_shiftc->result);
+			if(dataProConShift.s)
+			{
+				if(result_shiftc->result & 0x80000000)//whether negative
+					set_flag_n();
+				else
+					cle_flag_n();
+				if(result_shiftc->result==0)//whether zero
+					set_flag_z();
+				else
+					cle_flag_z();
+				if(result_shiftc->carry)//whether carry
+					set_flag_c();
+				else
+					cle_flag_c();
+			}
 		}
 		break;
 	case 1:

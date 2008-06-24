@@ -156,17 +156,25 @@ int decodeImmShift(int type,int imm5){
 	}
 	return shift_n;
 }
-
+/*
+in register.h
+#define SRType_None 0
+#define SRType_LSL	1
+#define SRType_LSR	2
+#define SRType_ASR	3
+#define SRType_ROR	4
+#define SRType_RRX	5
+*/
 struct RESULTCARRY* shift_c(int value,int type,int n,int carry_in){
 	int result,carry;
 	struct RESULTCARRY* result_shiftc = NULL;
 	switch(type){
-		case 0:{
+		case SRType_None:{
 			result = value;
 			carry = carry_in;
 			//set_carry(carry_in);
 		}break;
-		case 1:{
+		case SRType_LSL:{
 			if(n == 0){
 				result = value;
 				carry = carry_in;
@@ -176,19 +184,19 @@ struct RESULTCARRY* shift_c(int value,int type,int n,int carry_in){
 				result = lsl_c(value,n);
 				carry = n;
 		}break;
-		case 2:
+		case SRType_LSR:
 			result = lsr_c(value,n);
 			carry = n;
 			break;
-		case 3:
+		case SRType_ASR:
 			result = asr_c(value,n);
 			carry = n;
 			break;
-		case 4:
+		case SRType_ROR:
 			result = ror_c(value,n);
 			carry = n;
 			break;
-		case 5:
+		case SRType_RRX:
 			result = rrx_c(value,carry_in);
 			carry = carry_in;
 			break;
