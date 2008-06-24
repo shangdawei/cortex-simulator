@@ -90,15 +90,15 @@ void data_pro_mov_16m(int instruction){
 }
 
 void data_pro_bitoperation(int instruction){
-	int imm12,index;
+	int index;
 	func f_ptr;
 	printf("data_pro_bitoperation: 0x%X \n",instruction);
 	*((int *)(&dataProBit)) = instruction;
 	printf("Operate Code : 0x%x \n", dataProBit.op);
 	printf("Rn: 0x%x \n", dataProBit.rn);
-	printf("Rd: 0x%x \n", dataProBit.op);
-	imm12=decode_bitOperation(dataProBit.imm3, dataProBit.imm2,dataProBit.imm5);
-	printf("imm 12: 0x%x \n",imm12);
+	printf("Rd: 0x%x \n", dataProBit.rd);
+	//imm12=decode_bitOperation(dataProBit.imm3, dataProBit.imm2,dataProBit.imm5);
+	//printf("imm 12: 0x%x \n",imm12);
 	index = dataProBit.op;
 	if((dataProBit.op == 3) && (dataProBit.rn == 15))
 		index = dataProBit.op + 4;
@@ -701,19 +701,22 @@ void bit_field_clear(int i){
 	lsbit = decode_shift(dataProBit.imm3,dataProBit.imm2);
 	if(msbit >= lsbit){
 		m = 0xFFFFFFFF;
-		for(j = msbit;j > 0;j--)
+		for(j = msbit;j >= 0;j--)
 			m = m << 1;
+		//printf(" m = %x",m);
 		n = 1;
-		for(j = lsbit;j > 0;j--){
+		for(j = lsbit;j > 1;j--){
 			n = n << 1;
 			n = n + 1;
 		}
+		//printf(" n = %x",n);
 		temp = m | n;
-	result = get_general_register(dataProBit.rd);
-	result = result & temp;
-	set_general_register(dataProBit.rd, result);
-	printf(" APSR = %X",get_apsr());
-	printf(" rd = %X",get_general_register(dataProBit.rd));
+		//printf(" temp = %x",temp);
+		result = get_general_register(dataProBit.rd);
+		result = result & temp;
+		set_general_register(dataProBit.rd, result);
+		printf(" APSR = %X",get_apsr());
+		printf(" rd = %X",get_general_register(dataProBit.rd));
 	}
 	else
 		printf(" it is unpredictable!\n");
@@ -724,37 +727,44 @@ void bit_field_clear(int i){
 //Bit Field Insert copies any number of low order bits from a register into the same number of adjacent bits at any position in the destination register.
 void bit_field_inset(int i){
 	int msbit,lsbit,source,result,j,m,n,p,temp;
-//	n=0;													//modified by Jacky on 08.6.4 for assembling warning : havn't initialized local variable "n"
 	*((int *)(&dataProBit)) = i;
 	msbit = dataProBit.imm5;
+	//printf(" msbit = %d",msbit);
 	lsbit = decode_shift(dataProBit.imm3,dataProBit.imm2);
+	//printf(" lsbit = %d",lsbit);
 	if(msbit >= lsbit){
 		m = 1;
 		for(j = msbit-lsbit;j > 0;j--){
 			m = m << 1;
 			m = m +1;
 		}
+		//printf(" m = %X",m);
 		source = get_general_register(dataProBit.rn);
 		source = source & m;
+		//printf(" source = %X",source);
+		source = source << lsbit;
+		//printf(" source = %X",source);
 		p = 0xFFFFFFFF;
-		for(j = msbit;j > 0;j--)
+		for(j = msbit;j >= 0;j--)
 			p = p << 1;
 		n = 1;
-		for(j = lsbit;j > 0;j--){
+		for(j = lsbit;j > 1;j--){
 			n = n << 1;
 			n = n + 1;
 		}
 		temp = p | n;
-	result = get_general_register(dataProBit.rd);
-	result = result & temp;
-	result = result | source;
-	set_general_register(dataProBit.rd, result);
-	printf(" APSR = %X",get_apsr());
-	printf(" rd = %X",get_general_register(dataProBit.rd));
+		//printf(" temp = %X",temp);
+		result = get_general_register(dataProBit.rd);
+		result = result & temp;
+		//printf(" result = %X",result);
+		result = result | source;
+		set_general_register(dataProBit.rd, result);
+		printf(" APSR = %X",get_apsr());
+		printf(" rd = %X",get_general_register(dataProBit.rd));
 	}
 	else
 		printf(" it is unpredictable!\n");
-	printf("	***bit_field_cinset\n");
+	printf("	***bit_field_inset\n");
 
 }
 
@@ -765,21 +775,25 @@ void signed_bit_field_extract(int i){
 	widthminus1 = dataProBit.imm5;
 	lsbit = decode_shift(dataProBit.imm3,dataProBit.imm2);
 	msbit = lsbit + widthminus1;
+	//printf(" msbit = %d",msbit);
 	if(msbit <= 31){
 		m = 0xFFFFFFFF;
-		for(j = msbit;j > 0;j--)
+		for(j = msbit;j >= 0;j--)
 			m = m << 1;
 		n = 1;
-		for(j = lsbit;j > 0;j--){
+		for(j = lsbit;j > 1;j--){
 			n = n << 1;
 			n = n + 1;
 		}
 		temp = m | n;
+		//printf(" temp = %X",temp);
 		source = get_general_register(dataProBit.rn);
 		source = source & (~temp);
+		//printf(" source = %X",source);
 		p = source;
-		for(j = msbit;j <= 31;j++)
+		for(j = msbit;j < 31;j++)
 			p = p << 1;
+		//printf(" p = %X",p);
 		if(p & 0x80000000){
 			q = 0xFFFFFFFF;
 			for(j = 0;j <= msbit;j++)
@@ -810,11 +824,15 @@ void signed_lsl(int i){
 	*((int *)(&dataProBit)) = i;
 	imm = decode_shift(dataProBit.imm3,dataProBit.imm2);
 	saturate_to = dataProBit.imm5 + 1;
+	//printf(" saturate_to = %d",saturate_to);
 	source = get_general_register(dataProBit.rn);
+	//printf(" source = %X",source);
 	shift_n = decodeImmShift(0,imm);
+	//printf(" shift_n = %X",shift_n);
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
 	operand = shift(source,get_shift_t(),shift_n,apsr_c);
+	//printf(" operand = %d",operand);
 	result = signedSatQ(operand,saturate_to);
 	set_general_register(dataProBit.rd, result);//it exsit a problem.
 	if(get_sat())
@@ -860,10 +878,10 @@ void unsinged_bit_field_extract(int i){
 	msbit = lsbit + widthminus1;
 	if(msbit <= 31){
 		m = 0xFFFFFFFF;
-		for(j = msbit;j > 0;j--)
+		for(j = msbit;j >= 0;j--)
 			m = m << 1;
 		n = 1;
-		for(j = lsbit;j > 0;j--){
+		for(j = lsbit;j > 1;j--){
 			n = n << 1;
 			n = n + 1;
 		}

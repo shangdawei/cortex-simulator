@@ -122,70 +122,86 @@ int rrx(unsigned x,unsigned n){
 
 int decodeImmShift(int type,int imm5){
 	int shift_n;
-	switch(type){
-		case 0:{
-			set_shift_t(1);
+	if((type == 0) && (imm5 == 0)){
+		set_shift_t(0);
+		shift_n = imm5;
+	}
+	else if((type == 0) && (imm5 != 0)){
+		set_shift_t(1);
+		shift_n = imm5;
+	}
+	else if(type == 1){
+		set_shift_t(2);
+		if(imm5 == 0)
+			shift_n = 32;
+		else
 			shift_n = imm5;
-		}break;
-		case 1:{
-			set_shift_t(2);
-			if(imm5 == 0)
-				shift_n = 32;
-			else
-				shift_n = imm5;
-		}break;
-		case 2:{
-			set_shift_t(3);
-			if(imm5 == 0)
-				shift_n = 32;
-			else
-				shift_n = imm5;
-		}break;
-		case 3:{
-			if(imm5 == 0){
-				set_shift_t(5);
-				shift_n = 1;
-			}
-			else{
-				set_shift_t(4);
-				shift_n = imm5;
-			}
-		}break;
+	}
+	else if(type == 2){
+		set_shift_t(3);
+		if(imm5 == 0)
+			shift_n = 32;
+		else
+			shift_n = imm5;
+	}
+	else{
+		if(imm5 == 0){
+			set_shift_t(5);
+			shift_n = 1;
+		}
+		else{
+			set_shift_t(4);
+			shift_n = imm5;
+		}
 	}
 	return shift_n;
 }
 
-int shift_c(int value,int type,int n,int carry_in){
-	int result;
+struct RESULTCARRY* shift_c(int value,int type,int n,int carry_in){
+	int result,carry;
+	struct RESULTCARRY* result_shiftc = NULL;
 	switch(type){
 		case 0:{
 			result = value;
-			set_carry(carry_in);
+			carry = carry_in;
+			//set_carry(carry_in);
 		}break;
 		case 1:{
 			if(n == 0){
 				result = value;
-				set_carry(carry_in);
+				carry = carry_in;
+				//set_carry(carry_in);
 			}
 			else
 				result = lsl_c(value,n);
+				carry = n;
 		}break;
 		case 2:
-			result = lsr_c(value,n);break;
+			result = lsr_c(value,n);
+			carry = n;
+			break;
 		case 3:
-			result = asr_c(value,n);break;
+			result = asr_c(value,n);
+			carry = n;
+			break;
 		case 4:
-			result = ror_c(value,n);break;
+			result = ror_c(value,n);
+			carry = n;
+			break;
 		case 5:
-			result = rrx_c(value,carry_in);break;
+			result = rrx_c(value,carry_in);
+			carry = carry_in;
+			break;
 	}
-	return result;
+	result_shiftc->result = result;
+	result_shiftc->carry = carry;
+	return result_shiftc;
 }
 
 int shift(int value,int type,int n,int carry_in){
-	int result;
+	struct RESULTCARRY* result;
 	result = shift_c(value,type,n,carry_in);
-	return result;
+	return result->result;
 }
 
 int min(int x,int y){
@@ -203,7 +219,7 @@ int max(int x,int y){
 int signedSatQ(int i,int j){
 	int saturated_i,result,k,m;
 	m = 1;
-	saturated_i = min(max(i,-(2^(j-1))),(2^(j-1))-1);		
+	saturated_i = min(max(i,-(1<<(j-1))),(1<<(j-1))-1);//?????
 	for(k = j-1;k > 0;k--){
 		m = m << 1;
 		m = m + 1;
@@ -219,7 +235,7 @@ int signedSatQ(int i,int j){
 int unsignedSatQ(int i,int j){
 	int saturated_i,result,k,m;
 	m = 1;
-	saturated_i = min(max(i,0),(2^j)-1);
+	saturated_i = min(max(i,0),(1<<j)-1);
 	for(k = j-1;k > 0;k--){
 		m = m << 1;
 		m = m + 1;

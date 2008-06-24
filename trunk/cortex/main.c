@@ -8,6 +8,9 @@ int main(){
            if(instruction!=0){
                decode(instruction);
                printf("------------------------------------------------------------- \n");
+				#ifdef bool
+				printf("hello world!\n");
+				#endif
           }else{
               break;
           }
