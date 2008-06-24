@@ -26,6 +26,12 @@
 #define REG_V	0x10000000
 #define REG_Q	0x08000000
 
+struct RESULTCARRY{
+	int result;
+	int carry;
+};
+
+
 //static int registers[REG_SIZE]={0};
 
 void set_general_register(int rn, int value);

@@ -6,3 +6,23 @@
  *
  */
 #include "helper_procedures.h"
+
+void ALUWritePC(value)
+{
+/*
+This procedure writes a value to the PC with the correct semantics for such a write by the ADD
+(register) and MOV (register) data-processing instructions.
+*/
+	set_pc(value);
+}
+
+int ArchVersion()
+{
+//This function returns the major version number of the architecture.
+	return 2;
+}
+
+//bool bad_Reg(n)
+//{
+//	return false;
+//}

@@ -23,7 +23,7 @@ int ror(unsigned x,unsigned n);
 int rol(unsigned x,unsigned n);
 int rrx(unsigned x,unsigned n);
 int decodeImmShift(int type,int imm5);
-int shift_c(int value,int type,int n,int carry_in);
+struct RESULTCARRY* shift_c(int value,int type,int n,int carry_in);
 int shift(int value,int type,int n,int carry_in);
 int min(int x,int y);
 int max(int x,int y);
