@@ -5,6 +5,7 @@
 #include "register.h"
 #include "memory.h"
 #include "helper_procedures.h"
+#include "operators_built-in_func.h"
 #include <string.h>
 
 /**
