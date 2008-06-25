@@ -1,6 +1,7 @@
 #ifndef _INSTRUCTION
 #define _INSTRUCTION
 #include <stdio.h>
+#include "stdlib.h"
 #include "register.h"
 #include "memory.h"
 #include "helper_procedures.h"
@@ -25,8 +26,8 @@ int rrx(unsigned x,unsigned n);
 int decodeImmShift(int type,int imm5);
 struct RESULTCARRY* shift_c(int value,int type,int n,int carry_in);
 int shift(int value,int type,int n,int carry_in);
-int min(int x,int y);
-int max(int x,int y);
+//int min(int x,int y);
+//int max(int x,int y);
 int signedSatQ(int i,int j);
 int unsignedSatQ(int i,int j);
 int signedSat(int i,int j);

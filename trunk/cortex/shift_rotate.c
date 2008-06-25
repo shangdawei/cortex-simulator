@@ -167,7 +167,7 @@ in register.h
 */
 struct RESULTCARRY* shift_c(int value,int type,int n,int carry_in){
 	int result,carry;
-	struct RESULTCARRY* result_shiftc = NULL;
+	struct RESULTCARRY *result_shiftc = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	switch(type){
 		case SRType_None:{
 			result = value;
@@ -201,28 +201,32 @@ struct RESULTCARRY* shift_c(int value,int type,int n,int carry_in){
 			carry = carry_in;
 			break;
 	}
+#ifdef DEBUG
+	printf(" shiftc_result = %d",result);
+	printf(" shiftc_carry = %d",carry);
+#endif
 	result_shiftc->result = result;
 	result_shiftc->carry = carry;
 	return result_shiftc;
 }
 
 int shift(int value,int type,int n,int carry_in){
-	struct RESULTCARRY* result;
+	struct RESULTCARRY* result = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	result = shift_c(value,type,n,carry_in);
 	return result->result;
 }
 
-int min(int x,int y){
-	int z;
-	z = (x <= y)?x:y;
-	return z;
-}
-
-int max(int x,int y){
-	int z;
-	z = (x >= y)?x:y;
-	return z;
-}
+//int min(int x,int y){
+//	int z;
+//	z = (x <= y)?x:y;
+//	return z;
+//}
+//
+//int max(int x,int y){
+//	int z;
+//	z = (x >= y)?x:y;
+//	return z;
+//}
 
 int signedSatQ(int i,int j){
 	int saturated_i,result,k,m;
