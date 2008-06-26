@@ -6,7 +6,7 @@
  *
  */
 #include "data_process_imm.h" 
-//#include "register.h"
+#include "instruction.h"
 /**
  *
  *To define the struct to handle the instruction
@@ -115,7 +115,8 @@ void data_pro_reserved(int instruction){
 
 //Add with Carry (immediate) adds an immediate value and the carry flag value to a register value, and writes the result to the destination register. 
 void add_with_carry_imm(int i){
-	int imm,source,result;
+	int imm,source;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	unsigned apsr_c;
 	*((int *)(&dataProModified)) = i;
 	imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);//immediate expand without imm_carry
@@ -126,23 +127,23 @@ void add_with_carry_imm(int i){
 	//printf(" apsr_c = %X",apsr_c);
 	apsr_c = apsr_c >> 29;
 	result = addwithcarry(source,imm,apsr_c);
-	set_general_register(dataProModified.rd, result);//send data to destination register
+	set_general_register(dataProModified.rd, result->result);//send data to destination register
 	if(dataProModified.s==1){
-		if(result & 0x80000000)//whether negative
+		if(result->result & 0x80000000)//whether negative
 			set_flag_n();
 		else
 			cle_flag_n();
-		if(result==0)//whether zero
+		if(result->result == 0)//whether zero
 			set_flag_z();
 			//printf(" kkkkk ");}
 		else
 			cle_flag_z();
 			//printf(" kkkkk ");}
-		if(get_calculate_carry())//whether carry
+		if(result->carry_out)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
-		if(get_calculate_overflow())//whether overflow
+		if(result->overflow)//whether overflow
 			set_flag_v();
 		else
 			cle_flag_v();
@@ -156,28 +157,29 @@ void add_with_carry_imm(int i){
 
 //This instruction adds an immediate value to a register value, and writes the result to the destination register.
 void add_imm(int i){
-	int imm, result,source;
+	int imm,source;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	*((int *)(&dataProModified)) = i;
 	imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
     source = get_general_register(dataProModified.rn);
 	result = addwithcarry(source,imm,0);
-	set_general_register(dataProModified.rd, result);
+	set_general_register(dataProModified.rd, result->result);
 	if(dataProModified.s==1){
-		if(result & 0x80000000)
+		if(result->result & 0x80000000)
 			set_flag_n();
 		else
 			cle_flag_n();
-		if(result==0)
+		if(result->result == 0)
 			set_flag_z();
 			//printf(" kkkkk ");}
 		else
 			cle_flag_z();
 			//printf(" kkkkk ");}
-		if(get_calculate_carry())
+		if(result->carry_out)
 			set_flag_c();
 		else
 			cle_flag_c();
-		if(get_calculate_overflow())
+		if(result->overflow)
 			set_flag_v();
 		else
 			cle_flag_v();
@@ -252,58 +254,60 @@ void bit_clear_imm(int i){
 
 //Compare Negative (immediate) adds a register value and an immediate value. It updates the condition flags based on the result, and discards the result.
 void compare_negative_imm(int i){
-	int imm,source,result;
+	int imm,source;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	*((int *)(&dataProModified)) = i;
 	imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
     source = get_general_register(dataProModified.rn);
 	result = addwithcarry(source,imm,0);
-	if(result & 0x80000000)
+	if(result->result & 0x80000000)
 		set_flag_n();
 	else
 		cle_flag_n();
-	if(result==0)
+	if(result->result == 0)
 		set_flag_z();
 	else
 		cle_flag_z();
-	if(get_calculate_carry())
+	if(result->carry_out)
 		set_flag_c();
 	else
 		cle_flag_c();
-	if(get_calculate_overflow())
+	if(result->overflow)
 		set_flag_v();
 	else
 		cle_flag_v();
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf(" APSR = %X",get_apsr());
+	//printf(" rd = %X",get_general_register(dataProModified.rd));
 	printf("	***compare_negative\n");	
 
 }
 
 //Compare (immediate) subtracts an immediate value from a register value. It updates the condition flags based on the result, and discards the result.
 void compare_imm(int i){
-	int imm,source,result;
+	int imm,source;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	*((int *)(&dataProModified)) = i;
 	imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
     source = get_general_register(dataProModified.rn);
 	result = addwithcarry(source,~imm,1);
-	if(result & 0x80000000)
+	if(result->result & 0x80000000)
 		set_flag_n();
 	else
 		cle_flag_n();
-	if(result==0)
+	if(result->result == 0)
 		set_flag_z();
 	else
 		cle_flag_z();
-	if(get_calculate_carry())
+	if(result->carry_out)
 		set_flag_c();
 	else
 		cle_flag_c();
-	if(get_calculate_overflow())
+	if(result->overflow)
 		set_flag_v();
 	else
 		cle_flag_v();
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf(" APSR = %X",get_apsr());
+	//printf(" rd = %X",get_general_register(dataProModified.rd));
 	printf("	***compare\n");	
 
 }
@@ -459,41 +463,43 @@ void logical_or_imm(int i){
 
 //Reverse Subtract (immediate) subtracts a register value from an immediate value, and writes the result to the destination register. 
 void reverse_subtract_imm(int i){
-	int imm,source,result;
+	int imm,source;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	*((int *)(&dataProModified)) = i;
 	imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
 	source = get_general_register(dataProModified.rn);
 	result = addwithcarry(~source,imm,1);
-	set_general_register(dataProModified.rd, result);
+	set_general_register(dataProModified.rd, result->result);
 	if(dataProModified.s==1){
-		if(result & 0x80000000)
+		if(result->result & 0x80000000)
 			set_flag_n();
 		else
 			cle_flag_n();
-		if(result==0)
+		if(result->result == 0)
 			set_flag_z();
 			//printf(" kkkkk ");}
 		else
 			cle_flag_z();
 			//printf(" kkkkk ");}
-		if(get_calculate_carry())
+		if(result->carry_out)
 			set_flag_c();
 		else
 			cle_flag_c();
-		if(get_calculate_overflow())
+		if(result->overflow)
 			set_flag_v();
 		else
 			cle_flag_v();
 	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf(" APSR = %X",get_apsr());
+	printf(" rd = %X",get_general_register(dataProModified.rd));
 	printf("	***reverse subtract\n");	
 
 }
 
 //Subtract with Carry (immediate) subtracts an immediate value and the value of NOT(Carry flag) from a register value, and writes the result to the destination register. 
 void subtract_with_carry_imm(int i){
-	int imm,source,result;
+	int imm,source;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	unsigned apsr_c;
 	*((int *)(&dataProModified)) = i;
 	imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
@@ -501,59 +507,60 @@ void subtract_with_carry_imm(int i){
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
 	result = addwithcarry(source,~imm,apsr_c);
-	set_general_register(dataProModified.rd, result);
+	set_general_register(dataProModified.rd, result->result);
 	if(dataProModified.s==1){
-		if(result & 0x80000000)
+		if(result->result & 0x80000000)
 			set_flag_n();
 		else
 			cle_flag_n();
-		if(result==0)
+		if(result->result == 0)
 			set_flag_z();
 		else
 			cle_flag_z();
-		if(get_calculate_carry())
+		if(result->carry_out)
 			set_flag_c();
 		else
 			cle_flag_c();
-		if(get_calculate_overflow())
+		if(result->overflow)
 			set_flag_v();
 		else
 			cle_flag_v();
 	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf(" APSR = %X",get_apsr());
+	printf(" rd = %X",get_general_register(dataProModified.rd));
 	printf("	***subtract with carry \n");	
 
 }
 
 //This instruction subtracts an immediate value from a register value, and writes the result to the destination register. 
 void subtract_imm(int i){
-	int imm,source,result;
+	int imm,source;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	*((int *)(&dataProModified)) = i;
 	imm = ThumbExpandImm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
 	source = get_general_register(dataProModified.rn);
 	result = addwithcarry(source,~imm,1);
-	set_general_register(dataProModified.rd, result);
+	set_general_register(dataProModified.rd, result->result);
 	if(dataProModified.s==1){
-		if(result & 0x80000000)
+		if(result->result & 0x80000000)
 			set_flag_n();
 		else
 			cle_flag_n();
-		if(result==0)
+		if(result->result == 0)
 			set_flag_z();
 		else
 			cle_flag_z();
-		if(get_calculate_carry())
+		if(result->carry_out)
 			set_flag_c();
 		else
 			cle_flag_c();
-		if(get_calculate_overflow())
+		if(result->overflow)
 			set_flag_v();
 		else
 			cle_flag_v();
 	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf(" APSR = %X",get_apsr());
+	printf(" rd = %X",get_general_register(dataProModified.rd));
 	printf("	***subtract\n");	
 
 }
@@ -608,28 +615,30 @@ void test_imm(int i){
 
 //This instruction adds an immediate value to a register value, and writes the result to the destination register.
 void add_wide_imm(int i){
-	int imm,source,result;
+	int imm,source;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	*((int *)(&dataProAdd)) = i;
 	imm = decode_imm12(dataProAdd.imm1,dataProAdd.imm3,dataProAdd.imm8);
 	source = get_general_register(dataProAdd.rn);
 	result = addwithcarry(source,imm,0);
-	set_general_register(dataProAdd.rd, result);
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProAdd.rd));
+	set_general_register(dataProAdd.rd, result->result);
+	printf(" APSR = %X",get_apsr());
+	printf(" rd = %X",get_general_register(dataProAdd.rd));
 	printf("	***add_wide\n");
 
 }
 
 //This instruction subtracts an immediate value from a register value, and writes the result to the destination register.
 void sub_wide_imm(int i){
-	int imm,source,result;
+	int imm,source;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	*((int *)(&dataProAdd)) = i;
 	imm = decode_imm12(dataProAdd.imm1,dataProAdd.imm3,dataProAdd.imm8);
 	source = get_general_register(dataProAdd.rn);
 	result = addwithcarry(source,~imm,1);
-	set_general_register(dataProAdd.rd, result);
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProAdd.rd));
+	set_general_register(dataProAdd.rd, result->result);
+	printf(" APSR = %X",get_apsr());
+	printf(" rd = %X",get_general_register(dataProAdd.rd));
 	printf("	***subtract_wide\n");
 
 }
@@ -643,8 +652,8 @@ void address_before_current(int i){
 	base = align(pc,4);
 	result = base - imm;
 	set_general_register(dataProAdd.rd, result);
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProAdd.rd));	
+	printf(" APSR = %X",get_apsr());
+	printf(" rd = %X",get_general_register(dataProAdd.rd));	
 	printf("	***address_before_ins\n");
 
 }
@@ -658,8 +667,8 @@ void address_after_current(int i){
 	base = align(pc,4);
 	result = base + imm;
 	set_general_register(dataProAdd.rd, result);
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProAdd.rd));
+	printf(" APSR = %X",get_apsr());
+	printf(" rd = %X",get_general_register(dataProAdd.rd));
 	printf("	***address_after_ins\n");
 
 }
@@ -674,8 +683,8 @@ void move_top_imm(int i){
 	result = result & 0x0000FFFF;
 	result = result | imm;
 	set_general_register(dataProMov.rd, result);
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProMov.rd));	
+	printf(" APSR = %X",get_apsr());
+	printf(" rd = %X",get_general_register(dataProMov.rd));	
 	printf("	***move_top\n");
 
 }
@@ -687,8 +696,8 @@ void move_wide_imm(int i){
 	imm = decode_imm16(dataProMov.imm1,dataProMov.imm4,dataProMov.imm3,dataProMov.imm8);
 	result = imm;
 	set_general_register(dataProMov.rd, result);
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProMov.rd));	
+	printf(" APSR = %X",get_apsr());
+	printf(" rd = %X",get_general_register(dataProMov.rd));	
 	printf("	***move_wide\n");
 
 }
@@ -819,7 +828,9 @@ void signed_bit_field_extract(int i){
 
 //Signed Saturate saturates an optionally-shifted signed value to a selectable signed range.
 void signed_lsl(int i){
-	int imm,source,result,shift_n,operand;
+	int imm,source,operand;
+	struct RESULTCARRY *shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	struct RESULTCARRY *result = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	unsigned saturate_to,apsr_c;
 	*((int *)(&dataProBit)) = i;
 	imm = decode_shift(dataProBit.imm3,dataProBit.imm2);
@@ -827,25 +838,27 @@ void signed_lsl(int i){
 	//printf(" saturate_to = %d",saturate_to);
 	source = get_general_register(dataProBit.rn);
 	//printf(" source = %X",source);
-	shift_n = decodeImmShift(0,imm);
+	shift_tn = decodeImmShift(0,imm);
 	//printf(" shift_n = %X",shift_n);
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	operand = shift(source,get_shift_t(),shift_n,apsr_c);
+	operand = shift(source,shift_tn->carry,shift_tn->result,apsr_c);
 	//printf(" operand = %d",operand);
 	result = signedSatQ(operand,saturate_to);
-	set_general_register(dataProBit.rd, result);//it exsit a problem.
-	if(get_sat())
+	set_general_register(dataProBit.rd, result->result);//it exsit a problem.
+	if(result->carry)
 		set_flag_q();
-	printf(" APSR = %X",get_apsr());
-	printf(" rd = %X",get_general_register(dataProBit.rd));
+	printf(" APSR = 0x%x",get_apsr());
+	printf(" rd = 0x%x",get_general_register(dataProBit.rd));
 	printf("	***signed_lsl\n");
 
 }
 
 //Signed Saturate saturates an optionally-shifted signed value to a selectable signed range.
 void signed_asr(int i){
-	int imm,source,result,shift_n,operand;
+	int imm,source,operand;
+	struct RESULTCARRY *shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	struct RESULTCARRY *result = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	unsigned saturate_to,apsr_c;
 	*((int *)(&dataProBit)) = i;
 	imm = decode_shift(dataProBit.imm3,dataProBit.imm2);
@@ -854,13 +867,13 @@ void signed_asr(int i){
 	else{
 		saturate_to = dataProBit.imm5 + 1;
 		source = get_general_register(dataProBit.rn);
-		shift_n = decodeImmShift(2,imm);
+		shift_tn = decodeImmShift(2,imm);
 		apsr_c = get_flag_c();
 		apsr_c = apsr_c >> 29;
-		operand = shift(source,get_shift_t(),shift_n,apsr_c);
+		operand = shift(source,shift_tn->carry,shift_tn->result,apsr_c);
 		result = signedSatQ(operand,saturate_to);
-		set_general_register(dataProBit.rd, result);//it exsit a problem.
-		if(get_sat())
+		set_general_register(dataProBit.rd, result->result);//it exsit a problem.
+		if(result->carry)
 			set_flag_q();
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProBit.rd));
@@ -903,19 +916,21 @@ void unsinged_bit_field_extract(int i){
 
 //Unsigned Saturate saturates an optionally-shifted signed value to a selected unsigned range.
 void unsigned_lsl(int i){
-	int imm,source,result,shift_n,operand;
+	int imm,source,operand;
+	struct RESULTCARRY *shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	struct RESULTCARRY *result = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	unsigned saturate_to,apsr_c;
 	*((int *)(&dataProBit)) = i;
 	imm = decode_shift(dataProBit.imm3,dataProBit.imm2);
 	saturate_to = dataProBit.imm5;
 	source = get_general_register(dataProBit.rn);
-	shift_n = decodeImmShift(0,imm);
+	shift_tn = decodeImmShift(0,imm);
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	operand = shift(source,get_shift_t(),shift_n,apsr_c);
+	operand = shift(source,shift_tn->carry,shift_tn->result,apsr_c);
 	result = unsignedSatQ(operand,saturate_to);
-	set_general_register(dataProBit.rd, result);
-	if(get_sat())
+	set_general_register(dataProBit.rd, result->result);
+	if(result->carry)
 		set_flag_q();
 	printf(" APSR = %X",get_apsr());
 	printf(" rd = %X",get_general_register(dataProBit.rd));
@@ -925,7 +940,9 @@ void unsigned_lsl(int i){
 
 //Unsigned Saturate saturates an optionally-shifted signed value to a selected unsigned range.
 void unsigned_asr(int i){
-	int imm,source,result,shift_n,operand;
+	int imm,source,operand;
+	struct RESULTCARRY *shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	struct RESULTCARRY *result = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	unsigned saturate_to,apsr_c;
 	*((int *)(&dataProBit)) = i;
 	imm = decode_shift(dataProBit.imm3,dataProBit.imm2);
@@ -934,13 +951,13 @@ void unsigned_asr(int i){
 	else{
 		saturate_to = dataProBit.imm5;
 		source = get_general_register(dataProBit.rn);
-		shift_n = decodeImmShift(2,imm);
+		shift_tn = decodeImmShift(2,imm);
 		apsr_c = get_flag_c();
 		apsr_c = apsr_c >> 29;
-		operand = shift(source,get_shift_t(),shift_n,apsr_c);
+		operand = shift(source,shift_tn->carry,shift_tn->result,apsr_c);
 		result = unsignedSatQ(operand,saturate_to);
-		set_general_register(dataProBit.rd, result);
-		if(get_sat())
+		set_general_register(dataProBit.rd, result->result);
+		if(result->carry)
 			set_flag_q();
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProBit.rd));

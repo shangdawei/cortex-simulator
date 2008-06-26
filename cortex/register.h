@@ -37,7 +37,11 @@ struct RESULTCARRY{
 	int result;
 	int carry;
 };
-
+struct CALCULATECO{
+	int result;
+	int carry_out;
+	int overflow;
+};
 
 //static int registers[REG_SIZE]={0};
 
@@ -53,10 +57,10 @@ void set_apsr(int value);
 int get_apsr();
 void set_carry(int value);
 int get_carry();
-void set_shift_t(int value);
-int get_shift_t();
-void set_sat(int value);
-int get_sat();
+//void set_shift_t(int value);
+//int get_shift_t();
+//void set_sat(int value);
+//int get_sat();
 
 void set_flag_n();
 void set_flag_z();
