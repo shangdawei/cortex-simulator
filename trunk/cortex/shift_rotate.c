@@ -180,47 +180,41 @@ in register.h
 #define SRType_RRX	5
 */
 struct RESULTCARRY* shift_c(int value,int type,int n,int carry_in){
-	int result,carry;
 	struct RESULTCARRY *result_shiftc = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	switch(type){
 		case SRType_None:{
-			result = value;
-			carry = carry_in;
+			result_shiftc->result = value;
+			result_shiftc->carry = carry_in;
 			//set_carry(carry_in);
 		}break;
 		case SRType_LSL:{
 			if(n == 0){
-				result = value;
-				carry = carry_in;
+				result_shiftc->result = value;
+				result_shiftc->carry = carry_in;
 				//set_carry(carry_in);
 			}
 			else
-				result = lsl_c(value,n);
-				carry = n;
+				result_shiftc = lsl_c(value,n);
 		}break;
 		case SRType_LSR:
-			result = lsr_c(value,n);
-			carry = n;
+			result_shiftc = lsr_c(value,n);
 			break;
 		case SRType_ASR:
-			result = asr_c(value,n);
-			carry = n;
+			result_shiftc = asr_c(value,n);
 			break;
 		case SRType_ROR:
-			result = ror_c(value,n);
-			carry = n;
+			result_shiftc = ror_c(value,n);
 			break;
 		case SRType_RRX:
-			result = rrx_c(value,carry_in);
-			carry = carry_in;
+			result_shiftc = rrx_c(value,carry_in);
 			break;
 	}
-#ifdef DEBUG
-	printf(" shiftc_result = %d",result);
-	printf(" shiftc_carry = %d",carry);
-#endif
-	result_shiftc->result = result;
-	result_shiftc->carry = carry;
+//#ifdef DEBUG
+//	printf(" shiftc_result = %d",result);
+//	printf(" shiftc_carry = %d",carry);
+//#endif
+//	result_shiftc->result = result;
+//	result_shiftc->carry = carry;
 	return result_shiftc;
 }
 
