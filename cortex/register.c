@@ -2,9 +2,9 @@
 #include "string.h"
 #include "stdio.h"
 static int registers[REG_SIZE]={0};
-static int imm_carry = 0;//ImmExpand will product it. it is a template
-static int calculate_carry = 0;//It is a template carry
-static int calculate_overflow = 0;// It is a template overflow
+//static int imm_carry = 0;//ImmExpand will product it. it is a template
+//static int calculate_carry = 0;//It is a template carry
+//static int calculate_overflow = 0;// It is a template overflow
 //static int shift_t = 0;//category of shift
 //static int sat = 0;//whether saturated
 
@@ -13,7 +13,7 @@ void set_general_register(int rn, int value){
 }
 
 int get_general_register(int rn){
-	memset(registers,'2',REG_SIZE*sizeof(int));
+	//memset(registers,'2',REG_SIZE*sizeof(int));
 	return registers[rn];
 }
 
@@ -47,13 +47,13 @@ int get_apsr(){
 	return registers[$APSR];
 }
 
-void set_carry(int value){
-   imm_carry = value;
-}
-
-int get_carry(){
-   return imm_carry;
-}
+//void set_carry(int value){
+//   imm_carry = value;
+//}
+//
+//int get_carry(){
+//   return imm_carry;
+//}
 
 //void set_shift_t(int value){
 //	shift_t = value;
