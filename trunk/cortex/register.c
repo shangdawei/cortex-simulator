@@ -5,8 +5,8 @@ static int registers[REG_SIZE]={0};
 static int imm_carry = 0;//ImmExpand will product it. it is a template
 static int calculate_carry = 0;//It is a template carry
 static int calculate_overflow = 0;// It is a template overflow
-static int shift_t = 0;//category of shift
-static int sat = 0;//whether saturated
+//static int shift_t = 0;//category of shift
+//static int sat = 0;//whether saturated
 
 void set_general_register(int rn, int value){
 	registers[rn]=value;
@@ -55,21 +55,21 @@ int get_carry(){
    return imm_carry;
 }
 
-void set_shift_t(int value){
-	shift_t = value;
-}
+//void set_shift_t(int value){
+//	shift_t = value;
+//}
 
-int get_shift_t(){
-	return shift_t;
-}
-
-void set_sat(int value){
-	sat = value;
-}
-
-int get_sat(){
-	return sat;
-}
+//int get_shift_t(){
+//	return shift_t;
+//}
+//
+//void set_sat(int value){
+//	sat = value;
+//}
+//
+//int get_sat(){
+//	return sat;
+//}
 
 void set_flag_n(){
 	registers[$APSR]|=REG_N;
@@ -86,12 +86,12 @@ void set_flag_v(){
 void set_flag_q(){
 	registers[$APSR]|=REG_Q;
 }
-void set_calculate_carry(){
-	calculate_carry = 1;
-}
-void set_calculate_overflow(){
-	calculate_overflow = 1;
-}
+//void set_calculate_carry(){
+//	calculate_carry = 1;
+//}
+//void set_calculate_overflow(){
+//	calculate_overflow = 1;
+//}
 
 void cle_flag_n(){
 	registers[$APSR]&=(~REG_N);
@@ -112,12 +112,12 @@ void cle_flag_v(){
 void cle_flag_q(){
 	registers[$APSR]&=(~REG_Q);
 }
-void cle_calculate_carry(){
-	calculate_carry = 0;
-}
-void cle_calculate_overflow(){
-	calculate_overflow = 0;
-}
+//void cle_calculate_carry(){
+//	calculate_carry = 0;
+//}
+//void cle_calculate_overflow(){
+//	calculate_overflow = 0;
+//}
 
 int get_flag_n(){
 	int n = registers[$APSR];
@@ -157,13 +157,13 @@ int get_flag_q(){
 }
 
 
-int get_calculate_carry(){
-	return calculate_carry;
-}
-
-
-int get_calculate_overflow(){
-	return calculate_overflow;
-}
+//int get_calculate_carry(){
+//	return calculate_carry;
+//}
+//
+//
+//int get_calculate_overflow(){
+//	return calculate_overflow;
+//}
 
 

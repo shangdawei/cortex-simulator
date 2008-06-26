@@ -12,32 +12,32 @@
  *to handle the shift_rotate
  *
  */ 
-int lsl_c(unsigned x,unsigned n);
-int lsr_c(unsigned x,unsigned n);
-int asr_c(int x,unsigned n);
+struct RESULTCARRY* lsl_c(unsigned x,unsigned n);
+struct RESULTCARRY* lsr_c(unsigned x,unsigned n);
+struct RESULTCARRY* asr_c(int x,unsigned n);
 int lsl(unsigned x,unsigned n);
 int lsr(unsigned x,unsigned n);
 int asr(int x,unsigned n);
-int ror_c(unsigned x,unsigned n);
-int rol_c(unsigned x,unsigned n);
-int rrx_c(unsigned x,unsigned c_in);
+struct RESULTCARRY* ror_c(unsigned x,unsigned n);
+struct RESULTCARRY* rol_c(unsigned x,unsigned n);
+struct RESULTCARRY* rrx_c(unsigned x,unsigned c_in);
 int ror(unsigned x,unsigned n);
 int rol(unsigned x,unsigned n);
 int rrx(unsigned x,unsigned n);
-int decodeImmShift(int type,int imm5);
+struct RESULTCARRY* decodeImmShift(int type,int imm5);
 struct RESULTCARRY* shift_c(int value,int type,int n,int carry_in);
 int shift(int value,int type,int n,int carry_in);
 //int min(int x,int y);
 //int max(int x,int y);
-int signedSatQ(int i,int j);
-int unsignedSatQ(int i,int j);
+struct RESULTCARRY* signedSatQ(int i,int j);
+struct RESULTCARRY* unsignedSatQ(int i,int j);
 int signedSat(int i,int j);
 int unsignedSat(int i,int j);
 /**
  *to handle the calculate
  *
  */ 
-unsigned addwithcarry(unsigned m,unsigned n,unsigned carry_in);
+struct CALCULATECO* addwithcarry(unsigned m,unsigned n,unsigned carry_in);
 unsigned align(unsigned x,unsigned y);
 /**
  *to handle the immediate decode
