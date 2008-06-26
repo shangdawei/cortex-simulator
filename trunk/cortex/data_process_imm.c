@@ -148,8 +148,8 @@ void add_with_carry_imm(int i){
 		else
 			cle_flag_v();
 	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf(" APSR = %X",get_apsr());
+	printf(" rd = %X",get_general_register(dataProModified.rd));
 	printf("	***add with carry\n");	
 	printf("********ADC{s}<c><q>	{<Rd>,} <Rn>, #<const>******* \n");
 
@@ -184,19 +184,20 @@ void add_imm(int i){
 		else
 			cle_flag_v();
 	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf(" APSR = %X",get_apsr());
+	printf(" rd = %X",get_general_register(dataProModified.rd));
 	printf("	***add\n");	
 
 }
 
 //This instruction performs a bitwise AND of a register value and an immediate value, and writes the result to the destination register.
 void logical_and_imm(int i){
-	int imm,source,result;
+	int source,result;
+	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
 	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
     source = get_general_register(dataProModified.rn);
-	result = source & imm;
+	result = source & imm->result;
 	//int a = result & 0x80000000;
 	//printf(" a = %x",a);
 	set_general_register(dataProModified.rd, result);
@@ -210,24 +211,25 @@ void logical_and_imm(int i){
 			set_flag_z();
 		else
 			cle_flag_z();
-		if(get_carry()==0)
+		if(imm->carry)
 			cle_flag_c();
 		else
 			set_flag_c();
 	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf(" APSR = %X",get_apsr());
+	printf(" rd = %X",get_general_register(dataProModified.rd));
 	printf("	***logical and\n");	
 
 }
 
 //Bit Clear (immediate) performs a bitwise AND of a register value and the complement of an immediate value, and writes the result to the destination register. 
 void bit_clear_imm(int i){
-	int imm,source,result;
+	int source,result;
+	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
 	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
     source = get_general_register(dataProModified.rn);
-	result = source & (~imm);
+	result = source & (~imm->result);
 	//int a = result & 0x80000000;
 	//printf(" a = %x",a);
 	set_general_register(dataProModified.rd, result);
@@ -241,13 +243,13 @@ void bit_clear_imm(int i){
 			set_flag_z();
 		else
 			cle_flag_z();
-		if(get_carry()==0)
+		if(imm->carry)
 			cle_flag_c();
 		else
 			set_flag_c();
 	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf(" APSR = %X",get_apsr());
+	printf(" rd = %X",get_general_register(dataProModified.rd));
 	printf("	***bit_clear\n");	
 
 }
@@ -314,11 +316,12 @@ void compare_imm(int i){
 
 //Exclusive OR (immediate) performs a bitwise Exclusive OR of a register value and an immediate value, and writes the result to the destination register. 
 void exclusive_or_imm(int i){
-	int imm,source,result;
+	int source,result;
+	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
 	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
     source = get_general_register(dataProModified.rn);
-	result = source ^ imm;
+	result = source ^ imm->result;
 	//int a = result & 0x80000000;
 	//printf(" a = %x",a);
 	set_general_register(dataProModified.rd, result);
@@ -332,23 +335,24 @@ void exclusive_or_imm(int i){
 			set_flag_z();
 		else
 			cle_flag_z();
-		if(get_carry()==0)
+		if(imm->carry)
 			cle_flag_c();
 		else
 			set_flag_c();
 	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf(" APSR = %X",get_apsr());
+	printf(" rd = %X",get_general_register(dataProModified.rd));
 	printf("	***exclusive or\n");	
 
 }
 
 //Move (immediate) writes an immediate value to the destination register. 
 void move_imm(int i){
-	int imm,result;
+	int result;
+	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
 	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
-	result = imm;
+	result = imm->result;
 	set_general_register(dataProModified.rd, result);
 	if(dataProModified.s==1){
 		if(result & 0x80000000) //it's a problem.
@@ -361,24 +365,25 @@ void move_imm(int i){
 			set_flag_z();
 		else
 			cle_flag_z();
-		if(get_carry()==0)
+		if(imm->carry)
 			cle_flag_c();
 		else
 			set_flag_c();
 	}
-   printf(" APSR = %X",get_apsr());
-   printf(" rd = %X",get_general_register(dataProModified.rd));
+	printf(" APSR = %X",get_apsr());
+	printf(" rd = %X",get_general_register(dataProModified.rd));
 	printf("	***move\n");	
 
 }
 
 //Move Negative (immediate) writes the logical ones complement of an immediate value to the destination register. 
 void move_negative_imm(int i){
-	int imm,result;
+	int result;
+	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
 	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
 	//printf(" imm = %x",imm);
-	result = ~imm;
+	result = ~imm->result;
 	//int a = result & 0x80000000;
 	//printf(" a = %x",a);
 	set_general_register(dataProModified.rd, result);
@@ -394,7 +399,7 @@ void move_negative_imm(int i){
 			set_flag_z();
 		else
 			cle_flag_z();
-		if(get_carry()==0)
+		if(imm->carry)
 			cle_flag_c();
 		else
 			set_flag_c();
@@ -407,26 +412,27 @@ void move_negative_imm(int i){
 
 //Logical OR NOT (immediate) performs a bitwise (inclusive) OR of a register value and the complement of an immediate value, and writes the result to the destination register.
 void logical_or_not_imm(int i){
-	int imm,source,result;
+	int source,result;
+	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
 	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
 	source = get_general_register(dataProModified.rn);
-	result = source|(~imm);
+	result = source|(~imm->result);
 	set_general_register(dataProModified.rd, result);
-	if(dataProModified.s==1)
-     {if(result & 0x80000000)
-        set_flag_n();
-      else
-        cle_flag_n();
-      if(result==0)
-        set_flag_z();
-      else
-        cle_flag_z();
-		if(get_carry()==0)
+	if(dataProModified.s==1){
+		if(result & 0x80000000)
+			set_flag_n();
+		else
+			cle_flag_n();
+		if(result==0)
+			set_flag_z();
+		else
+			cle_flag_z();
+		if(imm->carry)
 			cle_flag_c();
 		else
 			set_flag_c();
-              }
+	}
 	printf(" APSR = %X",get_apsr());
 	printf(" rd = %X",get_general_register(dataProModified.rd));
 	printf("	***logical or not\n");	
@@ -435,26 +441,27 @@ void logical_or_not_imm(int i){
 
 //Logical OR (immediate) performs a bitwise (inclusive) OR of a register value and an immediate value, and writes the result to the destination register. 
 void logical_or_imm(int i){
-	int imm,source,result;
+	int source,result;
+	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
 	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
 	source = get_general_register(dataProModified.rn);
-	result = source|imm;
+	result = source | imm->result;
 	set_general_register(dataProModified.rd, result);
-	if(dataProModified.s==1)
-     {if(result & 0x80000000)
-        set_flag_n();
-      else
-        cle_flag_n();
-      if(result==0)
-        set_flag_z();
-      else
-        cle_flag_z();
-		if(get_carry()==0)
+	if(dataProModified.s==1){
+		if(result & 0x80000000)
+			set_flag_n();
+		else
+			cle_flag_n();
+		if(result==0)
+			set_flag_z();
+		else
+			cle_flag_z();
+		if(imm->carry)
 			cle_flag_c();
 		else
 			set_flag_c();
-              }
+	}
 	printf(" APSR = %X",get_apsr());
 	printf(" rd = %X",get_general_register(dataProModified.rd));
 	printf("	***logical or\n");	
@@ -567,11 +574,12 @@ void subtract_imm(int i){
 
 //Test Equivalence (immediate) performs an exclusive OR operation on a register value and an immediate value. 
 void test_equal_imm(int i){
-	int imm,source,result;
+	int source,result;
+	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
 	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
 	source = get_general_register(dataProModified.rn);
-	result = source ^ imm;
+	result = source ^ imm->result;
 	if(result & 0x80000000)
 		set_flag_n();
 	else
@@ -580,7 +588,7 @@ void test_equal_imm(int i){
 		set_flag_z();
 	else
 		cle_flag_z();
-	if(get_carry()==0)
+	if(imm->carry)
 		cle_flag_c();
 	else
 		set_flag_c();
@@ -591,11 +599,12 @@ void test_equal_imm(int i){
 
 //Test (immediate) performs a logical AND operation on a register value and an immediate value.
 void test_imm(int i){
-	int imm,source,result;
+	int source,result;
+	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
 	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
 	source = get_general_register(dataProModified.rn);
-	result = source & imm;
+	result = source & imm->result;
 	if(result & 0x80000000)
 		set_flag_n();
 	else
@@ -604,7 +613,7 @@ void test_imm(int i){
 		set_flag_z();
 	else
 		cle_flag_z();
-	if(get_carry()==0)
+	if(imm->carry)
 		cle_flag_c();
 	else
 		set_flag_c();
