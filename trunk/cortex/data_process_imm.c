@@ -14,8 +14,8 @@
  */ 
 
 
-void opcode_error(){
-	printf("	opcode error\n");
+void opcode_error(int i){
+	printf("	The instruction: 0x%x is error in this situation. \n",i);
 }
 
 void data_pro_modified_12m(int instruction){
