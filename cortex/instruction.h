@@ -55,7 +55,7 @@ int ThumbExpandImm12(int i1,int i3,int i8);
  *to handle the error message
  */ 
 void error_message(int instruction);
-void opcode_error();
+void opcode_error(int i);
 void err_reg();
 /**************************************************************************
  *
@@ -72,48 +72,48 @@ void data_pro_reserved(int instruction);
  *Table for data processing with 12 imm
  *
  */ 
-void add_with_carry_imm();		//1010		10
-void add_imm();					//1000		8
-void logical_and_imm();			//0000		0
-void bit_clear_imm();			//0001		1
-void compare_negative_imm();	//11000		24
-void compare_imm();				//11101		13--29
-void exclusive_or_imm();		//0100		4
-void move_imm();				//10010		2---18
-void move_negative_imm();		//10011		3--19
-void logical_or_not_imm();		//0011		3
-void logical_or_imm();			//0010		2
-void reverse_subtract_imm();	//1110		14
-void subtract_with_carry_imm();	//1011		11
-void subtract_imm();			//1101		13
-void test_equal_imm();			//10100		4--20	
-void test_imm();				//10000		0--16
+void add_with_carry_imm(int i);		//1010		10
+void add_imm(int i);					//1000		8
+void logical_and_imm(int i);			//0000		0
+void bit_clear_imm(int i);			//0001		1
+void compare_negative_imm(int i);	//11000		24
+void compare_imm(int i);				//11101		13--29
+void exclusive_or_imm(int i);		//0100		4
+void move_imm(int i);				//10010		2---18
+void move_negative_imm(int i);		//10011		3--19
+void logical_or_not_imm(int i);		//0011		3
+void logical_or_imm(int i);			//0010		2
+void reverse_subtract_imm(int i);	//1110		14
+void subtract_with_carry_imm(int i);	//1011		11
+void subtract_imm(int i);			//1101		13
+void test_equal_imm(int i);			//10100		4--20	
+void test_imm(int i);				//10000		0--16
 
 /*
  *
  *Table shared by (1)Add, substract plain 12 imm (2)move 16 imm
  *
  */ 
-void add_wide_imm();//000---0
-void sub_wide_imm();//110---6
-void address_before_current();//010---2
-void address_after_current();//100---4
+void add_wide_imm(int i);//000---0
+void sub_wide_imm(int i);//110---6
+void address_before_current(int i);//010---2
+void address_after_current(int i);//100---4
 
-void move_top_imm();//100+1 --101---5
-void move_wide_imm();//000+1---001---1
+void move_top_imm(int i);//100+1 --101---5
+void move_wide_imm(int i);//000+1---001---1
 
 /*
  *Table for bit field operations
  *
  */ 
-void bit_field_clear();// 011+100---7
-void bit_field_inset();// 011---3
-void signed_bit_field_extract();//010---2
-void signed_lsl();//000---0
-void signed_asr();//001---1
-void unsinged_bit_field_extract();//110---6
-void unsigned_lsl();//100----4
-void unsigned_asr();//101----5
+void bit_field_clear(int i);// 011+100---7
+void bit_field_inset(int i);// 011---3
+void signed_bit_field_extract(int i);//010---2
+void signed_lsl(int i);//000---0
+void signed_asr(int i);//001---1
+void unsinged_bit_field_extract(int i);//110---6
+void unsigned_lsl(int i);//100----4
+void unsigned_asr(int i);//101----5
 
 /**************************************************************************
  *
