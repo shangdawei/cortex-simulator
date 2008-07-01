@@ -156,7 +156,7 @@ struct RESULTCARRY* decodeImmShift(int type,int imm5){
 		else
 			shift_n = imm5;
 	}
-	else{
+	else if(type == 3){
 		if(imm5 == 0){
 			shift_t = SRType_RRX;
 			shift_n = 1;
@@ -165,6 +165,13 @@ struct RESULTCARRY* decodeImmShift(int type,int imm5){
 			shift_t = SRType_ROR;
 			shift_n = imm5;
 		}
+	}
+	else
+	{
+		printf("type error");
+		immshift->result = 0;
+		immshift->carry = 0;
+		return immshift;
 	}
 	immshift->result = shift_n;
 	immshift->carry = shift_t;
