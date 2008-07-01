@@ -84,33 +84,32 @@ APSR.Z = IsZeroBit(result);
 APSR.C = carry;
 // APSR.V unchanged
 */
-	int shifted,source,result,shift_n;
+	int source,result;
+	struct RESULTCARRY *shift,*shift_carry;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
+	shift = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
+	shift_carry = shift_c(get_general_register(dataProConShift.rm),shift->result,shift->carry,apsr_c);
     source = get_general_register(dataProConShift.rn);//get data from source register
 #if DEBUG_I
-	printf(" shifted = %d",shifted);
+	printf(" shifted = %d",shift_carry->result);
 	printf(" source = %c",source);
 	printf(" apsr_c = %c",apsr_c);
 #endif
-	result = source & shifted;
+	result = source & shift_carry->result;
 	set_general_register(dataProConShift.rd, result);//send data to destination register
-	if(dataProConShift.s==1){
+	if(dataProConShift.s){
 		if(result & 0x80000000)//whether negative
 			set_flag_n();
 		else
 			cle_flag_n();
-		if(result==0)//whether zero
+		if(!result)//whether zero
 			set_flag_z();
-			//printf(" kkkkk ");}
 		else
 			cle_flag_z();
-			//printf(" kkkkk ");}
-		if(get_calculate_carry())//whether carry
+		if(shift_carry->carry)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
@@ -138,34 +137,35 @@ APSR.Z = IsZeroBit(result);
 APSR.C = carry;
 // APSR.V unchanged
 */
-	int shifted,source,result,shift_n;
+	int source,result;
+	struct RESULTCARRY *shift,*shift_carry;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
+	shift = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
+	shift_carry = shift_c(get_general_register(dataProConShift.rm),shift->result,shift->carry,apsr_c);
     source = get_general_register(dataProConShift.rn);//get data from source register
-	result = source & (~shifted);
+	result = source & (~shift_carry->result);
 #if DEBUG_I
-	printf(" shifted = %x",shifted);
+	printf(" shifted = %x",shift_carry->result);
 	printf(" source = %x",source);
 	printf(" apsr_c = %c",apsr_c);
 	printf(" result = %x", result);
 #endif
 	set_general_register(dataProConShift.rd, result);//send data to destination register
-	if(dataProConShift.s==1){
+	if(dataProConShift.s){
 		if(result & 0x80000000)//whether negative
 			set_flag_n();
 		else
 			cle_flag_n();
-		if(result==0)//whether zero
+		if(!result)//whether zero
 			set_flag_z();
 			//printf(" kkkkk ");}
 		else
 			cle_flag_z();
 			//printf(" kkkkk ");}
-		if(get_calculate_carry())//whether carry
+		if(shift_carry->carry)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
@@ -191,34 +191,35 @@ APSR.Z = IsZeroBit(result);
 APSR.C = carry;
 // APSR.V unchanged
 */
-	int shifted,source,result,shift_n;
+	int source,result;
+	struct RESULTCARRY *shift,*shift_carry;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
+	shift = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
+	shift_carry = shift_c(get_general_register(dataProConShift.rm),shift->result,shift->carry,apsr_c);
     source = get_general_register(dataProConShift.rn);//get data from source register
-	result = source|shifted;
+	result = source|shift_carry->result;
 #if DEBUG_I
-	printf(" shifted = %x",shifted);
+	printf(" shifted = %x",shift_carry->result);
 	printf(" source = %x",source);
 	printf(" apsr_c = %c",apsr_c);
 	printf(" result = %x", result);
 #endif
 	set_general_register(dataProConShift.rd, result);//send data to destination register
-	if(dataProConShift.s==1){
+	if(dataProConShift.s){
 		if(result & 0x80000000)//whether negative
 			set_flag_n();
 		else
 			cle_flag_n();
-		if(result==0)//whether zero
+		if(!result)//whether zero
 			set_flag_z();
 			//printf(" kkkkk ");}
 		else
 			cle_flag_z();
 			//printf(" kkkkk ");}
-		if(get_calculate_carry())//whether carry
+		if(shift_carry->carry)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
@@ -246,34 +247,35 @@ APSR.Z = IsZeroBit(result);
 APSR.C = carry;
 // APSR.V unchanged
 */
-	int shifted,source,result,shift_n;
+	int source,result;
+	struct RESULTCARRY *shift,*shift_carry;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
+	shift = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
+	shift_carry = shift_c(get_general_register(dataProConShift.rm),shift->result,shift->carry,apsr_c);
     source = get_general_register(dataProConShift.rn);//get data from source register
-	result = source|(~shifted);
+	result = source|(~shift_carry->result);
 #if DEBUG_I
-	printf(" shifted = %x",shifted);
+	printf(" shifted = %x",shift_carry->result);
 	printf(" source = %x",source);
 	printf(" apsr_c = %c",apsr_c);
 	printf(" result = %x", result);
 #endif
 	set_general_register(dataProConShift.rd, result);//send data to destination register
-	if(dataProConShift.s==1){
+	if(dataProConShift.s){
 		if(result & 0x80000000)//whether negative
 			set_flag_n();
 		else
 			cle_flag_n();
-		if(result==0)//whether zero
+		if(!result)//whether zero
 			set_flag_z();
 			//printf(" kkkkk ");}
 		else
 			cle_flag_z();
 			//printf(" kkkkk ");}
-		if(get_calculate_carry())//whether carry
+		if(shift_carry->carry)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
@@ -297,17 +299,18 @@ APSR.N = result<31>;
 APSR.Z = IsZeroBit(result);
 APSR.C = carry;
 // APSR.V unchanged*/
-	int shifted,source,result,shift_n;
+	int source,result;
+	struct RESULTCARRY *shift,*shift_carry;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
+	shift = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
+	shift_carry = shift_c(get_general_register(dataProConShift.rm),shift->result,shift->carry,apsr_c);
     source = get_general_register(dataProConShift.rn);//get data from source register
-	result = source^shifted;
+	result = source^shift_carry->result;
 #if DEBUG_I
-	printf(" shifted = %x",shifted);
+	printf(" shifted = %x",shift_carry->result);
 	printf(" source = %x",source);
 	printf(" apsr_c = %c",apsr_c);
 	printf(" result = %x", result);
@@ -324,7 +327,7 @@ APSR.C = carry;
 		else
 			cle_flag_z();
 			//printf(" kkkkk ");}
-		if(get_calculate_carry())//whether carry
+		if(shift_carry->carry)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
@@ -353,41 +356,42 @@ APSR.Z = IsZeroBit(result);
 APSR.C = carry;
 APSR.V = overflow;
 */
-	int shifted,source,result,shift_n;
+	int shifted;
+	struct CALCULATECO *result;
+	struct RESULTCARRY *shift_tn;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
-    source = get_general_register(dataProConShift.rn);//get data from source register
-	result = addwithcarry(source,shifted,0);
+	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
+	shifted = shift(get_general_register(dataProConShift.rm),shift_tn->result,shift_tn->carry,apsr_c);
+	result = addwithcarry(get_general_register(dataProConShift.rn),shifted,0);
 #if DEBUG_I
-	printf(" shifted = %c",shifted);
-	printf(" source = %c",source);
-	printf(" apsr_c = %c",apsr_c);
-	printf(" result = %x",result);
+	printf(" shifted = %x",shifted);
+	printf(" source = %x",get_general_register(dataProConShift.rn));
+	printf(" apsr_c = %x",apsr_c);
+	printf(" result = %x",result->result);
 #endif
 	if(dataProConShift.rd==15)
-		ALUWritePC(result);
+		ALUWritePC(result->result);
 	else
-		set_general_register(dataProConShift.rd, result);//send data to destination register
+		set_general_register(dataProConShift.rd, result->result);//send data to destination register
 	if(dataProConShift.s==1){
-		if(result & 0x80000000)//whether negative
+		if(result->result & 0x80000000)//whether negative
 			set_flag_n();
 		else
 			cle_flag_n();
-		if(result==0)//whether zero
+		if(!result->result)//whether zero
 			set_flag_z();
 			//printf(" kkkkk ");}
 		else
 			cle_flag_z();
 			//printf(" kkkkk ");}
-		if(get_calculate_carry())//whether carry
+		if(result->carry_out)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
-		if(get_calculate_overflow())//whether overflow
+		if(result->overflow)//whether overflow
 			set_flag_v();
 		else
 			cle_flag_v();
@@ -395,14 +399,15 @@ APSR.V = overflow;
 #if DEBUG_I
 	printf(" APSR = %c",get_apsr());
 	printf(" rd = %c",get_general_register(dataProConShift.rd));
-	printf("	***adc_reg\n");	
-	printf("********ADC{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
+	printf("	***add_reg\n");	
+	printf("********ADD{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
 #endif
 }
 
 void adc_reg(int i)
 {
-/*if ConditionPassed() then
+/*
+if ConditionPassed() then
 EncodingSpecificOperations();
 shifted = Shift(R[m], shift_t, shift_n, APSR.C);
 (result, carry, overflow) = AddWithCarry(R[n], shifted, APSR.C);
@@ -411,39 +416,41 @@ if setflags then
 APSR.N = result<31>;
 APSR.Z = IsZeroBit(result);
 APSR.C = carry;
-APSR.V = overflow;*/
-	int shifted,source,result,shift_n;
+APSR.V = overflow;
+*/
+	int shifted;
+	struct CALCULATECO *result;
+	struct RESULTCARRY *shift_tn;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
-    source = get_general_register(dataProConShift.rn);//get data from source register
-	result = addwithcarry(source,shifted,apsr_c);
+	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
+	shifted = shift(get_general_register(dataProConShift.rm),shift_tn->result,shift_tn->carry,apsr_c);
+	result = addwithcarry(get_general_register(dataProConShift.rn),shifted,apsr_c);
 #if DEBUG_I
-	printf(" shifted = %c",shifted);
-	printf(" source = %c",source);
-	printf(" apsr_c = %c",apsr_c);
-	printf(" result = %x",result);
+	printf(" shifted = %x",shifted);
+	printf(" source = %x",get_general_register(dataProConShift.rn));
+	printf(" apsr_c = %x",apsr_c);
+	printf(" result = %x",result->result);
 #endif
-	set_general_register(dataProConShift.rd, result);//send data to destination register
+	set_general_register(dataProConShift.rd, result->result);//send data to destination register
 	if(dataProConShift.s==1){
-		if(result & 0x80000000)//whether negative
+		if(result->result & 0x80000000)//whether negative
 			set_flag_n();
 		else
 			cle_flag_n();
-		if(result==0)//whether zero
+		if(!result->result)//whether zero
 			set_flag_z();
 			//printf(" kkkkk ");}
 		else
 			cle_flag_z();
 			//printf(" kkkkk ");}
-		if(get_calculate_carry())//whether carry
+		if(result->carry_out)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
-		if(get_calculate_overflow())//whether overflow
+		if(result->overflow)//whether overflow
 			set_flag_v();
 		else
 			cle_flag_v();
@@ -451,10 +458,11 @@ APSR.V = overflow;*/
 #if DEBUG_I
 	printf(" APSR = %c",get_apsr());
 	printf(" rd = %c",get_general_register(dataProConShift.rd));
-	printf("	***adc_reg\n");	
-	printf("********ADC{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
+	printf("	***add_reg\n");	
+	printf("********ADD{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
 #endif
 }
+
 void sbc_reg(int i)
 {
 /*
@@ -469,38 +477,39 @@ APSR.Z = IsZeroBit(result);
 APSR.C = carry;
 APSR.V = overflow;
 */
-	int shifted,source,result,shift_n;
+	int shifted;
+	struct CALCULATECO *result;
+	struct RESULTCARRY *shift_tn;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
-    source = get_general_register(dataProConShift.rn);//get data from source register
-	result = addwithcarry(source,~shifted,apsr_c);
+	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
+	shifted = shift(get_general_register(dataProConShift.rm),shift_tn->result,shift_tn->carry,apsr_c);
+	result = addwithcarry(get_general_register(dataProConShift.rn),~shifted,apsr_c);
 #if DEBUG_I
-	printf(" shifted = %c",shifted);
-	printf(" source = %c",source);
-	printf(" apsr_c = %c",apsr_c);
-	printf(" result = %x",result);
+	printf(" shifted = %x",shifted);
+	printf(" source = %x",get_general_register(dataProConShift.rn));
+	printf(" apsr_c = %x",apsr_c);
+	printf(" result = %x",result->result);
 #endif
-	set_general_register(dataProConShift.rd, result);//send data to destination register
+	set_general_register(dataProConShift.rd, result->result);//send data to destination register
 	if(dataProConShift.s==1){
-		if(result & 0x80000000)//whether negative
+		if(result->result & 0x80000000)//whether negative
 			set_flag_n();
 		else
 			cle_flag_n();
-		if(result==0)//whether zero
+		if(!result->result)//whether zero
 			set_flag_z();
 			//printf(" kkkkk ");}
 		else
 			cle_flag_z();
 			//printf(" kkkkk ");}
-		if(get_calculate_carry())//whether carry
+		if(result->carry_out)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
-		if(get_calculate_overflow())//whether overflow
+		if(result->overflow)//whether overflow
 			set_flag_v();
 		else
 			cle_flag_v();
@@ -526,36 +535,39 @@ APSR.Z = IsZeroBit(result);
 APSR.C = carry;
 APSR.V = overflow;
 */
-	int shifted,source,result,shift_n;
+	int shifted;
+	struct CALCULATECO *result;
+	struct RESULTCARRY *shift_tn;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
-    source = get_general_register(dataProConShift.rn);//get data from source register
-	result = addwithcarry(source,~shifted,1);
+	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
+	shifted = shift(get_general_register(dataProConShift.rm),shift_tn->result,shift_tn->carry,apsr_c);
+	result = addwithcarry(get_general_register(dataProConShift.rn),~shifted,1);
 #if DEBUG_I
-	printf(" shifted = %c",shifted);
-	printf(" source = %c",source);
-	printf(" apsr_c = %c",apsr_c);
-	printf(" result = %x",result);
+	printf(" shifted = %x",shifted);
+	printf(" source = %x",get_general_register(dataProConShift.rn));
+	printf(" apsr_c = %x",apsr_c);
+	printf(" result = %x",result->result);
 #endif
-	set_general_register(dataProConShift.rd, result);//send data to destination register
+	set_general_register(dataProConShift.rd, result->result);//send data to destination register
 	if(dataProConShift.s==1){
-		if(result & 0x80000000)//whether negative
+		if(result->result & 0x80000000)//whether negative
 			set_flag_n();
 		else
 			cle_flag_n();
-		if(result==0)//whether zero
+		if(!result->result)//whether zero
 			set_flag_z();
+			//printf(" kkkkk ");}
 		else
 			cle_flag_z();
-		if(get_calculate_carry())//whether carry
+			//printf(" kkkkk ");}
+		if(result->carry_out)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
-		if(get_calculate_overflow())//whether overflow
+		if(result->overflow)//whether overflow
 			set_flag_v();
 		else
 			cle_flag_v();
@@ -581,36 +593,39 @@ APSR.Z = IsZeroBit(result);
 APSR.C = carry;
 APSR.V = overflow;
 */
-	int shifted,source,result,shift_n;
+	int shifted;
+	struct CALCULATECO *result;
+	struct RESULTCARRY *shift_tn;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
-    source = get_general_register(dataProConShift.rn);//get data from source register
-	result = addwithcarry(source,~shifted,apsr_c);
+	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
+	shifted = shift(get_general_register(dataProConShift.rm),shift_tn->result,shift_tn->carry,apsr_c);
+	result = addwithcarry(get_general_register(dataProConShift.rn),~shifted,apsr_c);
 #if DEBUG_I
-	printf(" shifted = %c",shifted);
-	printf(" source = %c",source);
-	printf(" apsr_c = %c",apsr_c);
-	printf(" result = %x",result);
+	printf(" shifted = %x",shifted);
+	printf(" source = %x",get_general_register(dataProConShift.rn));
+	printf(" apsr_c = %x",apsr_c);
+	printf(" result = %x",result->result);
 #endif
-	set_general_register(dataProConShift.rd, result);//send data to destination register
+	set_general_register(dataProConShift.rd, result->result);//send data to destination register
 	if(dataProConShift.s==1){
-		if(result & 0x80000000)//whether negative
+		if(result->result & 0x80000000)//whether negative
 			set_flag_n();
 		else
 			cle_flag_n();
-		if(result==0)//whether zero
+		if(!result->result)//whether zero
 			set_flag_z();
+			//printf(" kkkkk ");}
 		else
 			cle_flag_z();
-		if(get_calculate_carry())//whether carry
+			//printf(" kkkkk ");}
+		if(result->carry_out)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
-		if(get_calculate_overflow())//whether overflow
+		if(result->overflow)//whether overflow
 			set_flag_v();
 		else
 			cle_flag_v();
@@ -635,17 +650,17 @@ APSR.C = carry;
 // APSR.V unchanged
 */
 	int source,result,shift_n;
-	struct RESULTCARRY* shifted_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	struct RESULTCARRY* shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
 	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shifted_carry = shift_c(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
+	shift_carry = shift_c(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
     source = get_general_register(dataProConShift.rn);//get data from source register
-	result = source & shifted_carry->result;
+	result = source & shift_carry->result;
 #if DEBUG_I
-	printf(" shifted = %c",shifted_carry->result);
+	printf(" shifted = %c",shift_carry->result);
 	printf(" source = %c",source);
 	printf(" apsr_c = %c",apsr_c);
 	printf(" result = %x",result);
@@ -658,7 +673,7 @@ APSR.C = carry;
 		set_flag_z();
 	else
 		cle_flag_z();
-	if(get_calculate_carry())//whether carry
+	if(shift_carry->carry)//whether carry
 		set_flag_c();
 	else
 		cle_flag_c();
@@ -718,7 +733,7 @@ APSR.C = carry;
 				set_flag_z();
 			else
 				cle_flag_z();
-			if(get_calculate_carry())//whether carry
+			if(result_shiftc->carry)//whether carry
 				set_flag_c();
 			else
 				cle_flag_c();
@@ -851,7 +866,7 @@ APSR.C = carry;
 	//	set_flag_z();
 	//else
 	//	cle_flag_z();
-	//if(get_calculate_carry())//whether carry
+	//if(shift_carry->carry)//whether carry
 	//	set_flag_c();
 	//else
 	//	cle_flag_c();
@@ -877,18 +892,18 @@ APSR.C = carry;
 // APSR.V unchanged
 */
 	int source,result,shift_n;
-	struct RESULTCARRY* shifted_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	struct RESULTCARRY* shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
 	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shifted_carry = shift_c(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
+	shift_carry = shift_c(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
     source = get_general_register(dataProConShift.rn);//get data from source register
-	result = ~shifted_carry->result;
+	result = ~shift_carry->result;
 	set_general_register(dataProConShift.rd,result);
 #if DEBUG_I
-	printf(" shifted = %x",shifted_carry->result);
+	printf(" shifted = %x",shift_carry->result);
 	printf(" source = %x",source);
 	printf(" apsr_c = %x",apsr_c);
 	printf(" result = %x",result);
@@ -903,7 +918,7 @@ APSR.C = carry;
 			set_flag_z();
 		else
 			cle_flag_z();
-		if(get_calculate_carry())//whether carry
+		if(shift_carry->carry)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
@@ -928,17 +943,17 @@ APSR.C = carry;
 // APSR.V unchanged
 */
 	int source,result,shift_n;
-	struct RESULTCARRY* shifted_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	struct RESULTCARRY* shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
 	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shifted_carry = shift_c(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
+	shift_carry = shift_c(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
     source = get_general_register(dataProConShift.rn);//get data from source register
-	result = dataProConShift.rn^shifted_carry->result;
+	result = dataProConShift.rn^shift_carry->result;
 #if DEBUG_I
-	printf(" shifted = %x",shifted_carry->result);
+	printf(" shifted = %x",shift_carry->result);
 	printf(" source = %x",source);
 	printf(" apsr_c = %x",apsr_c);
 	printf(" result = %x",result);
@@ -951,7 +966,7 @@ APSR.C = carry;
 		set_flag_z();
 	else
 		cle_flag_z();
-	if(get_calculate_carry())//whether carry
+	if(shift_carry->carry)//whether carry
 		set_flag_c();
 	else
 		cle_flag_c();
@@ -977,18 +992,18 @@ APSR.C = carry;
 // APSR.V unchanged
 */
 	int source,result,shift_n;
-	struct RESULTCARRY* shifted_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	struct RESULTCARRY* shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
 	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shifted_carry = shift_c(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
+	shift_carry = shift_c(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
     source = get_general_register(dataProConShift.rn);//get data from source register
-	result = ~shifted_carry->result;
+	result = ~shift_carry->result;
 	set_general_register(dataProConShift.rd,result);
 #if DEBUG_I
-	printf(" shifted = %x",shifted_carry->result);
+	printf(" shifted = %x",shift_carry->result);
 	printf(" source = %x",source);
 	printf(" apsr_c = %x",apsr_c);
 	printf(" result = %x",result);
@@ -1003,7 +1018,7 @@ APSR.C = carry;
 			set_flag_z();
 		else
 			cle_flag_z();
-		if(get_calculate_carry())//whether carry
+		if(shift_carry->carry)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
@@ -1027,42 +1042,50 @@ APSR.Z = IsZeroBit(result);
 APSR.C = carry;
 APSR.V = overflow;
 */
-	int shifted,source,result,shift_n;
+	int shifted;
+	struct CALCULATECO *result;
+	struct RESULTCARRY *shift_tn;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shifted = shift(dataProConShift.rm,dataProConShift.type,shift_n,apsr_c);
-    source = get_general_register(dataProConShift.rn);//get data from source register
-	result = addwithcarry(source,~shifted,1);
+	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
+	shifted = shift(get_general_register(dataProConShift.rm),shift_tn->result,shift_tn->carry,apsr_c);
+	result = addwithcarry(get_general_register(dataProConShift.rn),~shifted,1);
 #if DEBUG_I
-	printf(" shifted = %c",shifted);
-	printf(" source = %c",source);
-	printf(" apsr_c = %c",apsr_c);
-	printf(" result = %x",result);
+	printf(" shifted = %x",shifted);
+	printf(" source = %x",get_general_register(dataProConShift.rn));
+	printf(" apsr_c = %x",apsr_c);
+	printf(" result = %x",result->result);
 #endif
-	if(result & 0x80000000)//whether negative
+	if(dataProConShift.rd==15)
+		ALUWritePC(result->result);
+	else
+		set_general_register(dataProConShift.rd, result->result);//send data to destination register
+
+	if(result->result & 0x80000000)//whether negative
 		set_flag_n();
 	else
 		cle_flag_n();
-	if(result==0)//whether zero
+	if(!result->result)//whether zero
 		set_flag_z();
+		//printf(" kkkkk ");}
 	else
 		cle_flag_z();
-	if(get_calculate_carry())//whether carry
+		//printf(" kkkkk ");}
+	if(result->carry_out)//whether carry
 		set_flag_c();
 	else
 		cle_flag_c();
-	if(get_calculate_overflow())//whether overflow
+	if(result->overflow)//whether overflow
 		set_flag_v();
 	else
 		cle_flag_v();
 #if DEBUG_I
 	printf(" APSR = %c",get_apsr());
 	printf(" rd = %c",get_general_register(dataProConShift.rd));
-	printf("	***rsb_reg\n");	
-	printf("********RSB{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
+	printf("	***cmp_reg\n");	
+	printf("********CMP{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
 #endif
 }
 
@@ -1088,18 +1111,18 @@ APSR.C = carry;
 // APSR.V unchanged
 */
 	int source,result,shift_n;
-	struct RESULTCARRY* shifted_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	struct RESULTCARRY* shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	unsigned apsr_c;
 	*((int *)(&regCtrlShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
 	shift_n = regCtrlShift.rm<<24>>24;
     source = get_general_register(regCtrlShift.rn);//get data from source register
-	shifted_carry = shift_c(source,SRType_LSL,shift_n,apsr_c);
-	result = shifted_carry->result;
+	shift_carry = shift_c(source,SRType_LSL,shift_n,apsr_c);
+	result = shift_carry->result;
 	set_general_register(regCtrlShift.rd,result);
 #if DEBUG_I
-	printf(" shifted = %x",shifted_carry->result);
+	printf(" shifted = %x",shift_carry->result);
 	printf(" source = %x",source);
 	printf(" apsr_c = %x",apsr_c);
 	printf(" result = %x",result);
@@ -1114,7 +1137,7 @@ APSR.C = carry;
 			set_flag_z();
 		else
 			cle_flag_z();
-		if(get_calculate_carry())//whether carry
+		if(shift_carry->carry)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
@@ -1141,18 +1164,18 @@ APSR.C = carry;
 // APSR.V unchanged
 */
 	int source,result,shift_n;
-	struct RESULTCARRY* shifted_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	struct RESULTCARRY* shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	unsigned apsr_c;
 	*((int *)(&regCtrlShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
 	shift_n = regCtrlShift.rm<<24>>24;
     source = get_general_register(regCtrlShift.rn);//get data from source register
-	shifted_carry = shift_c(source,SRType_LSR,shift_n,apsr_c);
-	result = shifted_carry->result;
+	shift_carry = shift_c(source,SRType_LSR,shift_n,apsr_c);
+	result = shift_carry->result;
 	set_general_register(regCtrlShift.rd,result);
 #if DEBUG_I
-	printf(" shifted = %x",shifted_carry->result);
+	printf(" shifted = %x",shift_carry->result);
 	printf(" source = %x",source);
 	printf(" apsr_c = %x",apsr_c);
 	printf(" result = %x",result);
@@ -1167,7 +1190,7 @@ APSR.C = carry;
 			set_flag_z();
 		else
 			cle_flag_z();
-		if(shifted_carry->carry)//whether carry
+		if(shift_carry->carry)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
@@ -1193,18 +1216,18 @@ APSR.C = carry;
 // APSR.V unchanged
 */
 	int source,result,shift_n;
-	struct RESULTCARRY* shifted_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	struct RESULTCARRY* shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	unsigned apsr_c;
 	*((int *)(&regCtrlShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
 	shift_n = regCtrlShift.rm<<24>>24;
     source = get_general_register(regCtrlShift.rn);//get data from source register
-	shifted_carry = shift_c(source,SRType_ASR,shift_n,apsr_c);
-	result = shifted_carry->result;
+	shift_carry = shift_c(source,SRType_ASR,shift_n,apsr_c);
+	result = shift_carry->result;
 	set_general_register(regCtrlShift.rd,result);
 #if DEBUG_I
-	printf(" shifted = %x",shifted_carry->result);
+	printf(" shifted = %x",shift_carry->result);
 	printf(" source = %x",source);
 	printf(" apsr_c = %x",apsr_c);
 	printf(" result = %x",result);
@@ -1219,7 +1242,7 @@ APSR.C = carry;
 			set_flag_z();
 		else
 			cle_flag_z();
-		if(shifted_carry->carry)//whether carry
+		if(shift_carry->carry)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
@@ -1244,18 +1267,18 @@ APSR.C = carry;
 // APSR.V unchanged
 */
 	int source,result,shift_n;
-	struct RESULTCARRY* shifted_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	struct RESULTCARRY* shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	unsigned apsr_c;
 	*((int *)(&regCtrlShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
 	shift_n = regCtrlShift.rm<<24>>24;
     source = get_general_register(regCtrlShift.rm);//get data from source register
-	shifted_carry = shift_c(source,SRType_ROR,shift_n,apsr_c);
-	result = shifted_carry->result;
+	shift_carry = shift_c(source,SRType_ROR,shift_n,apsr_c);
+	result = shift_carry->result;
 	set_general_register(regCtrlShift.rd,result);
 #if DEBUG_I
-	printf(" shifted = %x",shifted_carry->result);
+	printf(" shifted = %x",shift_carry->result);
 	printf(" source = %x",source);
 	printf(" apsr_c = %x",apsr_c);
 	printf(" result = %x",result);
@@ -1270,7 +1293,7 @@ APSR.C = carry;
 			set_flag_z();
 		else
 			cle_flag_z();
-		if(shifted_carry->carry)//whether carry
+		if(shift_carry->carry)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();
