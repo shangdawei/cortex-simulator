@@ -227,3 +227,230 @@ void ls_single_reserved3(int instruction){
 	printf("ls_single_reserved3: 0x%X \n",instruction);
 
 }
+
+//Load and store single data PC-relative.
+
+void ldr_lit(int i){
+	printf("	******ldr_lit\n");
+}
+
+void ldrb_lit(int i){
+	printf("	******ldrb_lit\n");
+}
+
+void ldrsb_lit(int i){
+	printf("	******ldrsb_lit\n");
+}
+
+void ldrh_lit(int i){
+	printf("	******ldrh_lit\n");
+}
+
+void ldrsh_lit(int i){
+	printf("	******ldrsh_lit\n");
+}
+
+//Load and store single data immediate offset.
+
+void ldr_imm(int i){
+	printf("	******ldr_imm\n");
+}
+
+void ldrb_imm(int i){
+	printf("	******ldrb_imm\n");
+}
+
+void ldrsb_imm(int i){
+	printf("	******ldrsb_imm\n");
+}
+
+void ldrh_imm(int i){
+	printf("	******ldrh_imm\n");
+}
+
+void ldrsh_imm(int i){
+	printf("	******ldrsh_imm\n");
+}
+
+void str_imm(int i){
+	printf("	******str_imm\n");
+}
+
+void strb_imm(int i){
+	printf("	******strb_imm\n");
+}
+
+void strh_imm(int i){
+	printf("	******strh_imm\n");
+}
+
+//Load and store single data negative immediate offset.
+
+void ldr_neg_imm(int i){
+	printf("	******ldr_neg_imm\n");
+}
+
+void ldrb_neg_imm(int i){
+	printf("	******ldrb_neg_imm\n");
+}
+
+void ldrsb_neg_imm(int i){
+	printf("	******ldrsb_neg_imm\n");
+}
+
+void ldrh_neg_imm(int i){
+	printf("	******ldrh_neg_imm\n");
+}
+
+void ldrsh_neg_imm(int i){
+	printf("	******ldrsh_neg_imm\n");
+}
+
+void str_neg_imm(int i){
+	printf("	******str_neg_imm\n");
+}
+
+void strb_neg_imm(int i){
+	printf("	******strb_neg_imm\n");
+}
+
+void strh_neg_imm(int i){
+	printf("	******strh_neg_imm\n");
+}
+
+//Load and store single data user privilege. 
+
+void ldrt(int i){
+	printf("	******ldrt\n");
+}
+
+void ldrbt(int i){
+	printf("	******ldrbt\n");
+}
+
+void ldrsbt(int i){
+	printf("	******ldrsbt\n");
+}
+
+void ldrht(int i){
+	printf("	******ldrht\n");
+}
+
+void ldrsht(int i){
+	printf("	******ldrsht\n");
+}
+
+void strt(int i){
+	printf("	******strt\n");
+}
+
+void strbt(int i){
+	printf("	******strbt\n");
+}
+
+void strht(int i){
+	printf("	******strht\n");
+}
+
+//Load and store single data post-indexed.
+
+void ldr_post(int i){
+	printf("	******ldr_post\n");
+}
+
+void ldrb_post(int i){
+	printf("	******ldrb_post\n");
+}
+
+void ldrsb_post(int i){
+	printf("	******ldrsb_post\n");
+}
+
+void ldrh_post(int i){
+	printf("	******ldrh_post\n");
+}
+
+void ldrsh_post(int i){
+	printf("	******ldrsh_post\n");
+}
+
+void str_post(int i){
+	printf("	******str_post\n");
+}
+
+void strb_post(int i){
+	printf("	******strb_post\n");
+}
+
+void strh_post(int i){
+	printf("	******strh_post\n");
+}
+
+//Load and store single data pre-indexed.
+
+void ldr_pre(int i){
+	printf("	******ldr_pre\n");
+}
+
+void ldrb_pre(int i){
+	printf("	******ldrb_pre\n");
+}
+
+void ldrsb_pre(int i){
+	printf("	******ldrsb_pre\n");
+}
+
+void ldrh_pre(int i){
+	printf("	******ldrh_pre\n");
+}
+
+void ldrsh_pre(int i){
+	printf("	******ldrsh_pre\n");
+}
+
+void str_pre(int i){
+	printf("	******str_pre\n");
+}
+
+void strb_pre(int i){
+	printf("	******strb_pre\n");
+}
+
+void strh_pre(int i){
+	printf("	******strh_pre\n");
+}
+
+//Load and store single data register offset.
+
+void ldr_reg(int i){
+	printf("	******ldr_reg\n");
+}
+
+void ldrb_reg(int i){
+	printf("	******ldrb_reg\n");
+}
+
+void ldrsb_reg(int i){
+	printf("	******ldrsb_reg\n");
+}
+
+void ldrh_reg(int i){
+	printf("	******ldrh_reg\n");
+}
+
+void ldrsh_reg(int i){
+	printf("	******ldrsh_reg\n");
+}
+
+void str_reg(int i){
+	printf("	******str_reg\n");
+}
+
+void strb_reg(int i){
+	printf("	******strb_reg\n");
+}
+
+void strh_reg(int i){
+	printf("	******strh_reg\n");
+}
+
