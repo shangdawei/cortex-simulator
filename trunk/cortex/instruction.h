@@ -202,5 +202,108 @@ void udiv(int i);
 void smlal(int i);
 void umlal(int i);
 
+/**************************************************************************
+ *
+ *Data Processing instruction: no immediate operand
+ *
+ **************************************************************************/
+void ls_single_pc_12m(int instruction);
+void ls_single_rnadd_12m(int instruction);
+void ls_single_rnminus_8m(int instruction);
+void ls_single_rnpri_8m(int instruction);
+void ls_single_rnpost_8m(int instruction);
+void ls_single_rnpre_8m(int instruction);
+void ls_single_rnshift(int instruction);
+void ls_single_reserved1(int instruction);
+void ls_single_reserved2(int instruction);
+void ls_single_reserved3(int instruction);
+/*
+ *
+ *Table for load and store single data PC-relative. 
+ *
+ */
+void ldr_lit(int i);
+void ldrb_lit(int i);
+void ldrsb_lit(int i);
+void ldrh_lit(int i);
+void ldrsh_lit(int i);
+/*
+ *
+ *Table for load and store single data immediate offset. 
+ *
+ */
+void ldr_imm(int i);
+void ldrb_imm(int i);
+void ldrsb_imm(int i);
+void ldrh_imm(int i);
+void ldrsh_imm(int i);
+void str_imm(int i);
+void strb_imm(int i);
+void strh_imm(int i);
+/*
+ *
+ *Table for load and store single data negative immediate offset. 
+ *
+ */
+void ldr_neg_imm(int i);
+void ldrb_neg_imm(int i);
+void ldrsb_neg_imm(int i);
+void ldrh_neg_imm(int i);
+void ldrsh_neg_imm(int i);
+void str_neg_imm(int i);
+void strb_neg_imm(int i);
+void strh_neg_imm(int i);
+/*
+ *
+ *Table for load and store single data user privilege. 
+ *
+ */
+void ldrt(int i);
+void ldrbt(int i);
+void ldrsbt(int i);
+void ldrht(int i);
+void ldrsht(int i);
+void strt(int i);
+void strbt(int i);
+void strht(int i);
+/*
+ *
+ *Table for load and store single data post-indexed. 
+ *
+ */
+void ldr_post(int i);
+void ldrb_post(int i);
+void ldrsb_post(int i);
+void ldrh_post(int i);
+void ldrsh_post(int i);
+void str_post(int i);
+void strb_post(int i);
+void strh_post(int i);
+/*
+ *
+ *Table for load and store single data pre-indexed. 
+ *
+ */
+void ldr_pre(int i);
+void ldrb_pre(int i);
+void ldrsb_pre(int i);
+void ldrh_pre(int i);
+void ldrsh_pre(int i);
+void str_pre(int i);
+void strb_pre(int i);
+void strh_pre(int i);
+/*
+ *
+ *Table for load and store single data register offset. 
+ *
+ */
+void ldr_reg(int i);
+void ldrb_reg(int i);
+void ldrsb_reg(int i);
+void ldrh_reg(int i);
+void ldrsh_reg(int i);
+void str_reg(int i);
+void strb_reg(int i);
+void strh_reg(int i);
 #endif
 
