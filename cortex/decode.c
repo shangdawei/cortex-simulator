@@ -55,16 +55,16 @@ TranslateTable table[MAXSIZE] = {
     	//these 8 entries is to define Data Processing :no immdiate, which is on Page 80
 	//*************************************************************************************************
 	//Entry 21: there should be 10 functions
-		//{0xFE1F0000,0xF81F0000,(void *)ls_single_pc_12m},
-		//{0xFE800000,0xF8800000,(void *)ls_single_rnadd_12m},
-		//{0xFE800F00,0xF8000C00,(void *)ls_single_rnminus_8m},
-		//{0xFE800E00,0xF8000E00,(void *)ls_single_rnpri_8m},
-		//{0xFE800D00,0xF8000900,(void *)ls_single_rnpost_8m},
-		//{0xFE800D00,0xF8000D00,(void *)ls_single_rnpre_8m},
-		//{0xFE800DC0,0xF8000000,(void *)ls_single_rnshift},
-		//{0xFE800D00,0xF8000800,(void *)ls_single_reserved1},
-		//{0xFE800800,0xF8000000,(void *)ls_single_reserved2},
-		//{0xFE1F0000,0xF80F0000,(void *)ls_single_reserved3},
+		{0xFE1F0000,0xF81F0000,(void *)ls_single_pc_12m},
+		{0xFE800000,0xF8800000,(void *)ls_single_rnadd_12m},
+		{0xFE800F00,0xF8000C00,(void *)ls_single_rnminus_8m},
+		{0xFE800E00,0xF8000E00,(void *)ls_single_rnpri_8m},
+		{0xFE800D00,0xF8000900,(void *)ls_single_rnpost_8m},
+		{0xFE800D00,0xF8000D00,(void *)ls_single_rnpre_8m},
+		{0xFE800DC0,0xF8000000,(void *)ls_single_rnshift},
+		{0xFE800D00,0xF8000800,(void *)ls_single_reserved1},
+		{0xFE800800,0xF8000000,(void *)ls_single_reserved2},
+		{0xFE1F0000,0xF80F0000,(void *)ls_single_reserved3},
     	//these 10 entries is to define Load & Store single data item,which is on Page 87
 	//*************************************************************************************************
 	//Entry 31: there should be 3 functions

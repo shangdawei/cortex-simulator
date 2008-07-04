@@ -1,5 +1,5 @@
 #include "memory.h"
-static int memory[MEM_SIZE]={0};
+static int memory[MEM_SIZE]={0,1,2,3,4,5,6,7,8,9,};
 void memory_copy(int target, int destination, int num){
 	int i;
 	for (i =0; i< num; i++){

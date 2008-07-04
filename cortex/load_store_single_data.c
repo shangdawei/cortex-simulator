@@ -231,7 +231,31 @@ void ls_single_reserved3(int instruction){
 //Load and store single data PC-relative.
 
 void ldr_lit(int i){
-	printf("	******ldr_lit\n");
+	int rt,imm32,base,address,address1,result;
+	*((int *)(&LsSinglePc)) = i;
+	rt= LsSinglePc.rt;
+	imm32 = LsSinglePc.imm12;
+	if(rt == 15 && InITBlock() && !LastInITBlock())
+		printf("it is unpredictable!");
+	else{
+		base = align(get_pc(),4);
+		if(LsSinglePc.u == 1)
+			address = base + imm32;
+		else
+			address = base - imm32;
+		address1 = address & 0xFFFFFFFC;
+		if(rt == 15)
+			if(address1 != 0)
+				printf("it is unpredictable!");
+			else
+				LoadWritePC(get_memory(address));
+		else{
+			result = get_memory(address);
+			set_general_register(rt,result);
+		}
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldr_lit\n");
+	}
 }
 
 void ldrb_lit(int i){
