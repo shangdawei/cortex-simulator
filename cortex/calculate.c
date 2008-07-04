@@ -6,6 +6,36 @@
 //simulate CPU based unit ----addition implemet
 
 struct CALCULATECO* addwithcarry(unsigned m,unsigned n,unsigned carry_in){
+/*
+unsigned_sum = UInt(x) + UInt(y) + UInt(carry_in);
+signed_sum = SInt(x) + SInt(y) + UInt(carry_in);
+result = unsigned_sum<N-1:0>; // = signed_sum<N-1:0>
+carry_out = if UInt(result) == unsigned_sum then '0' else '1';
+overflow = if SInt(result) == signed_sum then '0' else '1';
+return (result, carry_out, overflow);
+*/
+
+	//modified by Jacky on 08.7.3
+	//long long u_sum,lx = x,ly = y;
+	//long s_sum;
+	//int sx = (int)x,sy = (int)y;
+	//struct CALCULATECO *rco = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
+	////u_sum = lx+ly+carry_in;
+	//u_sum = 0xfffffffffff;
+	//printf("u_sum = %x",u_sum);
+	//s_sum = sx+sy+carry_in;
+	//printf("sx = %x, sy = %d, s_sum = %x",sx,sy,s_sum);
+	//rco->result = x & 0x7fffffff;
+	//if(rco->result==u_sum)
+	//	rco->carry_out=0;
+	//else
+	//	rco->carry_out=1;
+	//if(((int)rco->result)==s_sum)
+	//	rco->overflow=0;
+	//else
+	//	rco->overflow=1;
+	//printf("rco->result = %x,rco->carry = %x,rco->overflow = %x",rco->result,rco->carry_out,rco->overflow);
+	//return rco;
 	unsigned sum,temp1,temp2,temp3,temp4,temp5;
 	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	sum = m + n + carry_in;
@@ -30,6 +60,7 @@ struct CALCULATECO* addwithcarry(unsigned m,unsigned n,unsigned carry_in){
 	else
 		result->overflow = 0;
 	result->result = sum;
+	printf("adc.result = %x, adc.carry = %x,adc.overflow = %x",result->result,result->carry_out,result->overflow);
 	return result;
 }
 

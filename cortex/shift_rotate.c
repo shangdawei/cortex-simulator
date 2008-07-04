@@ -12,7 +12,7 @@ struct RESULTCARRY* lsl_c(unsigned x,unsigned n){
 		c_out = x;
 		x = x << 1;
 	}
-	c_out = (c_out & 0x80000000) >> 2;
+	c_out = (c_out & 0x80000000) >> 31;
 	result_lsl_c->result = x;
 	result_lsl_c->carry = c_out;
 	return result_lsl_c;
@@ -39,7 +39,7 @@ struct RESULTCARRY* asr_c(int x,unsigned n){
 		c_out = x;
 		x = x >>1;
 	}
-	c_out = (c_out & 0x00000001) << 29;
+	c_out = c_out & 0x00000001;
 	result_asr_c->result = x;
 	result_asr_c->carry = c_out;
 	return result_asr_c;	
@@ -81,7 +81,8 @@ struct RESULTCARRY* ror_c(unsigned x,unsigned n){
 	else
 		result = lsr(x,m) | lsl(x,32-m);
 	c_out = result;
-	c_out = (c_out & 0x80000000) >> 2;
+//	c_out = (c_out & 0x80000000) >> 2;				modified by Jacky on 08.7.3, for carry returned should be a bit,
+	c_out = (c_out & 0x80000000) >> 31;			//	so only can be a 1 or 0, so does rol_c, rrx_c....
 	result_ror_c->result = result;
 	result_ror_c->carry = c_out;
 	return result_ror_c;
@@ -96,7 +97,7 @@ struct RESULTCARRY* rol_c(unsigned x,unsigned n){
 	else
 		result = lsl(x,m) | lsr(x,32-m);
 	c_out = result;
-	c_out = (c_out & 0x00000001) << 29;
+	c_out = c_out & 0x00000001;
 	result_rol_c->result = result;
 	result_rol_c->carry = c_out;
 	return result_rol_c;
@@ -107,7 +108,7 @@ struct RESULTCARRY* rrx_c(unsigned x,unsigned c_in){
 	struct RESULTCARRY* result_rrx_c = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	result = (c_in << 31) | (x >> 1);
 	c_out = x;
-	c_out = (c_out & 0x00000001) << 29;
+	c_out = c_out & 0x00000001;
 	result_rrx_c->result = result;
 	result_rrx_c->carry = c_out;
 	return result_rrx_c;
