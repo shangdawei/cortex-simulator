@@ -26,3 +26,16 @@ int ArchVersion()
 //{
 //	return false;
 //}
+
+bool InITBlock(){
+//This function returns TRUE if execution is currently in an IT block and FALSE otherwise.
+}
+
+bool LastInITBlock(){
+//This function returns TRUE if the current instruction is the last instruction in an IT block, and FALSE otherwise.
+}
+
+void LoadWritePC(int value){
+//This procedure writes a value to the PC with BX-like interworking behavior for writes by load instructions.
+	set_pc(value);
+}
