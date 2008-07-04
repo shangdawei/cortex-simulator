@@ -38,7 +38,7 @@ struct RESULTCARRY{
 	int carry;
 };
 struct CALCULATECO{
-	int result;
+	unsigned int result;
 	int carry_out;
 	int overflow;
 };
