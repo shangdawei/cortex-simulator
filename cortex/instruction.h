@@ -305,5 +305,13 @@ void ldrsh_reg(int i);
 void str_reg(int i);
 void strb_reg(int i);
 void strh_reg(int i);
+/*
+ *
+ *Table for dealing with byte or half word access  
+ *
+ */
+int load_byte(int address,int s);
+int load_half(int address,int s);
+
 #endif
 
