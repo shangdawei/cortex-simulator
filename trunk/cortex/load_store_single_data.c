@@ -233,10 +233,10 @@ void ls_single_reserved3(int instruction){
 void ldr_lit(int i){
 	int rt,imm32,base,address,address1,result;
 	*((int *)(&LsSinglePc)) = i;
-	rt= LsSinglePc.rt;
+	rt = LsSinglePc.rt;
 	imm32 = LsSinglePc.imm12;
 	if(rt == 15 && InITBlock() && !LastInITBlock())
-		printf("it is unpredictable!");
+		printf("	it is unpredictable!");
 	else{
 		base = align(get_pc(),4);
 		if(LsSinglePc.u == 1)
@@ -246,7 +246,7 @@ void ldr_lit(int i){
 		address1 = address & 0xFFFFFFFC;
 		if(rt == 15)
 			if(address1 != 0)
-				printf("it is unpredictable!");
+				printf("	it is unpredictable!");
 			else
 				LoadWritePC(get_memory(address));
 		else{
@@ -259,29 +259,143 @@ void ldr_lit(int i){
 }
 
 void ldrb_lit(int i){
-	printf("	******ldrb_lit\n");
+	int rt,imm32,base,address,result;
+	*((int *)(&LsSinglePc)) = i;
+	rt = LsSinglePc.rt;
+	imm32 = LsSinglePc.imm12;
+	if(rt == 15)
+		printf("	it is error in this situation!");
+	else if(rt == 13)
+		printf("	it is unpredictable!");
+	else{
+		base = align(get_pc(),4);
+		if(LsSinglePc.u == 1)
+			address = base + imm32;
+		else
+			address = base - imm32;
+		result = load_byte(address,LsSinglePc.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrb_lit\n");
+	}
 }
 
 void ldrsb_lit(int i){
-	printf("	******ldrsb_lit\n");
+	int rt,imm32,base,address,result;
+	*((int *)(&LsSinglePc)) = i;
+	rt = LsSinglePc.rt;
+	imm32 = LsSinglePc.imm12;
+	if(rt == 15)
+		printf("	it is error in this situation!");
+	else if(rt == 13)
+		printf("	it is unpredictable!");
+	else{
+		base = align(get_pc(),4);
+		if(LsSinglePc.u == 1)
+			address = base + imm32;
+		else
+			address = base - imm32;
+		result = load_byte(address,LsSinglePc.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrsb_lit\n");
+	}
 }
 
 void ldrh_lit(int i){
-	printf("	******ldrh_lit\n");
+	int rt,imm32,base,address,result;
+	*((int *)(&LsSinglePc)) = i;
+	rt = LsSinglePc.rt;
+	imm32 = LsSinglePc.imm12;
+	if(rt == 15)
+		printf("	it is error in this situation!");
+	else if(rt == 13)
+		printf("	it is unpredictable!");
+	else{
+		base = align(get_pc(),4);
+		if(LsSinglePc.u == 1)
+			address = base + imm32;
+		else
+			address = base - imm32;
+		result = load_half(address,LsSinglePc.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrh_lit\n");
+	}
 }
 
 void ldrsh_lit(int i){
-	printf("	******ldrsh_lit\n");
+	int rt,imm32,base,address,result;
+	*((int *)(&LsSinglePc)) = i;
+	rt = LsSinglePc.rt;
+	imm32 = LsSinglePc.imm12;
+	if(rt == 15)
+		printf("	it is error in this situation!");
+	else if(rt == 13)
+		printf("	it is unpredictable!");
+	else{
+		base = align(get_pc(),4);
+		if(LsSinglePc.u == 1)
+			address = base + imm32;
+		else
+			address = base - imm32;
+		result = load_half(address,LsSinglePc.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrsh_lit\n");
+	}
 }
 
 //Load and store single data immediate offset.
 
 void ldr_imm(int i){
-	printf("	******ldr_imm\n");
+	int rt,rn,imm32,address,address1,result;
+	*((int *)(&LsSingleRnAdd)) = i;
+	rt = LsSingleRnAdd.rt;
+	rn = LsSingleRnAdd.rn;
+	imm32 = LsSingleRnAdd.imm12;
+	if(rt == 15 && InITBlock() && !LastInITBlock())
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnAdd.u == 1)
+			address = rn + imm32;
+		else
+			address = rn + imm32;
+		address1 = address & 0xFFFFFFFC;
+		if(rt == 15)
+			if(address1 != 0)
+				printf("	it is unpredictable!");
+			else
+				LoadWritePC(get_memory(address));
+		else{
+			result = get_memory(address);
+			set_general_register(rt,result);
+		}
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldr_imm\n");
+	}
 }
 
 void ldrb_imm(int i){
-	printf("	******ldrb_imm\n");
+	int rt,imm32,rn,address,result;
+	*((int *)(&LsSingleRnAdd)) = i;
+	rt = LsSingleRnAdd.rt;
+	rn = LsSingleRnAdd.rn;
+	imm32 = LsSingleRnAdd.imm12;
+	if(rt == 15)
+		printf("	it is error in this situation!");
+	else if(rt == 13)
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnAdd.u == 1)
+			address = rn + imm32;
+		else
+			address = rn - imm32;
+		result = load_byte(address,LsSingleRnAdd.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrb_imm\n");
+	}
 }
 
 void ldrsb_imm(int i){
