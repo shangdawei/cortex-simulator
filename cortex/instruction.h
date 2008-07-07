@@ -312,6 +312,8 @@ void strh_reg(int i);
  */
 int load_byte(int address,int s);
 int load_half(int address,int s);
+void store_byte(int address,int value);
+void store_half(int address,int value);
 
 #endif
 
