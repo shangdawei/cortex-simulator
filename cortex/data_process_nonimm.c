@@ -55,16 +55,228 @@ void data_pro_con_shift(int instruction)
 }
 
 
-void reg_ctrl_shift(int instuction){}
-void sign_unsign_extend(int instruction){}
-void simd_add_sub(int instruction){}
-void other_three_reg_data_pro(int instruction){}
-void bit32_multiply_acc(int instruction){}
-void bit64_multiply(int instruction){}
-void data_pro_nonimm_reserved(int instruction){}
+void reg_ctrl_shift(int instruction)
+{
+	int opcode,index;
+	func f_ptr;
+	*((int *)(&regCtrlShift)) = instruction;
+	opcode=decode_imm5(regCtrlShift.op,regCtrlShift.op2);
+	printf("reg_ctrl_shift: 0x%X \n",instruction);
+	printf("Operate Code : 0x%x \n", opcode);
+	printf("S: 0x%x \n", regCtrlShift.s);
+	printf("Rn: 0x%x \n", regCtrlShift.rn);
+	printf("Rd: 0x%x \n", regCtrlShift.rd);
+	printf("Rm: 0x%x \n", regCtrlShift.rm);
+
+	if(!regCtrlShift.op2)
+	{
+		printf("UNDEFINED instructions!\n");
+		return;
+	}
+	index = regCtrlShift.op;
+	printf("index : %d", index);
+
+
+	f_ptr=(void *)reg_ctrl_s[index];
+	f_ptr(instruction);
+}
+void sign_unsign_extend(int instruction)
+{
+	int index;
+	func f_ptr;
+	*((int *)(&signUnsignExtend)) = instruction;
+	printf("sign_unsign_extend: 0x%X \n",instruction);
+	printf("Operate Code : 0x%x \n",signUnsignExtend.op);
+	printf("Rn: 0x%x \n", signUnsignExtend.rn);
+	printf("Rd: 0x%x \n", signUnsignExtend.rd);
+	printf("Rm: 0x%x \n", signUnsignExtend.rm);
+	printf("rot: 0x%x \n",signUnsignExtend.rot);
+
+	if(signUnsignExtend.rn!=0xf)
+	{
+		printf("UNDEFINED instructions!\n");
+		return;
+	}
+	if(signUnsignExtend.pass1)
+	{
+		printf("unpredictable instruction");
+		return;
+	}
+
+	index = signUnsignExtend.op;
+	printf("index : %d", index);
+
+
+	f_ptr=(void *)reg_ctrl_s[index];
+	f_ptr(instruction);
+}
+void simd_add_sub(int instruction)
+{
+	*((int *)(&SIMDAddSub)) = instruction;
+	printf("simd_add_sub: 0x%X \n",instruction);
+	printf("Operate Code : 0x%x \n",SIMDAddSub.op);
+	printf("Rn: 0x%x \n", SIMDAddSub.rn);
+	printf("Rd: 0x%x \n", SIMDAddSub.rd);
+	printf("Rm: 0x%x \n", SIMDAddSub.rm);
+	printf("prefix: 0x%x \n",SIMDAddSub.prefix);
+
+}
+void other_three_reg_data_pro(int instruction)
+{
+	int index,opcode;
+	func f_ptr;
+	*((int *)(&otherThreeRegDataPro)) = instruction;
+	opcode=decode_imm5(otherThreeRegDataPro.op,otherThreeRegDataPro.op2);
+	printf("other_three_reg_data_pro: 0x%X \n",instruction);
+	printf("Operate Code : 0x%x \n",opcode);
+	printf("Rn: 0x%x \n", otherThreeRegDataPro.rn);
+	printf("Rd: 0x%x \n", otherThreeRegDataPro.rd);
+	printf("Rm: 0x%x \n", otherThreeRegDataPro.rm);
+
+	if(otherThreeRegDataPro.op==1)
+	{
+		index = otherThreeRegDataPro.op2;
+	}
+	else if(otherThreeRegDataPro.op==3&&otherThreeRegDataPro.op2==0)
+	{
+		index = 4;
+	}
+	else
+	{
+		printf("unpredictable instruction");
+		return;
+	}
+	f_ptr=(void *)other_three_reg_data_p[index];
+	f_ptr(instruction);
+}
+void bit32_multiply_acc(int instruction)
+{
+	int index;
+	func f_ptr;
+	*((int *)(&bit32MultiplyAcc)) = instruction;
+	printf("bit32_multiply_acc: 0x%X \n",instruction);
+	printf("Op : 0x%x \n",bit32MultiplyAcc.op);
+	printf("Op2 : 0x%x \n",bit32MultiplyAcc.op2);
+	printf("Rn: 0x%x \n", bit32MultiplyAcc.rn);
+	printf("Rd: 0x%x \n", bit32MultiplyAcc.rd);
+	printf("Rm: 0x%x \n", bit32MultiplyAcc.rm);
+	printf("Racc: 0x%x \n", bit32MultiplyAcc.racc);
+
+	if(bit32MultiplyAcc.op||bit32MultiplyAcc.op2>1)
+	{
+		printf("UNDEFINED instructions!\n");
+		return;
+	}
+	else if(bit32MultiplyAcc.racc!=0xf)
+	{
+		index = bit32MultiplyAcc.op2;
+	}
+	else if(bit32MultiplyAcc.op2==0)
+	{
+		index = 2;
+	}
+	else
+	{
+bit64Multiply
+	}
+	f_ptr=(void *)bit32_multiply_a[index];
+	f_ptr(instruction);
+
+}
+void bit64_multiply(int instruction)
+{
+	int index;
+	func f_ptr;
+	*((int *)(&bit64Multiply)) = instruction;
+	printf("bit64_multiply: 0x%X \n",instruction);
+	printf("Op : 0x%x \n",bit64Multiply.op);
+	printf("Op2 : 0x%x \n",bit64Multiply.op2);
+	printf("Rn: 0x%x \n", bit64Multiply.rn);
+	printf("Rdlo: 0x%x \n", bit64Multiply.rdlo);
+	printf("Rdhi: 0x%x \n", bit64Multiply.rdhi);
+	printf("Rm: 0x%x \n", bit64Multiply.rm);
+	switch(bit64Multiply.op)
+	{
+	case 0:
+		if(!bit64Multiply.op2)
+		{
+			index = 0;
+		}
+		else
+		{
+			printf("UNDEFINED instructions!\n");
+			return;
+		}
+		break;
+	case 1:
+		if(bit64Multiply.op2==0xf)
+		{
+			index = 1;
+		}
+		else
+		{
+			printf("UNDEFINED instructions!\n");
+			return;
+		}
+		break;
+	case 2:
+		if(!bit64Multiply.op2)
+		{
+			index = 2;
+		}
+		else
+		{
+			printf("UNDEFINED instructions!\n");
+			return;
+		}
+		break;
+	case 3:
+		if(bit64Multiply.op2==0xf)
+		{
+			index = 3;
+		}
+		else
+		{
+			printf("UNDEFINED instructions!\n");
+			return;
+		}
+		break;		
+	case 4:
+		if(!bit64Multiply.op2)
+		{
+			index = 4;
+		}
+		else
+		{
+			printf("UNDEFINED instructions!\n");
+			return;
+		}
+		break;
+	case 6:
+		if(!bit64Multiply.op2)
+		{
+			index = 5;
+		}
+		else
+		{
+			printf("UNDEFINED instructions!\n");
+			return;
+		}
+		break;
+	default:
+			printf("UNDEFINED instructions!\n");
+			return;
+	}
+	f_ptr=(void *)bit64_multiply[index];
+	f_ptr(instruction);
+}
+void data_pro_nonimm_reserved(int instruction)
+{
+	printf("data_pro_nonimm_reserved: 0x%X \n",instruction);
+}
 
 void err_reg(){
-	printf("opcode error\n");
+	printf("UNDEFINED instructions!\n");
 }
 
 

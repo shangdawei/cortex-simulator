@@ -105,7 +105,7 @@ struct BITMULTIPLY{
 	unsigned op		:3;
 	unsigned pass1	:4;
 	unsigned pass2	:5;
-}Bit64Multiply;
+}bit64Multiply;
 
 
 void* data_pro_con_s[30]={
@@ -150,19 +150,21 @@ void* reg_ctrl_s[4]={
 	(void *)ror_reg,
 };
 
-void* sign_unsign_e[4]={
-	(void *)sxtb,
+void* sign_unsign_e[6]={
 	(void *)sxth,
-	(void *)uxtb,
 	(void *)uxth,
+	(void *)err_reg,
+	(void *)err_reg,
+	(void *)sxtb,
+	(void *)uxtb,
 };
 
 void* other_three_reg_data_p[5]={
-	(void *)clz,
-	(void *)rbit,
 	(void *)rev,
 	(void *)rev16,
+	(void *)rbit,
 	(void *)revsh,
+	(void *)clz,
 };
 
 void* bit32_multiply_a[3]={
