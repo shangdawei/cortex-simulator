@@ -357,10 +357,7 @@ void ldr_imm(int i){
 	if(rt == 15 && InITBlock() && !LastInITBlock())
 		printf("	it is unpredictable!");
 	else{
-		if(LsSingleRnAdd.u == 1)
-			address = rn + imm32;
-		else
-			address = rn + imm32;
+		address = get_general_register(rn) + imm32;
 		address1 = address & 0xFFFFFFFC;
 		if(rt == 15)
 			if(address1 != 0)
@@ -387,10 +384,7 @@ void ldrb_imm(int i){
 	else if(rt == 13)
 		printf("	it is unpredictable!");
 	else{
-		if(LsSingleRnAdd.u == 1)
-			address = rn + imm32;
-		else
-			address = rn - imm32;
+		address = get_general_register(rn) + imm32;
 		result = load_byte(address,LsSingleRnAdd.s);
 		set_general_register(rt,result);
 		printf("	Rt = %X",get_general_register(rt));
@@ -399,61 +393,257 @@ void ldrb_imm(int i){
 }
 
 void ldrsb_imm(int i){
-	printf("	******ldrsb_imm\n");
+	int rt,imm32,rn,address,result;
+	*((int *)(&LsSingleRnAdd)) = i;
+	rt = LsSingleRnAdd.rt;
+	rn = LsSingleRnAdd.rn;
+	imm32 = LsSingleRnAdd.imm12;
+	if(rt == 15)
+		printf("	it is error in this situation!");
+	else if(rt == 13)
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + imm32;
+		result = load_byte(address,LsSingleRnAdd.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrsb_imm\n");
+	}
 }
 
 void ldrh_imm(int i){
-	printf("	******ldrh_imm\n");
+	int rt,imm32,rn,address,result;
+	*((int *)(&LsSingleRnAdd)) = i;
+	rt = LsSingleRnAdd.rt;
+	rn = LsSingleRnAdd.rn;
+	imm32 = LsSingleRnAdd.imm12;
+	if(rt == 15)
+		printf("	it is error in this situation!");
+	else if(rt == 13)
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + imm32;
+		result = load_half(address,LsSingleRnAdd.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrh_imm\n");
+	}
 }
 
 void ldrsh_imm(int i){
-	printf("	******ldrsh_imm\n");
+	int rt,imm32,rn,address,result;
+	*((int *)(&LsSingleRnAdd)) = i;
+	rt = LsSingleRnAdd.rt;
+	rn = LsSingleRnAdd.rn;
+	imm32 = LsSingleRnAdd.imm12;
+	if(rt == 15)
+		printf("	it is error in this situation!");
+	else if(rt == 13)
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + imm32;
+		result = load_byte(address,LsSingleRnAdd.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrsh_imm\n");
+	}
 }
 
 void str_imm(int i){
-	printf("	******str_imm\n");
+	int rt,rn,imm32,address,result;
+	*((int *)(&LsSingleRnAdd)) = i;
+	rt = LsSingleRnAdd.rt;
+	rn = LsSingleRnAdd.rn;
+	imm32 = LsSingleRnAdd.imm12;
+	if(rn == 15)
+		printf("	it is undefined!");
+	else if(rt == 15)
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + imm32;
+		result = get_general_register(rt);
+		set_memory(address,result);
+		printf("	Memory unit is %X",get_memory(address));
+		printf("	******str_imm\n");
+	}
 }
 
 void strb_imm(int i){
-	printf("	******strb_imm\n");
+	int rt,rn,imm32,address;
+	*((int *)(&LsSingleRnAdd)) = i;
+	rt = LsSingleRnAdd.rt;
+	rn = LsSingleRnAdd.rn;
+	imm32 = LsSingleRnAdd.imm12;
+	if(rn == 15)
+		printf("	it is undefined!");// didn't consider if BadReg(t) then UNPREDICTABLE;????
+	else{
+		address = get_general_register(rn) + imm32;
+		store_byte(address,get_general_register(rt));
+		printf("	Memory unit is %X",get_memory(address/4));
+		printf("	******strb_imm\n");
+	}
 }
 
 void strh_imm(int i){
-	printf("	******strh_imm\n");
+	int rt,rn,imm32,address;
+	*((int *)(&LsSingleRnAdd)) = i;
+	rt = LsSingleRnAdd.rt;
+	rn = LsSingleRnAdd.rn;
+	imm32 = LsSingleRnAdd.imm12;
+	if(rn == 15)
+		printf("	it is undefined!");// didn't consider if BadReg(t) then UNPREDICTABLE;????
+	else{
+		address = get_general_register(rn) + imm32;
+		store_half(address,get_general_register(rt));
+		printf("	Memory unit is %X",get_memory(address/2));
+		printf("	******strh_imm\n");
+	}
 }
 
 //Load and store single data negative immediate offset.
 
 void ldr_neg_imm(int i){
-	printf("	******ldr_neg_imm\n");
+	int rt,rn,imm32,address,address1,result;
+	*((int *)(&LsSingleRnMinus)) = i;
+	rt = LsSingleRnMinus.rt;
+	rn = LsSingleRnMinus.rn;
+	imm32 = LsSingleRnMinus.imm8;
+	if(rt == 15 && InITBlock() && !LastInITBlock())
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) - imm32;
+		address1 = address & 0xFFFFFFFC;
+		if(rt == 15)
+			if(address1 != 0)
+				printf("	it is unpredictable!");
+			else
+				LoadWritePC(get_memory(address));
+		else{
+			result = get_memory(address);
+			set_general_register(rt,result);
+		}
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldr_neg_imm\n");
+	}
 }
 
 void ldrb_neg_imm(int i){
-	printf("	******ldrb_neg_imm\n");
+	int rt,rn,imm32,address,result;
+	*((int *)(&LsSingleRnMinus)) = i;
+	rt = LsSingleRnMinus.rt;
+	rn = LsSingleRnMinus.rn;
+	imm32 = LsSingleRnMinus.imm8;
+	if(rt == 15)
+		printf("	it is unpredictable!");// didn't consider if BadReg(t) || (wback && n == t) then UNPREDICTABLE;???
+	else{
+		address = get_general_register(rn) - imm32;
+		result = load_byte(address,LsSingleRnMinus.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrb_neg_imm\n");
+	}
 }
 
 void ldrsb_neg_imm(int i){
-	printf("	******ldrsb_neg_imm\n");
+	int rt,rn,imm32,address,result;
+	*((int *)(&LsSingleRnMinus)) = i;
+	rt = LsSingleRnMinus.rt;
+	rn = LsSingleRnMinus.rn;
+	imm32 = LsSingleRnMinus.imm8;
+	if(rt == 15)
+		printf("	it is unpredictable!");// didn't consider if BadReg(t) || (wback && n == t) then UNPREDICTABLE;???
+	else{
+		address = get_general_register(rn) - imm32;
+		result = load_byte(address,LsSingleRnMinus.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrsb_neg_imm\n");
+	}
 }
 
 void ldrh_neg_imm(int i){
-	printf("	******ldrh_neg_imm\n");
+	int rt,rn,imm32,address,result;
+	*((int *)(&LsSingleRnMinus)) = i;
+	rt = LsSingleRnMinus.rt;
+	rn = LsSingleRnMinus.rn;
+	imm32 = LsSingleRnMinus.imm8;
+	if(rt == 15)
+		printf("	it is unpredictable!");// didn't consider if BadReg(t) || (wback && n == t) then UNPREDICTABLE;???
+	else{
+		address = get_general_register(rn) - imm32;
+		result = load_half(address,LsSingleRnMinus.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrh_neg_imm\n");
+	}
 }
 
 void ldrsh_neg_imm(int i){
-	printf("	******ldrsh_neg_imm\n");
+	int rt,rn,imm32,address,result;
+	*((int *)(&LsSingleRnMinus)) = i;
+	rt = LsSingleRnMinus.rt;
+	rn = LsSingleRnMinus.rn;
+	imm32 = LsSingleRnMinus.imm8;
+	if(rt == 15)
+		printf("	it is unpredictable!");// didn't consider if BadReg(t) || (wback && n == t) then UNPREDICTABLE;???
+	else{
+		address = get_general_register(rn) - imm32;
+		result = load_half(address,LsSingleRnMinus.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrsh_neg_imm\n");
+	}
 }
 
 void str_neg_imm(int i){
-	printf("	******str_neg_imm\n");
+	int rt,rn,imm32,address,result;
+	*((int *)(&LsSingleRnMinus)) = i;
+	rt = LsSingleRnMinus.rt;
+	rn = LsSingleRnMinus.rn;
+	imm32 = LsSingleRnMinus.imm8;
+	if(rn == 15)
+		printf("	it is undefined!");
+	else if(rt == 15)
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) - imm32;
+		result = get_general_register(rt);
+		set_memory(address,result);
+		printf("	Memory unit is %X",get_memory(address));
+		printf("	******str_neg_imm\n");
+	}
 }
 
 void strb_neg_imm(int i){
-	printf("	******strb_neg_imm\n");
+	int rt,rn,imm32,address,result;
+	*((int *)(&LsSingleRnMinus)) = i;
+	rt = LsSingleRnMinus.rt;
+	rn = LsSingleRnMinus.rn;
+	imm32 = LsSingleRnMinus.imm8;
+	if(rn == 15)
+		printf("	it is undefined!");// didn't consider if BadReg(t) || (wback && n == t) then UNPREDICTABLE;???
+	else{
+		address = get_general_register(rn) - imm32;
+		store_byte(address,get_general_register(rt));
+		printf("	Memory unit is %X",get_memory(address/4));
+		printf("	******strb_neg_imm\n");
+	}
 }
 
 void strh_neg_imm(int i){
-	printf("	******strh_neg_imm\n");
+	int rt,rn,imm32,address,result;
+	*((int *)(&LsSingleRnMinus)) = i;
+	rt = LsSingleRnMinus.rt;
+	rn = LsSingleRnMinus.rn;
+	imm32 = LsSingleRnMinus.imm8;
+	if(rn == 15)
+		printf("	it is undefined!");// didn't consider if BadReg(t) || (wback && n == t) then UNPREDICTABLE;???
+	else{
+		address = get_general_register(rn) - imm32;
+		store_half(address,get_general_register(rt));
+		printf("	Memory unit is %X",get_memory(address/2));
+		printf("	******strh_neg_imm\n");
+	}
 }
 
 //Load and store single data user privilege. 

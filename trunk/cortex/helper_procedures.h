@@ -12,7 +12,7 @@ struct TWOWORD{
 
 void ALUWritePC(int value);
 int ArchVersion();
-bool bad_Reg(int n);
+bool Bad_Reg(int n);
 bool BigEndian();
 void BranchWritePC(int value);
 void BreakPoint();
@@ -43,7 +43,7 @@ void Hint_SendEvent();
 void Hint_Yield();
 bool InITBlock();
 void InstructionSynchronizationBarrier(char option);
-bool intZeroDivideTrappingEnabled();
+bool IntZeroDivideTrappingEnabled();
 bool LastInITBlock();
 void LoadWritePC(int value);
 

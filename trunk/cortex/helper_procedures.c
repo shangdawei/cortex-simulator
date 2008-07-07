@@ -7,7 +7,7 @@
  */
 #include "helper_procedures.h"
 
-void ALUWritePC(value)
+void ALUWritePC(int value)
 {
 /*
 This procedure writes a value to the PC with the correct semantics for such a write by the ADD
@@ -22,10 +22,10 @@ int ArchVersion()
 	return 2;
 }
 
-//bool bad_Reg(n)
-//{
-//	return false;
-//}
+bool Bad_Reg(int n){
+//This function performs the check for the register numbers 13 and 15 that are disallowed for many Thumb register specifiers.
+	return (n == 13 || n == 15);
+}
 
 bool InITBlock(){
 //This function returns TRUE if execution is currently in an IT block and FALSE otherwise.

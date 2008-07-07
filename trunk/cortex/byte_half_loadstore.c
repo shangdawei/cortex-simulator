@@ -52,3 +52,49 @@ int load_half(int address,int s){
 		result = result | 0xFFFF0000;
 	return result;
 }
+
+void store_byte(int address,int value){
+	int quotient,residual,data,result;
+	quotient = address / 4;
+	data = get_memory(quotient);
+	value = value & 0x000000FF;
+	residual = address % 4;
+	if(residual == 0){
+		data = data & 0xFFFFFF00;
+		result = data | value;
+	}
+	else if(residual == 1){
+		data = data & 0xFFFF00FF;
+		value = value << 8;
+		result = data | value;
+	}
+	else if(residual == 2){
+		data = data & 0xFF00FFFF;
+		value = value << 16;
+		result = data | value;
+	}
+	else{
+		data = data & 0x00FFFFFF;
+		value = value << 24;
+		result = data | value;
+	}
+	set_memory(quotient,result);
+}
+
+void store_half(int address,int value){
+	int quotient,residual,data,result;
+	quotient = address / 2;
+	data = get_memory(quotient);
+	value = value & 0x0000FFFF;
+	residual = address % 2;
+	if(residual == 0){
+		data = data & 0xFFFF0000;
+		result = data | value;
+	}
+	else{
+		data = data & 0x0000FFFF;
+		value = value << 16;
+		result = data | value;
+	}
+	set_memory(quotient,result);
+}
