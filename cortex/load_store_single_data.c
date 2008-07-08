@@ -665,35 +665,137 @@ void strh_neg_imm(int i){
 //Load and store single data user privilege. 
 
 void ldrt(int i){
-	printf("	******ldrt\n");
+	int rt,rn,imm32,address,result;
+	*((int *)(&LsSingleRnPri)) = i;
+	rt = LsSingleRnPri.rt;
+	rn = LsSingleRnPri.rn;
+	imm32 = LsSingleRnPri.imm8;
+	if(Bad_Reg(rt))
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + imm32;
+		result = get_memory(address);//didn't consider MemU_unpriv!
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrt\n");
+	}
 }
 
 void ldrbt(int i){
-	printf("	******ldrbt\n");
+	int rt,rn,imm32,address,result;
+	*((int *)(&LsSingleRnPri)) = i;
+	rt = LsSingleRnPri.rt;
+	rn = LsSingleRnPri.rn;
+	imm32 = LsSingleRnPri.imm8;
+	if(Bad_Reg(rt))
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + imm32;
+		result = load_byte(address,LsSingleRnPri.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrbt\n");
+	}
 }
 
 void ldrsbt(int i){
-	printf("	******ldrsbt\n");
+	int rt,rn,imm32,address,result;
+	*((int *)(&LsSingleRnPri)) = i;
+	rt = LsSingleRnPri.rt;
+	rn = LsSingleRnPri.rn;
+	imm32 = LsSingleRnPri.imm8;
+	if(Bad_Reg(rt))
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + imm32;
+		result = load_byte(address,LsSingleRnPri.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrsbt\n");
+	}
 }
 
 void ldrht(int i){
-	printf("	******ldrht\n");
+	int rt,rn,imm32,address,result;
+	*((int *)(&LsSingleRnPri)) = i;
+	rt = LsSingleRnPri.rt;
+	rn = LsSingleRnPri.rn;
+	imm32 = LsSingleRnPri.imm8;
+	if(Bad_Reg(rt))
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + imm32;
+		result = load_half(address,LsSingleRnPri.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrht\n");
+	}
 }
 
 void ldrsht(int i){
-	printf("	******ldrsht\n");
+	int rt,rn,imm32,address,result;
+	*((int *)(&LsSingleRnPri)) = i;
+	rt = LsSingleRnPri.rt;
+	rn = LsSingleRnPri.rn;
+	imm32 = LsSingleRnPri.imm8;
+	if(Bad_Reg(rt))
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + imm32;
+		result = load_half(address,LsSingleRnPri.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrsht\n");
+	}
 }
 
 void strt(int i){
-	printf("	******strt\n");
+	int rt,rn,imm32,address,result;
+	*((int *)(&LsSingleRnPri)) = i;
+	rt = LsSingleRnPri.rt;
+	rn = LsSingleRnPri.rn;
+	imm32 = LsSingleRnPri.imm8;
+	if(Bad_Reg(rt))
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + imm32;
+		result = get_general_register(rt);
+		set_memory(address,result);
+		printf("	Memory unit is %X",get_memory(address));
+		printf("	******strt\n");
+	}
 }
 
 void strbt(int i){
-	printf("	******strbt\n");
+	int rt,rn,imm32,address;
+	*((int *)(&LsSingleRnPri)) = i;
+	rt = LsSingleRnPri.rt;
+	rn = LsSingleRnPri.rn;
+	imm32 = LsSingleRnPri.imm8;
+	if(Bad_Reg(rt))
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + imm32;
+		store_byte(address,get_general_register(rt));
+		printf("	Memory unit is %X",get_memory(address/4));
+		printf("	******strbt\n");
+	}
 }
 
 void strht(int i){
-	printf("	******strht\n");
+	int rt,rn,imm32,address;
+	*((int *)(&LsSingleRnPri)) = i;
+	rt = LsSingleRnPri.rt;
+	rn = LsSingleRnPri.rn;
+	imm32 = LsSingleRnPri.imm8;
+	if(Bad_Reg(rt))
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + imm32;
+		store_byte(address,get_general_register(rt));
+		printf("	Memory unit is %X",get_memory(address/2));
+		printf("	******strht\n");
+	}
 }
 
 //Load and store single data post-indexed.
