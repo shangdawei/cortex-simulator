@@ -801,102 +801,562 @@ void strht(int i){
 //Load and store single data post-indexed.
 
 void ldr_post(int i){
-	printf("	******ldr_post\n");
+	int rt,rn,imm32,address,offset_addr,address1,result;
+	*((int *)(&LsSingleRnPost)) = i;
+	rt = LsSingleRnPost.rt;
+	rn = LsSingleRnPost.rn;
+	imm32 = LsSingleRnPost.imm8;
+	if(LsSingleRnPost.pass1 == 1 && rt == rn)
+		printf("	it is unpredictable!");
+	else if(rt == 15 && InITBlock() && !LastInITBlock())
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnPost.pass2 == 1)
+			offset_addr = get_general_register(rn) + imm32;
+		else
+			offset_addr = get_general_register(rn) - imm32;
+		address = get_general_register(rn);
+		set_general_register(rn,offset_addr);
+		address1 = address & 0xFFFFFFFC;
+		if(rt == 15)
+			if(address1 != 0)
+				printf("	it is unpredictable!");
+			else
+				LoadWritePC(get_memory(address));
+		else{
+			result = get_memory(address);
+			set_general_register(rt,result);
+		}
+		printf("	Rn = %X",get_general_register(rn));
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldr_post\n");
+	}
 }
 
 void ldrb_post(int i){
-	printf("	******ldrb_post\n");
+	int rt,rn,imm32,address,offset_addr,result;
+	*((int *)(&LsSingleRnPost)) = i;
+	rt = LsSingleRnPost.rt;
+	rn = LsSingleRnPost.rn;
+	imm32 = LsSingleRnPost.imm8;
+	if(Bad_Reg(rt) || (LsSingleRnPost.pass1 == 1 && rt == rn))
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnPost.pass2 == 1)
+			offset_addr = get_general_register(rn) + imm32;
+		else
+			offset_addr = get_general_register(rn) - imm32;
+		address = get_general_register(rn);
+		set_general_register(rn,offset_addr);
+		result = load_byte(address,LsSingleRnPost.s);
+		set_general_register(rt,result);
+		printf("	Rn = %X",get_general_register(rn));
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrb_post\n");
+	}
 }
 
 void ldrsb_post(int i){
-	printf("	******ldrsb_post\n");
+	int rt,rn,imm32,address,offset_addr,result;
+	*((int *)(&LsSingleRnPost)) = i;
+	rt = LsSingleRnPost.rt;
+	rn = LsSingleRnPost.rn;
+	imm32 = LsSingleRnPost.imm8;
+	if(Bad_Reg(rt) || (LsSingleRnPost.pass1 == 1 && rt == rn))
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnPost.pass2 == 1)
+			offset_addr = get_general_register(rn) + imm32;
+		else
+			offset_addr = get_general_register(rn) - imm32;
+		address = get_general_register(rn);
+		set_general_register(rn,offset_addr);
+		result = load_byte(address,LsSingleRnPost.s);
+		set_general_register(rt,result);
+		printf("	Rn = %X",get_general_register(rn));
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrsb_post\n");
+	}
 }
 
 void ldrh_post(int i){
-	printf("	******ldrh_post\n");
+	int rt,rn,imm32,address,offset_addr,result;
+	*((int *)(&LsSingleRnPost)) = i;
+	rt = LsSingleRnPost.rt;
+	rn = LsSingleRnPost.rn;
+	imm32 = LsSingleRnPost.imm8;
+	if(Bad_Reg(rt) || (LsSingleRnPost.pass1 == 1 && rt == rn))
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnPost.pass2 == 1)
+			offset_addr = get_general_register(rn) + imm32;
+		else
+			offset_addr = get_general_register(rn) - imm32;
+		address = get_general_register(rn);
+		set_general_register(rn,offset_addr);
+		result = load_half(address,LsSingleRnPost.s);
+		set_general_register(rt,result);
+		printf("	Rn = %X",get_general_register(rn));
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrh_post\n");
+	}
 }
 
 void ldrsh_post(int i){
-	printf("	******ldrsh_post\n");
+	int rt,rn,imm32,address,offset_addr,result;
+	*((int *)(&LsSingleRnPost)) = i;
+	rt = LsSingleRnPost.rt;
+	rn = LsSingleRnPost.rn;
+	imm32 = LsSingleRnPost.imm8;
+	if(Bad_Reg(rt) || (LsSingleRnPost.pass1 == 1 && rt == rn))
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnPost.pass2 == 1)
+			offset_addr = get_general_register(rn) + imm32;
+		else
+			offset_addr = get_general_register(rn) - imm32;
+		address = get_general_register(rn);
+		set_general_register(rn,offset_addr);
+		result = load_half(address,LsSingleRnPost.s);
+		set_general_register(rt,result);
+		printf("	Rn = %X",get_general_register(rn));
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrsh_post\n");
+	}
 }
 
 void str_post(int i){
-	printf("	******str_post\n");
+	int rt,rn,imm32,address,offset_addr,result;
+	*((int *)(&LsSingleRnPost)) = i;
+	rt = LsSingleRnPost.rt;
+	rn = LsSingleRnPost.rn;
+	imm32 = LsSingleRnPost.imm8;
+	if(rn == 15)
+		printf("	it is undefined!");
+	else if(rt == 15 || rn == rt)
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnPost.pass2 == 1)
+			offset_addr = get_general_register(rn) + imm32;
+		else
+			offset_addr = get_general_register(rn) - imm32;
+		address = get_general_register(rn);
+		set_general_register(rn,offset_addr);
+		result = get_general_register(rt);
+		set_memory(address,result);
+		printf("	Memory unit is %X",get_memory(address));
+		printf("	******str_post\n");
+	}
 }
 
 void strb_post(int i){
-	printf("	******strb_post\n");
+	int rt,rn,imm32,address,offset_addr;
+	*((int *)(&LsSingleRnPost)) = i;
+	rt = LsSingleRnPost.rt;
+	rn = LsSingleRnPost.rn;
+	imm32 = LsSingleRnPost.imm8;
+	if(rn == 15)
+		printf("	it is undefined!");
+	else if(Bad_Reg(rt) || rt == rn)
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnPost.pass2 == 1)
+			offset_addr = get_general_register(rn) + imm32;
+		else
+			offset_addr = get_general_register(rn) - imm32;
+		address = get_general_register(rn);
+		set_general_register(rn,offset_addr);
+		store_byte(address,get_general_register(rt));
+		printf("	Memory unit is %X",get_memory(address/4));
+		printf("	******strb_post\n");
+	}
 }
 
 void strh_post(int i){
-	printf("	******strh_post\n");
+	int rt,rn,imm32,address,offset_addr;
+	*((int *)(&LsSingleRnPost)) = i;
+	rt = LsSingleRnPost.rt;
+	rn = LsSingleRnPost.rn;
+	imm32 = LsSingleRnPost.imm8;
+	if(rn == 15)
+		printf("	it is undefined!");
+	else if(Bad_Reg(rt) || rt == rn)
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnPost.pass2 == 1)
+			offset_addr = get_general_register(rn) + imm32;
+		else
+			offset_addr = get_general_register(rn) - imm32;
+		address = get_general_register(rn);
+		set_general_register(rn,offset_addr);
+		store_half(address,get_general_register(rt));
+		printf("	Memory unit is %X",get_memory(address/2));
+		printf("	******strh_post\n");
+	}
 }
 
 //Load and store single data pre-indexed.
 
 void ldr_pre(int i){
-	printf("	******ldr_pre\n");
+	int rt,rn,imm32,address,offset_addr,address1,result;
+	*((int *)(&LsSingleRnPre)) = i;
+	rt = LsSingleRnPre.rt;
+	rn = LsSingleRnPre.rn;
+	imm32 = LsSingleRnPre.imm8;
+	if(LsSingleRnPre.pass1 == 1 && rt == rn)
+		printf("	it is unpredictable!");
+	else if(rt == 15 && InITBlock() && !LastInITBlock())
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnPre.pass2 == 1)
+			offset_addr = get_general_register(rn) + imm32;
+		else
+			offset_addr = get_general_register(rn) - imm32;
+		address = offset_addr;
+		set_general_register(rn,offset_addr);
+		address1 = address & 0xFFFFFFFC;
+		if(rt == 15)
+			if(address1 != 0)
+				printf("	it is unpredictable!");
+			else
+				LoadWritePC(get_memory(address));
+		else{
+			result = get_memory(address);
+			set_general_register(rt,result);
+		}
+		printf("	Rn = %X",get_general_register(rn));
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldr_pre\n");
+	}
 }
 
 void ldrb_pre(int i){
-	printf("	******ldrb_pre\n");
+	int rt,rn,imm32,address,offset_addr,result;
+	*((int *)(&LsSingleRnPre)) = i;
+	rt = LsSingleRnPre.rt;
+	rn = LsSingleRnPre.rn;
+	imm32 = LsSingleRnPre.imm8;
+	if(Bad_Reg(rt) || (LsSingleRnPre.pass1 == 1 && rt == rn))
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnPre.pass2 == 1)
+			offset_addr = get_general_register(rn) + imm32;
+		else
+			offset_addr = get_general_register(rn) - imm32;
+		address = offset_addr;
+		set_general_register(rn,offset_addr);
+		result = load_byte(address,LsSingleRnPre.s);
+		set_general_register(rt,result);
+		printf("	Rn = %X",get_general_register(rn));
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrb_pre\n");
+	}
 }
 
 void ldrsb_pre(int i){
-	printf("	******ldrsb_pre\n");
+	int rt,rn,imm32,address,offset_addr,result;
+	*((int *)(&LsSingleRnPre)) = i;
+	rt = LsSingleRnPre.rt;
+	rn = LsSingleRnPre.rn;
+	imm32 = LsSingleRnPre.imm8;
+	if(Bad_Reg(rt) || (LsSingleRnPre.pass1 == 1 && rt == rn))
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnPre.pass2 == 1)
+			offset_addr = get_general_register(rn) + imm32;
+		else
+			offset_addr = get_general_register(rn) - imm32;
+		address = offset_addr;
+		set_general_register(rn,offset_addr);
+		result = load_byte(address,LsSingleRnPre.s);
+		set_general_register(rt,result);
+		printf("	Rn = %X",get_general_register(rn));
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrsb_pre\n");
+	}
 }
 
 void ldrh_pre(int i){
-	printf("	******ldrh_pre\n");
+	int rt,rn,imm32,address,offset_addr,result;
+	*((int *)(&LsSingleRnPre)) = i;
+	rt = LsSingleRnPre.rt;
+	rn = LsSingleRnPre.rn;
+	imm32 = LsSingleRnPre.imm8;
+	if(Bad_Reg(rt) || (LsSingleRnPre.pass1 == 1 && rt == rn))
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnPre.pass2 == 1)
+			offset_addr = get_general_register(rn) + imm32;
+		else
+			offset_addr = get_general_register(rn) - imm32;
+		address = offset_addr;
+		set_general_register(rn,offset_addr);
+		result = load_half(address,LsSingleRnPre.s);
+		set_general_register(rt,result);
+		printf("	Rn = %X",get_general_register(rn));
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrh_pre\n");
+	}
 }
 
 void ldrsh_pre(int i){
-	printf("	******ldrsh_pre\n");
+	int rt,rn,imm32,address,offset_addr,result;
+	*((int *)(&LsSingleRnPre)) = i;
+	rt = LsSingleRnPre.rt;
+	rn = LsSingleRnPre.rn;
+	imm32 = LsSingleRnPre.imm8;
+	if(Bad_Reg(rt) || (LsSingleRnPre.pass1 == 1 && rt == rn))
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnPre.pass2 == 1)
+			offset_addr = get_general_register(rn) + imm32;
+		else
+			offset_addr = get_general_register(rn) - imm32;
+		address = offset_addr;
+		set_general_register(rn,offset_addr);
+		result = load_half(address,LsSingleRnPre.s);
+		set_general_register(rt,result);
+		printf("	Rn = %X",get_general_register(rn));
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrsh_pre\n");
+	}
 }
 
 void str_pre(int i){
-	printf("	******str_pre\n");
+	int rt,rn,imm32,address,offset_addr,result;
+	*((int *)(&LsSingleRnPre)) = i;
+	rt = LsSingleRnPre.rt;
+	rn = LsSingleRnPre.rn;
+	imm32 = LsSingleRnPre.imm8;
+	if(rn == 15)
+		printf("	it is undefined!");
+	else if(rt == 15 || rn == rt)
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnPre.pass2 == 1)
+			offset_addr = get_general_register(rn) + imm32;
+		else
+			offset_addr = get_general_register(rn) - imm32;
+		address = offset_addr;
+		set_general_register(rn,offset_addr);
+		result = get_general_register(rt);
+		set_memory(address,result);
+		printf("	Memory unit is %X",get_memory(address));
+		printf("	******str_pre\n");
+	}
 }
 
 void strb_pre(int i){
-	printf("	******strb_pre\n");
+	int rt,rn,imm32,address,offset_addr;
+	*((int *)(&LsSingleRnPre)) = i;
+	rt = LsSingleRnPre.rt;
+	rn = LsSingleRnPre.rn;
+	imm32 = LsSingleRnPre.imm8;
+	if(rn == 15)
+		printf("	it is undefined!");
+	else if(Bad_Reg(rt) || rt == rn)
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnPre.pass2 == 1)
+			offset_addr = get_general_register(rn) + imm32;
+		else
+			offset_addr = get_general_register(rn) - imm32;
+		address = offset_addr;
+		set_general_register(rn,offset_addr);
+		store_byte(address,get_general_register(rt));
+		printf("	Memory unit is %X",get_memory(address/4));
+		printf("	******strb_pre\n");
+	}
 }
 
 void strh_pre(int i){
-	printf("	******strh_pre\n");
+	int rt,rn,imm32,address,offset_addr;
+	*((int *)(&LsSingleRnPre)) = i;
+	rt = LsSingleRnPre.rt;
+	rn = LsSingleRnPre.rn;
+	imm32 = LsSingleRnPre.imm8;
+	if(rn == 15)
+		printf("	it is undefined!");
+	else if(Bad_Reg(rt) || rt == rn)
+		printf("	it is unpredictable!");
+	else{
+		if(LsSingleRnPre.pass2 == 1)
+			offset_addr = get_general_register(rn) + imm32;
+		else
+			offset_addr = get_general_register(rn) - imm32;
+		address = offset_addr;
+		set_general_register(rn,offset_addr);
+		store_half(address,get_general_register(rt));
+		printf("	Memory unit is %X",get_memory(address/2));
+		printf("	******strh_pre\n");
+	}
 }
 
 //Load and store single data register offset.
 
 void ldr_reg(int i){
-	printf("	******ldr_reg\n");
+	int rt,rn,rm,shift_n,address,address1,result;
+	*((int *)(&LsSingleRnShift)) = i;
+	rt = LsSingleRnShift.rt;
+	rn = LsSingleRnShift.rn;
+	rm = LsSingleRnShift.rm;
+	shift_n = LsSingleRnShift.shift;
+	if(Bad_Reg(rm))
+		printf("	it is unpredictable!");
+	else if(rt == 15 && InITBlock() && !LastInITBlock())
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + lsl(get_general_register(rm),shift_n);
+		address1 = address & 0xFFFFFFFC;
+		if(rt == 15)
+			if(address1 != 0)
+				printf("	it is unpredictable!");
+			else
+				LoadWritePC(get_memory(address));
+		else{
+			result = get_memory(address);
+			set_general_register(rt,result);
+		}
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldr_reg\n");
+	}
 }
 
 void ldrb_reg(int i){
-	printf("	******ldrb_reg\n");
+	int rt,rn,rm,shift_n,address,result;
+	*((int *)(&LsSingleRnShift)) = i;
+	rt = LsSingleRnShift.rt;
+	rn = LsSingleRnShift.rn;
+	rm = LsSingleRnShift.rm;
+	shift_n = LsSingleRnShift.shift;
+	if(rt == 15)
+		printf("	it is unpredictable!");
+	else if(rt == 13 || Bad_Reg(rm))
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + lsl(get_general_register(rm),shift_n);
+		result = load_byte(address,LsSingleRnShift.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrb_reg\n");
+	}
 }
 
 void ldrsb_reg(int i){
-	printf("	******ldrsb_reg\n");
+	int rt,rn,rm,shift_n,address,result;
+	*((int *)(&LsSingleRnShift)) = i;
+	rt = LsSingleRnShift.rt;
+	rn = LsSingleRnShift.rn;
+	rm = LsSingleRnShift.rm;
+	shift_n = LsSingleRnShift.shift;
+	if(rt == 15)
+		printf("	it is unpredictable!");
+	else if(rt == 13 || Bad_Reg(rm))
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + lsl(get_general_register(rm),shift_n);
+		result = load_byte(address,LsSingleRnShift.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrsb_reg\n");
+	}
 }
 
 void ldrh_reg(int i){
-	printf("	******ldrh_reg\n");
+	int rt,rn,rm,shift_n,address,result;
+	*((int *)(&LsSingleRnShift)) = i;
+	rt = LsSingleRnShift.rt;
+	rn = LsSingleRnShift.rn;
+	rm = LsSingleRnShift.rm;
+	shift_n = LsSingleRnShift.shift;
+	if(rt == 15)
+		printf("	it is unpredictable!");
+	else if(rt == 13 || Bad_Reg(rm))
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + lsl(get_general_register(rm),shift_n);
+		result = load_half(address,LsSingleRnShift.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrh_reg\n");
+	}
 }
 
 void ldrsh_reg(int i){
-	printf("	******ldrsh_reg\n");
+	int rt,rn,rm,shift_n,address,result;
+	*((int *)(&LsSingleRnShift)) = i;
+	rt = LsSingleRnShift.rt;
+	rn = LsSingleRnShift.rn;
+	rm = LsSingleRnShift.rm;
+	shift_n = LsSingleRnShift.shift;
+	if(rt == 15)
+		printf("	it is unpredictable!");
+	else if(rt == 13 || Bad_Reg(rm))
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + lsl(get_general_register(rm),shift_n);
+		result = load_half(address,LsSingleRnShift.s);
+		set_general_register(rt,result);
+		printf("	Rt = %X",get_general_register(rt));
+		printf("	******ldrsh_reg\n");
+	}
 }
 
 void str_reg(int i){
-	printf("	******str_reg\n");
+	int rt,rn,rm,shift_n,address,result;
+	*((int *)(&LsSingleRnShift)) = i;
+	rt = LsSingleRnShift.rt;
+	rn = LsSingleRnShift.rn;
+	rm = LsSingleRnShift.rm;
+	shift_n = LsSingleRnShift.shift;
+	if(rn == 15)
+		printf("	it is undefined!");
+	else if(rt == 15 || Bad_Reg(rm))
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + lsl(get_general_register(rm),shift_n);
+		result = get_general_register(rt);
+		set_memory(address,result);
+		printf("	Memory unit is %X",get_memory(address));
+		printf("	******str_reg\n");
+	}
 }
 
 void strb_reg(int i){
-	printf("	******strb_reg\n");
+	int rt,rn,rm,shift_n,address;
+	*((int *)(&LsSingleRnShift)) = i;
+	rt = LsSingleRnShift.rt;
+	rn = LsSingleRnShift.rn;
+	rm = LsSingleRnShift.rm;
+	shift_n = LsSingleRnShift.shift;
+	if(rn == 15)
+		printf("	it is undefined!");
+	else if(Bad_Reg(rt) || Bad_Reg(rm))
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + lsl(get_general_register(rm),shift_n);
+		store_byte(address,get_general_register(rt));
+		printf("	Memory unit is %X",get_memory(address/4));
+		printf("	******strb_reg\n");
+	}
 }
 
 void strh_reg(int i){
-	printf("	******strh_reg\n");
+	int rt,rn,rm,shift_n,address;
+	*((int *)(&LsSingleRnShift)) = i;
+	rt = LsSingleRnShift.rt;
+	rn = LsSingleRnShift.rn;
+	rm = LsSingleRnShift.rm;
+	shift_n = LsSingleRnShift.shift;
+	if(rn == 15)
+		printf("	it is undefined!");
+	else if(Bad_Reg(rt) || Bad_Reg(rm))
+		printf("	it is unpredictable!");
+	else{
+		address = get_general_register(rn) + lsl(get_general_register(rm),shift_n);
+		store_half(address,get_general_register(rt));
+		printf("	Memory unit is %X",get_memory(address/2));
+		printf("	******strh_reg\n");
+	}
 }
 
