@@ -4,7 +4,8 @@
 #include "register.h"
 #include "memory.h"
 
-
+int HighestSetBit(int i);
+int LowestSetBit(int i);
 
 
 #endif
