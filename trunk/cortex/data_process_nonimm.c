@@ -177,7 +177,8 @@ void bit32_multiply_acc(int instruction)
 	}
 	else
 	{
-bit64Multiply
+		printf("UNDEFINED instructions!\n");
+		return;
 	}
 	f_ptr=(void *)bit32_multiply_a[index];
 	f_ptr(instruction);
@@ -267,7 +268,7 @@ void bit64_multiply(int instruction)
 			printf("UNDEFINED instructions!\n");
 			return;
 	}
-	f_ptr=(void *)bit64_multiply[index];
+	f_ptr=(void *)bit64_mul[index];
 	f_ptr(instruction);
 }
 void data_pro_nonimm_reserved(int instruction)
@@ -1747,30 +1748,163 @@ APSR.C = carry;
 void sxtb(int i)
 {
 /*
+d = UInt(Rd); m = UInt(Rm); rotation = UInt(rotate:'000');
+if BadReg(d) || BadReg(m) then UNPREDICTABLE;
 if ConditionPassed() then
 EncodingSpecificOperations();
 rotated = ROR(R[m], rotation);
 R[d] = SignExtend(rotated<7:0>, 32);
 */
-	int rotated;
+	unsigned int rotated,rotation,result;
 	*((int *)(&signUnsignExtend)) = i;
+	if(Bad_Reg(signUnsignExtend.rd)||Bad_Reg(signUnsignExtend.rm))
+	{
+		printf("UNPREDICTABLE instructions!!/n");
+		return;
+	}
+	rotation = signUnsignExtend.rot<<3;
 	rotated = ror(get_general_register(signUnsignExtend.rm),signUnsignExtend.rot);
-
+	result = rotated<<24>>24;
+	if(result>>7)
+	{
+		result = 0xfff0|result;
+	}
+	set_general_register(signUnsignExtend.rd,result);
 }
-void sxth(int i){}
-void uxtb(int i){}
-void uxth(int i){}
+void sxth(int i)
+{
+/*
+d = UInt(Rd); m = UInt(Rm); rotation = UInt(rotate:'000');
+if BadReg(d) || BadReg(m) then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+rotated = ROR(R[m], rotation);
+R[d] = SignExtend(rotated<15:0>, 32);
+*/
+	unsigned int rotated,rotation,result;
+	*((int *)(&signUnsignExtend)) = i;
+	if(Bad_Reg(signUnsignExtend.rd)||Bad_Reg(signUnsignExtend.rm))
+	{
+		printf("UNPREDICTABLE instructions!!/n");
+		return;
+	}
+	rotation = signUnsignExtend.rot<<3;
+	rotated = ror(get_general_register(signUnsignExtend.rm),signUnsignExtend.rot);
+	result = rotated<<16>>16;
+	if(result>>15)
+	{
+		result = 0xff00|result;
+	}
+	set_general_register(signUnsignExtend.rd,result);
+}
+void uxtb(int i)
+{
+/*
+d = UInt(Rd); m = UInt(Rm); rotation = UInt(rotate:'000');
+if BadReg(d) || BadReg(m) then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+rotated = ROR(R[m], rotation);
+R[d] = ZeroExtend(rotated<7:0>, 32);
+*/
+	unsigned int rotated,rotation,result;
+	*((int *)(&signUnsignExtend)) = i;
+	if(Bad_Reg(signUnsignExtend.rd)||Bad_Reg(signUnsignExtend.rm))
+	{
+		printf("UNPREDICTABLE instructions!!/n");
+		return;
+	}
+	rotation = signUnsignExtend.rot<<3;
+	rotated = ror(get_general_register(signUnsignExtend.rm),signUnsignExtend.rot);
+	result = rotated<<24>>24;
+	set_general_register(signUnsignExtend.rd,result);
+}
+void uxth(int i)
+{
+/*
+d = UInt(Rd); m = UInt(Rm); rotation = UInt(rotate:'000');
+if BadReg(d) || BadReg(m) then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+rotated = ROR(R[m], rotation);
+R[d] = ZeroExtend(rotated<15:0>, 32);
+*/
+	unsigned int rotated,rotation,result;
+	*((int *)(&signUnsignExtend)) = i;
+	if(Bad_Reg(signUnsignExtend.rd)||Bad_Reg(signUnsignExtend.rm))
+	{
+		printf("UNPREDICTABLE instructions!!/n");
+		return;
+	}
+	rotation = signUnsignExtend.rot<<3;
+	rotated = ror(get_general_register(signUnsignExtend.rm),signUnsignExtend.rot);
+	result = rotated<<16>>16;
+	set_general_register(signUnsignExtend.rd,result);
+}
 
 /*************************************************************************************************
  *
  *functions of other three-register data processing instructions
  *
  *************************************************************************************************/
-void clz(int i){}
-void rbit(int i){}
-void rev(int i){}
-void rev16(int i){}
-void revsh(int i){}
+void clz(int i)
+{
+/*
+d = UInt(Rd); m = UInt(Rm); m2 = UInt(Rm2);
+if BadReg(d) || BadReg(m) || m2 != m then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+result = 31 - HighestSetBit(R[m]); // = 32 if R[m] is zero
+R[d] = result<31:0>;
+*/
+	int result;
+	*((int *)(&otherThreeRegDataPro)) = i;
+	if(Bad_Reg(otherThreeRegDataPro.rd)||Bad_Reg(otherThreeRegDataPro.rm)||(otherThreeRegDataPro.rn!=otherThreeRegDataPro.rm))
+	{
+		printf("UNPREDICTABLE instructions!!\n");
+		return;
+	}
+	result = 31 - HighestSetBit(get_general_register(otherThreeRegDataPro.rm));
+	set_general_register(otherThreeRegDataPro.rd,result);
+}
+void rbit(int i)
+{
+/*
+d = UInt(Rd); m = UInt(Rm); m2 = UInt(Rm2);
+if BadReg(d) || BadReg(m) || m2 != m then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+bits(32) result;
+for i = 0 to 31 do
+result<31-i> = R[m]<i>;
+R[d] = result;
+*/
+	int result=0,j,mask,source;
+	*((int *)(&otherThreeRegDataPro)) = i;
+	if(Bad_Reg(otherThreeRegDataPro.rd)||Bad_Reg(otherThreeRegDataPro.rm)||(otherThreeRegDataPro.rn!=otherThreeRegDataPro.rm))
+	{
+		printf("UNPREDICTABLE instructions!!/n");
+		return;
+	} 
+	source = get_general_register(otherThreeRegDataPro.rm);
+	for(j = 0;j<31;j++)
+	{
+		mask = (source>>j)&1;
+		result = result|(mask<<(31-j));
+	}
+}
+void rev(int i)
+{
+
+}
+void rev16(int i)
+{
+
+}
+void revsh(int i)
+{
+
+}
 
 /*************************************************************************************************
  *
