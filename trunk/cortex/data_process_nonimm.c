@@ -1895,15 +1895,92 @@ R[d] = result;
 }
 void rev(int i)
 {
-
+/*
+d = UInt(Rd); m = UInt(Rm); m2 = UInt(Rm2);
+if BadReg(d) || BadReg(m) || m2 != m then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+bits(32) result;
+result<31:24> = R[m]<7:0>;
+result<23:16> = R[m]<15:8>;
+result<15:8> = R[m]<23:16>;
+result<7:0> = R[m]<31:24>;
+R[d] = result;
+*/
+	unsigned int r1=0,r2=0,r3=0,r4=0,result=0,source;
+	*((int *)(&otherThreeRegDataPro)) = i;
+	if(Bad_Reg(otherThreeRegDataPro.rd)||Bad_Reg(otherThreeRegDataPro.rm)||(otherThreeRegDataPro.rn!=otherThreeRegDataPro.rm))
+	{
+		printf("UNPREDICTABLE instructions!!/n");
+		return;
+	} 
+	source = get_general_register(otherThreeRegDataPro.rm);	
+	r1 = source<<24>>24;
+	r2 = source<<16>>24;
+	r3 = source<<8>>24;
+	r4 = source>>24;
+	result = (r1<<24)|(r2<<16)|(r3<<8)|r4;
+	set_general_register(otherThreeRegDataPro.rd,result);
 }
 void rev16(int i)
 {
-
+/*
+d = UInt(Rd); m = UInt(Rm); m2 = UInt(Rm2);
+if BadReg(d) || BadReg(m) || m2 != m then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+bits(32) result;
+result<31:24> = R[m]<23:16>;
+result<23:16> = R[m]<31:24>;
+result<15:8> = R[m]<7:0>;
+result<7:0> = R[m]<15:8>;
+R[d] = result;
+*/
+	unsigned int r1=0,r2=0,r3=0,r4=0,result=0,source;
+	*((int *)(&otherThreeRegDataPro)) = i;
+	if(Bad_Reg(otherThreeRegDataPro.rd)||Bad_Reg(otherThreeRegDataPro.rm)||(otherThreeRegDataPro.rn!=otherThreeRegDataPro.rm))
+	{
+		printf("UNPREDICTABLE instructions!!/n");
+		return;
+	} 
+	source = get_general_register(otherThreeRegDataPro.rm);	
+	r1 = source<<24>>24;
+	r2 = source<<16>>24;
+	r3 = source<<8>>24;
+	r4 = source>>24;
+	result = (r3<<24)|(r4<<16)|(r1<<8)|r2;
+	set_general_register(otherThreeRegDataPro.rd,result);
 }
 void revsh(int i)
 {
+/*
+untested.....
 
+d = UInt(Rd); m = UInt(Rm); m2 = UInt(Rm2);
+if BadReg(d) || BadReg(m) || m2 != m then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+bits(32) result;
+result<31:8> = SignExtend(R[m]<7:0>, 24);
+result<7:0> = R[m]<15:8>;
+R[d] = result;
+*/
+	unsigned int r1=0,r2=0,result=0,source,flag;
+	*((int *)(&otherThreeRegDataPro)) = i;
+	if(Bad_Reg(otherThreeRegDataPro.rd)||Bad_Reg(otherThreeRegDataPro.rm)||(otherThreeRegDataPro.rn!=otherThreeRegDataPro.rm))
+	{
+		printf("UNPREDICTABLE instructions!!/n");
+		return;
+	} 
+	source = get_general_register(otherThreeRegDataPro.rm);
+	flag = source<<24>>31;
+	if(flag)
+	{
+		r1 = ((source<<8)&0x00f0)|0xff00;
+	}
+	r2 = (source&0x00f0)>>8;
+	result = r1|r2;
+	set_general_register(otherThreeRegDataPro.rd,result);
 }
 
 /*************************************************************************************************
@@ -1911,18 +1988,275 @@ void revsh(int i)
  *functions of 32-bit multiplies instuctions, with or without accumulate
  *
 *************************************************************************************************/
-void mla(int i){}
-void mls(int i){}
-void mul(int i){}
+void mla(int i)
+{
+/*
+d = UInt(Rd); n = UInt(Rn); m = UInt(Rm); a = UInt(Ra);
+if a == 15 then SEE MUL on page A5-180;
+if BadReg(d) || BadReg(n) || BadReg(m) || a == 13 then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+operand1 = SInt(R[n]); // or UInt(R[n]) without functionality change
+operand2 = SInt(R[m]); // or UInt(R[m]) without functionality change
+addend = SInt(R[a]); // or UInt(R[a]) without functionality change
+result = operand1 * operand2 + addend;
+R[d] = result<31:0>;
+*/
+	unsigned int op1=0,op2=0,result=0,addend;
+	*((int *)(&bit32MultiplyAcc)) = i;
+	if(Bad_Reg(bit32MultiplyAcc.rd)||Bad_Reg(bit32MultiplyAcc.rn)||Bad_Reg(bit32MultiplyAcc.rm)||(bit32MultiplyAcc.racc == 13))
+	{
+		printf("UNPREDICTABLE instructions!!/n");
+		return;
+	} 
+	op1 = get_general_register(bit32MultiplyAcc.rn);
+	op2 = get_general_register(bit32MultiplyAcc.rm);
+	addend = get_general_register(bit32MultiplyAcc.racc);
+	result = op1*op2+addend;
+	set_general_register(bit32MultiplyAcc.rd,result);
+}
+void mls(int i)
+{
+/*
+d = UInt(Rd); n = UInt(Rn); m = UInt(Rm); a = UInt(Ra);
+if BadReg(d) || BadReg(n) || BadReg(m) || BadReg(a) then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+operand1 = SInt(R[n]); // or UInt(R[n]) without functionality change
+operand2 = SInt(R[m]); // or UInt(R[m]) without functionality change
+addend = SInt(R[a]); // or UInt(R[a]) without functionality change
+result = addend - operand1 * operand2;
+R[d] = result<31:0>;
+*/
+	unsigned int op1=0,op2=0,result=0,addend;
+	*((int *)(&bit32MultiplyAcc)) = i;
+	if(Bad_Reg(bit32MultiplyAcc.rd)||Bad_Reg(bit32MultiplyAcc.rn)||Bad_Reg(bit32MultiplyAcc.rm)||Bad_Reg(bit32MultiplyAcc.racc))
+	{
+		printf("UNPREDICTABLE instructions!!/n");
+		return;
+	} 
+	op1 = get_general_register(bit32MultiplyAcc.rn);
+	op2 = get_general_register(bit32MultiplyAcc.rm);
+	addend = get_general_register(bit32MultiplyAcc.racc);
+	result = addend-op1*op2;
+	set_general_register(bit32MultiplyAcc.rd,result);
+}
+void mul(int i)
+{
+/*
+d = UInt(Rd); n = UInt(Rn); m = UInt(Rm); setflags = FALSE;
+if BadReg(d) || BadReg(n) || BadReg(m) then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+operand1 = SInt(R[n]); // or UInt(R[n]) without functionality change
+operand2 = SInt(R[m]); // or UInt(R[m]) without functionality change
+result = operand1 * operand2;
+R[d] = result<31:0>;
+if setflags then
+APSR.N = result<31>;
+APSR.Z = IsZeroBit(result);
+if ArchVersion() == 4 then
+APSR.C = UNKNOWN;
+*/
+	unsigned int op1=0,op2=0,result=0;
+	*((int *)(&bit32MultiplyAcc)) = i;
+	if(Bad_Reg(bit32MultiplyAcc.rd)||Bad_Reg(bit32MultiplyAcc.rn)||Bad_Reg(bit32MultiplyAcc.rm))
+	{
+		printf("UNPREDICTABLE instructions!!/n");
+		return;
+	} 
+	op1 = get_general_register(bit32MultiplyAcc.rn);
+	op2 = get_general_register(bit32MultiplyAcc.rm);
+	result = op1*op2;
+	set_general_register(bit32MultiplyAcc.rd,result);
+}
 /*************************************************************************************************
  *
  *functions of 64-bit multiply, multiply-accumulate, and divide instrucions 
  *
 *************************************************************************************************/
-void smull(int i){}
-void sdiv(int i){}
-void umull(int i){}
-void udiv(int i){}
-void smlal(int i){}
-void umlal(int i){}
+void smull(int i)
+{
+/*
+dLo = UInt(RdLo); dHi = UInt(RdHi); n = UInt(Rn); m = UInt(Rm);
+if BadReg(dLo) || BadReg(dHi) || BadReg(n) || BadReg(m) then UNPREDICTABLE;
+if dHi == dLo then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+result = SInt(R[n]) * SInt(R[m]);
+R[dHi] = result<63:32>;
+R[dLo] = result<31:0>;
+*/
+	long long rn,rm,result;
+	*((int *)(&bit64Multiply)) = i;
+	if(Bad_Reg(bit64Multiply.rdlo)||Bad_Reg(bit64Multiply.rdhi)||Bad_Reg(bit64Multiply.rm)
+		||Bad_Reg(bit64Multiply.rn)||(bit64Multiply.rdhi==bit64Multiply.rdlo))
+	{
+		printf("UNPREDICTABLE instructions!!/n");
+		return;
+	} 
+	rn = get_general_register(bit64Multiply.rn);
+	rm = get_general_register(bit64Multiply.rm);
+	result = rn*rm;
+	set_general_register(bit64Multiply.rdhi,(result&0xffffffff00000000)>>32);
+	set_general_register(bit64Multiply.rdlo,(result&0x00000000ffffffff));
+}
+void sdiv(int i)
+{
+/*
+d = UInt(Rd); n = UInt(Rn); m = UInt(Rm);
+if BadReg(d) || BadReg(n) || BadReg(m) then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+if SInt(R[m]) == 0 then
+if IntegerZeroDivideTrappingEnabled() then
+RaiseIntegerZeroDivide();
+else
+result = 0;
+else
+result = RoundTowardsZero(SInt(R[n]) / SInt(R[m]));
+R[d] = result<31:0>;
+*/
+	int result;
+	*((int *)(&bit64Multiply)) = i;
+	if(Bad_Reg(bit64Multiply.rdhi)||Bad_Reg(bit64Multiply.rm)||Bad_Reg(bit64Multiply.rn))
+	{
+		printf("UNPREDICTABLE instructions!!/n");
+		return;
+	} 
+	if(!get_general_register(bit64Multiply.rm))
+	{
+		if(IntegerZeroDivideTrappingEnabled())
+		{
+			RaiseIntegerZeroDivide();
+		}
+		else
+			result = 0;
+	}
+	else
+	{
+		result = get_general_register(bit64Multiply.rn)/get_general_register(bit64Multiply.rm);
+	}
+	set_general_register(bit64Multiply.rdhi,result);
+}
+void umull(int i)
+{
+/*
+dLo = UInt(RdLo); dHi = UInt(RdHi); n = UInt(Rn); m = UInt(Rm);
+if BadReg(dLo) || BadReg(dHi) || BadReg(n) || BadReg(m) then UNPREDICTABLE;
+if dHi == dLo then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+result = UInt(R[n])*Uint(R[m]);
+R[dHi] = result<63:32>;
+R[dLo] = result<31:0>;
+*/
+	unsigned long long rn,rm,result;
+	*((int *)(&bit64Multiply)) = i;
+	if(Bad_Reg(bit64Multiply.rdlo)||Bad_Reg(bit64Multiply.rdhi)||Bad_Reg(bit64Multiply.rm)
+		||Bad_Reg(bit64Multiply.rn)||(bit64Multiply.rdhi==bit64Multiply.rdlo))
+	{
+		printf("UNPREDICTABLE instructions!!/n");
+		return;
+	} 
+	rn = get_general_register(bit64Multiply.rn);
+	rm = get_general_register(bit64Multiply.rm);
+	result = rn*rm;
+	set_general_register(bit64Multiply.rdhi,(result&0xffffffff00000000)>>32);
+	set_general_register(bit64Multiply.rdlo,(result&0x00000000ffffffff));
+}
+void udiv(int i)
+{
+/*
+d = UInt(Rd); n = UInt(Rn); m = UInt(Rm);
+if BadReg(d) || BadReg(n) || BadReg(m) then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+if UInt(R[m]) == 0 then
+if IntegerZeroDivideTrappingEnabled() then
+RaiseIntegerZeroDivide();
+else
+result = 0;
+else
+result = RoundTowardsZero(UInt(R[n]) / UInt(R[m]));
+R[d] = result<31:0>;
+*/
+	int result;
+	*((int *)(&bit64Multiply)) = i;
+	if(Bad_Reg(bit64Multiply.rdhi)||Bad_Reg(bit64Multiply.rm)||Bad_Reg(bit64Multiply.rn))
+	{
+		printf("UNPREDICTABLE instructions!!/n");
+		return;
+	} 
+	if(!get_general_register(bit64Multiply.rm))
+	{
+		if(IntegerZeroDivideTrappingEnabled())
+		{
+			RaiseIntegerZeroDivide();
+		}
+		else
+			result = 0;
+	}
+	else
+	{
+		result = get_general_register(bit64Multiply.rn)/get_general_register(bit64Multiply.rm);
+	}
+	set_general_register(bit64Multiply.rdhi,result);
+}
+void smlal(int i)
+{
+/*
+dLo = UInt(RdLo); dHi = UInt(RdHi); n = UInt(Rn); m = UInt(Rm);
+if BadReg(dLo) || BadReg(dHi) || BadReg(n) || BadReg(m) then UNPREDICTABLE;
+if dHi == dLo then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+result = SInt(R[n])*Sint(R[m])+SInt(R[dHi]:R[dLo])
+R[dHi] = result<63:32>;
+R[dLo] = result<31:0>;
+*/
+	long long rn,rm,result,rh,rl;
+	*((int *)(&bit64Multiply)) = i;
+	if(Bad_Reg(bit64Multiply.rdlo)||Bad_Reg(bit64Multiply.rdhi)||Bad_Reg(bit64Multiply.rm)
+		||Bad_Reg(bit64Multiply.rn)||(bit64Multiply.rdhi==bit64Multiply.rdlo))
+	{
+		printf("UNPREDICTABLE instructions!!/n");
+		return;
+	} 
+	rn = get_general_register(bit64Multiply.rn);
+	rm = get_general_register(bit64Multiply.rm);
+	rh = get_general_register(bit64Multiply.rdhi);
+	rl = get_general_register(bit64Multiply.rdlo);
+	result = rn*rm+(rh<<32)&rl;
+	set_general_register(bit64Multiply.rdhi,(result&0xffffffff00000000)>>32);
+	set_general_register(bit64Multiply.rdlo,(result&0x00000000ffffffff));
+}
+void umlal(int i)
+{
+/*
+dLo = UInt(RdLo); dHi = UInt(RdHi); n = UInt(Rn); m = UInt(Rm);
+if BadReg(dLo) || BadReg(dHi) || BadReg(n) || BadReg(m) then UNPREDICTABLE;
+if dHi == dLo then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+result = UInt(R[n]) * UInt(R[m]) + UInt(R[dHi]:R[dLo]);
+R[dHi] = result<63:32>;
+R[dLo] = result<31:0>;
+*/
+	unsigned long long rn,rm,result,rh,rl;
+	*((int *)(&bit64Multiply)) = i;
+	if(Bad_Reg(bit64Multiply.rdlo)||Bad_Reg(bit64Multiply.rdhi)||Bad_Reg(bit64Multiply.rm)
+		||Bad_Reg(bit64Multiply.rn)||(bit64Multiply.rdhi==bit64Multiply.rdlo))
+	{
+		printf("UNPREDICTABLE instructions!!/n");
+		return;
+	} 
+	rn = get_general_register(bit64Multiply.rn);
+	rm = get_general_register(bit64Multiply.rm);
+	rh = get_general_register(bit64Multiply.rdhi);
+	rl = get_general_register(bit64Multiply.rdlo);
+	result = rn*rm+rh<<32&rl;
+	set_general_register(bit64Multiply.rdhi,(result&0xffffffff00000000)>>32);
+	set_general_register(bit64Multiply.rdlo,(result&0x00000000ffffffff));
+}
 

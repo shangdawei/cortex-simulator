@@ -43,10 +43,10 @@ void Hint_SendEvent();
 void Hint_Yield();
 bool InITBlock();
 void InstructionSynchronizationBarrier(char option);
-bool IntZeroDivideTrappingEnabled();
+bool IntegerZeroDivideTrappingEnabled();
 bool LastInITBlock();
 void LoadWritePC(int value);
-
+void RaiseIntegerZeroDivide();
 
 
 
