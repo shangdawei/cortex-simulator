@@ -6,6 +6,7 @@
 
 int HighestSetBit(int i);
 int LowestSetBit(int i);
+int BitCount(int x);
 
 
 #endif

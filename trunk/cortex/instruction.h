@@ -315,5 +315,23 @@ int load_half(int address,int s);
 void store_byte(int address,int value);
 void store_half(int address,int value);
 
+/**************************************************************************
+ *
+ *Load and store multiple
+ *
+ **************************************************************************/
+void ls_multiple(int instruction);
+void ls_multiple_reserved(int instruction);
+/*
+ *
+ *Table for dealing with loading and storing multiple
+ *
+ */
+void ldm_db_ea(int i);
+void ldm_ia_fd(int i);
+void pop(int i);
+void push(int i);
+void stm_db_fd(int i);
+void stm_ia_ea(int i);
 #endif
 

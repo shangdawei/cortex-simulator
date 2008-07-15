@@ -461,7 +461,9 @@ void str_imm(int i){
 		printf("	it is unpredictable!");
 	else{
 		address = get_general_register(rn) + imm32;
+		//printf("	%X",address);
 		result = get_general_register(rt);
+		//printf("	%X",result);
 		set_memory(address,result);
 		printf("	Memory unit is %X",get_memory(address));
 		printf("	******str_imm\n");

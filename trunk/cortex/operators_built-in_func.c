@@ -42,3 +42,15 @@ zeros, LowestSetBit(x) = Len(x).
 	}
 	return 32;
 }
+/*
+If x is a bitstring, BitCount(x) produces an integer result equal to the number of bits of x that are ones.
+*/
+int BitCount(int x){
+	int i,count = 0,mask = 0x80000000;
+	for(i = 0;i <= 31;i++){
+		x << i;
+		if(mask & x)
+			count++;
+	}
+	return count;
+}

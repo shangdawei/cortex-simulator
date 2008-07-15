@@ -72,7 +72,8 @@ TranslateTable table[MAXSIZE] = {
     	//these 3 entries is to define Load & Store, Double and Exclusive, which is on Page 89
 	//*************************************************************************************************
 	//Entry 34: there should be 2 functions
-
+		{0xFE402000,0xE8000000,(void *)ls_multiple},
+		{0xFE400000,0xE8000000,(void *)ls_multiple_reserved},
     	//these 2 entries is to define Load & Store Multible, which is on Page 91
    	//***********************************************************j**************************************
 	//Entry 36: there should be 8 functions
