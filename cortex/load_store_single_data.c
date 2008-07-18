@@ -248,9 +248,9 @@ void ldr_lit(int i){
 			if(address1 != 0)
 				printf("	it is unpredictable!");
 			else
-				LoadWritePC(get_memory(address));
+				LoadWritePC(get_memory(address/4));
 		else{
-			result = get_memory(address);
+			result = get_memory(address/4);
 			set_general_register(rt,result);
 		}
 		printf("	Rt = %X",get_general_register(rt));
@@ -363,9 +363,9 @@ void ldr_imm(int i){
 			if(address1 != 0)
 				printf("	it is unpredictable!");
 			else
-				LoadWritePC(get_memory(address));
+				LoadWritePC(get_memory(address/4));
 		else{
-			result = get_memory(address);
+			result = get_memory(address/4);
 			set_general_register(rt,result);
 		}
 		printf("	Rt = %X",get_general_register(rt));
@@ -464,8 +464,8 @@ void str_imm(int i){
 		//printf("	%X",address);
 		result = get_general_register(rt);
 		//printf("	%X",result);
-		set_memory(address,result);
-		printf("	Memory unit is %X",get_memory(address));
+		set_memory(address/4,result);
+		printf("	Memory unit is %X",get_memory(address/4));
 		printf("	******str_imm\n");
 	}
 }
@@ -523,9 +523,9 @@ void ldr_neg_imm(int i){
 			if(address1 != 0)
 				printf("	it is unpredictable!");
 			else
-				LoadWritePC(get_memory(address));
+				LoadWritePC(get_memory(address/4));
 		else{
-			result = get_memory(address);
+			result = get_memory(address/4);
 			set_general_register(rt,result);
 		}
 		printf("	Rt = %X",get_general_register(rt));
@@ -622,8 +622,8 @@ void str_neg_imm(int i){
 	else{
 		address = get_general_register(rn) - imm32;
 		result = get_general_register(rt);
-		set_memory(address,result);
-		printf("	Memory unit is %X",get_memory(address));
+		set_memory(address/4,result);
+		printf("	Memory unit is %X",get_memory(address/4));
 		printf("	******str_neg_imm\n");
 	}
 }
@@ -676,7 +676,7 @@ void ldrt(int i){
 		printf("	it is unpredictable!");
 	else{
 		address = get_general_register(rn) + imm32;
-		result = get_memory(address);//didn't consider MemU_unpriv!
+		result = get_memory(address/4);//didn't consider MemU_unpriv!
 		set_general_register(rt,result);
 		printf("	Rt = %X",get_general_register(rt));
 		printf("	******ldrt\n");
@@ -762,8 +762,8 @@ void strt(int i){
 	else{
 		address = get_general_register(rn) + imm32;
 		result = get_general_register(rt);
-		set_memory(address,result);
-		printf("	Memory unit is %X",get_memory(address));
+		set_memory(address/4,result);
+		printf("	Memory unit is %X",get_memory(address/4));
 		printf("	******strt\n");
 	}
 }
@@ -824,9 +824,9 @@ void ldr_post(int i){
 			if(address1 != 0)
 				printf("	it is unpredictable!");
 			else
-				LoadWritePC(get_memory(address));
+				LoadWritePC(get_memory(address/4));
 		else{
-			result = get_memory(address);
+			result = get_memory(address/4);
 			set_general_register(rt,result);
 		}
 		printf("	Rn = %X",get_general_register(rn));
@@ -945,8 +945,8 @@ void str_post(int i){
 		address = get_general_register(rn);
 		set_general_register(rn,offset_addr);
 		result = get_general_register(rt);
-		set_memory(address,result);
-		printf("	Memory unit is %X",get_memory(address));
+		set_memory(address/4,result);
+		printf("	Memory unit is %X",get_memory(address/4));
 		printf("	******str_post\n");
 	}
 }
@@ -1021,9 +1021,9 @@ void ldr_pre(int i){
 			if(address1 != 0)
 				printf("	it is unpredictable!");
 			else
-				LoadWritePC(get_memory(address));
+				LoadWritePC(get_memory(address/4));
 		else{
-			result = get_memory(address);
+			result = get_memory(address/4);
 			set_general_register(rt,result);
 		}
 		printf("	Rn = %X",get_general_register(rn));
@@ -1142,8 +1142,8 @@ void str_pre(int i){
 		address = offset_addr;
 		set_general_register(rn,offset_addr);
 		result = get_general_register(rt);
-		set_memory(address,result);
-		printf("	Memory unit is %X",get_memory(address));
+		set_memory(address/4,result);
+		printf("	Memory unit is %X",get_memory(address/4));
 		printf("	******str_pre\n");
 	}
 }
@@ -1214,9 +1214,9 @@ void ldr_reg(int i){
 			if(address1 != 0)
 				printf("	it is unpredictable!");
 			else
-				LoadWritePC(get_memory(address));
+				LoadWritePC(get_memory(address/4));
 		else{
-			result = get_memory(address);
+			result = get_memory(address/4);
 			set_general_register(rt,result);
 		}
 		printf("	Rt = %X",get_general_register(rt));
@@ -1318,8 +1318,8 @@ void str_reg(int i){
 	else{
 		address = get_general_register(rn) + lsl(get_general_register(rm),shift_n);
 		result = get_general_register(rt);
-		set_memory(address,result);
-		printf("	Memory unit is %X",get_memory(address));
+		set_memory(address/4,result);
+		printf("	Memory unit is %X",get_memory(address/4));
 		printf("	******str_reg\n");
 	}
 }
