@@ -58,14 +58,14 @@ void ldm_db_ea(int i){
 		}
 		for(j = 0;j <= 14;j++){
 			if(registers & (1<< j)){
-				loadedvalue = get_memory(address);
+				loadedvalue = get_memory(address/4);
 				if(!(j == n && LdmDbEa.w == 1))
 					set_general_register(j,loadedvalue);
 				address = address + 4;
 			}
 		}
 		if(registers & (1<< 15)){
-			LoadWritePC(get_memory(address));
+			LoadWritePC(get_memory(address/4));
 			address = address + 4;
 		}
 		assert(address == originalRn);
@@ -104,14 +104,14 @@ void ldm_ia_fd(int i){
 		}
 		for(j = 0;j <= 14;j++){
 			if(registers & (1<< j)){
-				loadedvalue = get_memory(address);
+				loadedvalue = get_memory(address/4);
 				if(!(j == n && LdmIaFd.w == 1))
 					set_general_register(j,loadedvalue);
 				address = address + 4;
 			}
 		}
 		if(registers & (1<< 15)){
-			LoadWritePC(get_memory(address));
+			LoadWritePC(get_memory(address/4));
 			address = address + 4;
 		}
 		assert(address == originalRn + 4*BitCount(registers));
@@ -139,14 +139,14 @@ void pop(int i){
 		address = sp;
 		sp = sp + 4*BitCount(registers);
 		set_sp(sp);
-		for(j = 0;j<= 14;j++){
+		for(j = 0;j <= 14;j++){
 			if(registers & (1<< j)){
-				loadedvalue = get_memory(address);
+				loadedvalue = get_memory(address/4);
 				address = address + 4;
 			}
 		}
 		if(registers & (1<< 15)){
-			LoadWritePC(get_memory(address));
+			LoadWritePC(get_memory(address/4));
 			address = address + 4;
 		}
 		assert(address == originalSP + 4*BitCount(registers));
@@ -170,14 +170,17 @@ void push(int i){
 	else{
 		originalSP = sp;
 		address = sp - 4*BitCount(registers);
-		for(j = 0;j<= 14;j++){
+		for(j = 0;j <= 14;j++){
 			if(registers & (1<< j)){
-				set_memory(address,get_general_register(j));
+				set_memory(address/4,get_general_register(j));
 				address = address + 4;
 			}
 		}
 		assert(address == originalSP);
-		//haven't print the results.????
+		for(j = 0;j <= 14;j++){
+			address = address - 4;
+			printf("	0x%X",get_memory(address/4));
+		}
 		printf("	*****push\n");
 	}
 }
@@ -202,16 +205,20 @@ void stm_db_fd(int i){
 			if(registers & (1<< j)){
 				if(j == n && StmDbFd.w == 1){
 					if(j == LowestSetBit(registers))
-						set_memory(address,originalRn);
+						set_memory(address/4,originalRn);
 					else
-						set_memory(address,0);
+						set_memory(address/4,0);
 				}
 				else
-					set_memory(address,get_general_register(j));
+					set_memory(address/4,get_general_register(j));
 				address = address + 4;
 			}
 		}
 		assert(address == originalRn);
+		for(j = 0;j <= 14;j++){
+			address = address - 4;
+			printf("	0x%X",get_memory(address/4));
+		}
 		printf("	*****stm_db_fd\n");
 	}
 }
@@ -236,16 +243,20 @@ void stm_ia_ea(int i){
 			if(registers & (1<< j)){
 				if(j == n && StmIaEa.w == 1){
 					if(j == LowestSetBit(registers))
-						set_memory(address,originalRn);
+						set_memory(address/4,originalRn);
 					else
-						set_memory(address,0);
+						set_memory(address/4,0);
 				}
 				else
-					set_memory(address,get_general_register(j));
+					set_memory(address/4,get_general_register(j));
 				address = address + 4;
 			}
 		}
 		assert(address == originalRn + 4*BitCount(registers));
+		for(j = 0;j <= 14;j++){
+			address = address - 4;
+			printf("	0x%X",get_memory(address/4));
+		}
 		printf("	*****stm_ia_ea\n");
 	}
 }
