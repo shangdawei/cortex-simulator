@@ -68,6 +68,9 @@ TranslateTable table[MAXSIZE] = {
     	//these 10 entries is to define Load & Store single data item,which is on Page 87
 	//*************************************************************************************************
 	//Entry 31: there should be 3 functions
+		{0xFFE00000,0xE8400000,(void *)ls_exclusive},
+		{0xFFE00000,0xE8C00000,(void *)ls_exbh_tb},
+		{0xFE400000,0xE8400000,(void *)ls_double},
 
     	//these 3 entries is to define Load & Store, Double and Exclusive, which is on Page 89
 	//*************************************************************************************************
