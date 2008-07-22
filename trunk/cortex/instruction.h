@@ -204,7 +204,7 @@ void umlal(int i);
 
 /**************************************************************************
  *
- *Data Processing instruction: no immediate operand
+ *Load and store: single
  *
  **************************************************************************/
 void ls_single_pc_12m(int instruction);
@@ -314,10 +314,32 @@ int load_byte(int address,int s);
 int load_half(int address,int s);
 void store_byte(int address,int value);
 void store_half(int address,int value);
+/**************************************************************************
+ *
+ *Load and store: double,exclusive,table branch
+ *
+ **************************************************************************/
+void ls_exclusive(int instruction);
+void ls_exbh_tb(int instruction);
+void ls_double(int instruction);
+/*
+ *
+ *Table for dealing with table branch  
+ *
+ */
+void tbb(int i);
+void tbh(int i);
+/*
+ *
+ *Table for dealing with double 
+ *
+ */
+void ldrd(int i);
+void strd(int i);
 
 /**************************************************************************
  *
- *Load and store multiple
+ *Load and store: multiple
  *
  **************************************************************************/
 void ls_multiple(int instruction);
