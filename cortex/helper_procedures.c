@@ -28,6 +28,11 @@ bool Bad_Reg(int n)
 	return (n == 13 || n == 15);
 }
 
+void BranchWritePC(int value)
+{
+//This procedure writes a value to the PC with the correct semantics for such writes by simple branches - that is, just a change to the PC in all circumstances.
+}
+
 bool InITBlock()
 {
 //This function returns TRUE if execution is currently in an IT block and FALSE otherwise.
