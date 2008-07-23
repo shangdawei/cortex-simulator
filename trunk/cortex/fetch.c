@@ -53,6 +53,7 @@ int testcase[100]={
 	0xF8D01002,
 	0xF8860001,
 	0xF8302C00,
+	0xE9501201,
 };
 int fetch(int i){
      return testcase[i];
