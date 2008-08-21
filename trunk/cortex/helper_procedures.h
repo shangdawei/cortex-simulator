@@ -17,6 +17,7 @@ bool BigEndian();
 void BranchWritePC(int value);
 void BreakPoint();
 void BXWritePC(int value);
+void CallSupervisor();
 void ClearEventRegister();
 void ClearExclusiveMonitors();
 bool ConditionPassed();
@@ -32,8 +33,9 @@ void Coproc_SendOneWord(int word, int cp_num, int instr);
 void Coproc_SendTwoWords(int word1, int word2, int cp_num,int instr);
 void DataMemoryBarrier(char option);
 void DataSynchronizationBarrier(char option);
+void DecodeImmShift();
 void DecodeRegShift();
-void EventRegistered();
+bool EventRegistered();
 void EncodingSpecificOperations();
 bool ExclusiveMonitorsPass(int address, int size);
 void Hint_Debug(char option);
@@ -46,7 +48,14 @@ void InstructionSynchronizationBarrier(char option);
 bool IntegerZeroDivideTrappingEnabled();
 bool LastInITBlock();
 void LoadWritePC(int value);
+void RaiseCoprocessorException();
 void RaiseIntegerZeroDivide();
+void SetExclusiveMonitors(int address, int size);
+void StartITBlock(int firstcond, int mask);
+int ThisInstr();
+void WaitForEvent();
+void WaitForInterrupt();
+
 
 
 
