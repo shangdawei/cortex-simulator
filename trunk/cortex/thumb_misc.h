@@ -164,16 +164,16 @@ void* nop_compatible_hints[16] = {
 	(void *)thumb_wait_for_event,		//0b0010
 	(void *)thumb_wait_for_interrupt,	//0b0011
 	(void *)thumb_send_event,			//0b0100
-	(void *)opcode_error,
-	(void *)opcode_error,
-	(void *)opcode_error,
-	(void *)opcode_error,
-	(void *)opcode_error,
-	(void *)opcode_error,
-	(void *)opcode_error,
-	(void *)opcode_error,
-	(void *)opcode_error,
-	(void *)opcode_error,
-	(void *)opcode_error,
+	(void *)thumb_opcode_error,
+	(void *)thumb_opcode_error,
+	(void *)thumb_opcode_error,
+	(void *)thumb_opcode_error,
+	(void *)thumb_opcode_error,
+	(void *)thumb_opcode_error,
+	(void *)thumb_opcode_error,
+	(void *)thumb_opcode_error,
+	(void *)thumb_opcode_error,
+	(void *)thumb_opcode_error,
+	(void *)thumb_opcode_error,
 };
 #endif
