@@ -33,6 +33,14 @@ void BranchWritePC(int value)
 //This procedure writes a value to the PC with the correct semantics for such writes by simple branches - that is, just a change to the PC in all circumstances.
 }
 
+void BXWritePC(int value) {
+/*
+	This procedure writes a value to the PC with the correct semantics for such writes by interworking 
+	instructions. That is, with BX-like interworking behavior in all circumstances.
+*/
+	set_pc(value);
+}
+
 bool InITBlock()
 {
 //This function returns TRUE if execution is currently in an IT block and FALSE otherwise.
