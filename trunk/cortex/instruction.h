@@ -497,6 +497,7 @@ void thumb_wait_for_interrupt(short i);
 void thumb_send_event(short i);
 void thumb_conditional_branch(short i);
 void thumb_unconditional_branch(short i);
+void thumb_service_call(short instruction);
  
 #endif
 

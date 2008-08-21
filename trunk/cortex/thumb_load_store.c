@@ -13,14 +13,14 @@ void thumb_ldr_lit(short instruction)
 	imm32 = LdrFromLiteralPool.imm8 << 2;
 	base = align(get_pc(), 4);
 	address = base + imm32;
-	address1 = address & 0x00000003;								//0xFFFFFFFC
+	address1 = address & 0x00000003;
 	if(rt == $PC)
 		if(address1 != 0)
 			printf("	it is unpredictable!");
 		else
-			LoadWritePC(get_memory(address/4));
+			LoadWritePC(get_MemU(address, 4));
 	else{
-		result = get_memory(address/4);
+		result = get_MemU(address, 4);
 		set_general_register(rt,result);
 	}
 	printf("	Rt = %X",get_general_register(rt));
@@ -39,6 +39,7 @@ void thumb_ld_st_reg_off(short instruction)
 	f_ptr = ldr_str_reg_off[LdrStrRegOffset.op];
 	f_ptr(instruction);
 }
+
 void thumb_str_reg(short instruction)
 {
 	int rt, rn, rm, address, result;
@@ -48,8 +49,8 @@ void thumb_str_reg(short instruction)
 	rm = LdrStrRegOffset.rm;
 	address = get_general_register(rn) + get_general_register(rm);
 	result = get_general_register(rt);
-	set_memory(address/4,result);
-	printf("	Memory unit is %X",get_memory(address/4));
+	set_MemU(address, 4, result);
+	printf("	Memory unit is %X",get_MemU(address, 4));
 	printf("	******thumb_str_reg\n");
 }
 
@@ -61,8 +62,8 @@ void thumb_strh_reg(short instruction)
 	rn = LdrStrRegOffset.rn;
 	rm = LdrStrRegOffset.rm;
 	address = get_general_register(rn) + get_general_register(rm);
-	store_half(address,get_general_register(rt));
-	printf("	Memory unit is %X",get_memory(address/2));
+	set_MemU(address, 2, get_general_register(rt));
+	printf("	Memory unit is %X",get_MemU(address, 2));
 	printf("	******thumb_strh_reg\n");
 }
 
@@ -74,8 +75,8 @@ void thumb_strb_reg(short instruction)
 	rn = LdrStrRegOffset.rn;
 	rm = LdrStrRegOffset.rm;
 	address = get_general_register(rn) + get_general_register(rm);
-	store_byte(address,get_general_register(rt));
-	printf("	Memory unit is %X",get_memory(address/4));
+	set_MemU(address, 1, get_general_register(rt));
+	printf("	Memory unit is %X",get_MemU(address, 1));
 	printf("	******thumb_strb_reg\n");
 }
 
@@ -87,7 +88,8 @@ void thumb_ldrsb_reg(short instruction)
 	rn = LdrStrRegOffset.rn;
 	rm = LdrStrRegOffset.rm;
 	address = get_general_register(rn) + get_general_register(rm);
-	result = load_byte(address,1);
+	result = get_MemU(address,1);
+	if (result & 0x00000080) result |= 0xFFFFFF00;
 	set_general_register(rt,result);
 	printf("	Rt = %X",get_general_register(rt));
 	printf("	******thumb_ldrsb_reg\n");
@@ -106,9 +108,9 @@ void thumb_ldr_reg(short instruction)
 		if(address1 != 0)
 			printf("	it is unpredictable!");
 		else
-			LoadWritePC(get_memory(address/4));
+			LoadWritePC(get_MemU(address, 4));
 	else{
-		result = get_memory(address/4);
+		result = get_MemU(address, 4);
 		set_general_register(rt,result);
 	}
 	printf("	Rt = %X",get_general_register(rt));
@@ -123,7 +125,7 @@ void thumb_ldrh_reg(short instruction)
 	rn = LdrStrRegOffset.rn;
 	rm = LdrStrRegOffset.rm;
 	address = get_general_register(rn) + get_general_register(rm);
-	result = load_half(address,0);
+	result = get_MemU(address, 2);
 	set_general_register(rt,result);
 	printf("	Rt = %X",get_general_register(rt));
 	printf("	******thumb_ldrh_reg\n");
@@ -137,7 +139,7 @@ void thumb_ldrb_reg(short instruction)
 	rn = LdrStrRegOffset.rn;
 	rm = LdrStrRegOffset.rm;
 	address = get_general_register(rn) + get_general_register(rm);
-	result = load_byte(address,0);
+	result = get_MemU(address, 1);
 	set_general_register(rt,result);
 	printf("	Rt = %X",get_general_register(rt));
 	printf("	******thumb_ldrb_reg\n");
@@ -151,7 +153,8 @@ void thumb_ldrsh_reg(short instruction)
 	rn = LdrStrRegOffset.rn;
 	rm = LdrStrRegOffset.rm;
 	address = get_general_register(rn) + get_general_register(rm);
-	result = load_half(address,1);
+	result = get_MemU(address, 2);
+	if (result & 0x00008000) result |= 0xFFFF0000;
 	set_general_register(rt,result);
 	printf("	Rt = %X",get_general_register(rt));
 	printf("	******thumb_ldrsh_reg\n");
@@ -181,8 +184,8 @@ void thumb_str_imm(short instruction)
 	imm32 = LdrStrWordByteImmOffset.imm5 << 2;
 	address = get_general_register(rn) + imm32;
 	result = get_general_register(rt);		
-	set_memory(address/4,result);
-	printf("	Memory unit is %X",get_memory(address/4));
+	set_MemU(address, 4, result);
+	printf("	Memory unit is %X",get_MemU(address, 4));
 	printf("	******strb_imm\n");
 }
 
@@ -199,9 +202,9 @@ void thumb_ldr_imm(short instruction)
 		if(address1 != 0)
 			printf("	it is unpredictable!");
 		else
-			LoadWritePC(get_memory(address/4));
+			LoadWritePC(get_MemU(address, 4));
 	else{
-		result = get_memory(address/4);
+		result = get_MemU(address, 4);
 		set_general_register(rt,result);
 	}
 	printf("	Rt = %X",get_general_register(rt));
@@ -216,8 +219,8 @@ void thumb_strb_imm(short instruction)
 	rn = LdrStrWordByteImmOffset.rn;
 	imm32 = LdrStrWordByteImmOffset.imm5;
 	address = get_general_register(rn) + imm32;
-	store_byte(address,get_general_register(rt));
-	printf("	Memory unit is %X",get_memory(address/4));
+	set_MemU(address, 1, get_general_register(rt));
+	printf("	Memory unit is %X",get_MemU(address, 1));
 	printf("	******thumb_strb_imm\n");
 }
 
@@ -229,7 +232,7 @@ void thumb_ldrb_imm(short instruction)
 	rn = LdrStrWordByteImmOffset.rn;
 	imm32 = LdrStrWordByteImmOffset.imm5;
 	address = get_general_register(rn) + imm32;
-	result = load_byte(address, 0);
+	result = get_MemU(address, 1);
 	set_general_register(rt, result);
 	printf("	Rt = %X",get_general_register(rt));
 	printf("	******thumb_ldrb_imm\n");
@@ -258,8 +261,8 @@ void thumb_strh_imm(short instruction)
 	rn = LdrStrHalfwordImmOffset.rn;
 	imm32 = LdrStrHalfwordImmOffset.imm5 << 1;
 	address = get_general_register(rn) + imm32;
-	store_half(address,get_general_register(rt));
-	printf("	Memory unit is %X",get_memory(address/2));
+	set_MemU(address, 1, get_general_register(rt));
+	printf("	Memory unit is %X",get_MemU(address, 2));
 	printf("	******thumb_strh_imm\n");
 }
 
@@ -271,7 +274,7 @@ void thumb_ldrh_imm(short instruction)
 	rn = LdrStrHalfwordImmOffset.rn;
 	imm32 = LdrStrHalfwordImmOffset.imm5 << 1;
 	address = get_general_register(rn) + imm32;
-	result = load_half(address, 0);
+	result = get_MemU(address, 2);
 	set_general_register(rt,result);
 	printf("	Rt = %X",get_general_register(rt));
 	printf("	******thumb_strh_imm\n");
@@ -299,8 +302,8 @@ void thumb_str_sp_imm(short instruction)
 	rn = $SP;
 	imm32 = LdrStrStack.imm8 << 2;
 	address = get_general_register(rn) + imm32;
-	set_memory(address/4,get_general_register(rt));
-	printf("	Memory unit is %X",get_memory(address/4));
+	set_MemU(address, 4, get_general_register(rt));
+	printf("	Memory unit is %X",get_MemU(address, 4));
 	printf("	******thumb_str_sp_imm\n");
 }
 
@@ -312,14 +315,14 @@ void thumb_ldr_sp_imm(short instruction)
 	rn = $SP;
 	imm32 = LdrStrStack.imm8 << 2;
 	address = get_general_register(rn) + imm32;
-	address1 = address & 0x00000003;								//
+	address1 = address & 0x00000003;
 	if(rt == $PC)
 		if(address1 != 0)
 			printf("	it is unpredictable!");
 		else
-			LoadWritePC(get_memory(address/4));
+			LoadWritePC(get_MemU(address, 4));
 	else{
-		result = get_memory(address/4);
+		result = get_MemU(address, 4);
 		set_general_register(rt,result);
 	}
 	printf("	Rt = %X",get_general_register(rt));
@@ -357,12 +360,12 @@ void thumb_stm(short instruction)
 			if(registers & (0x01<< j)){
 				if(j == rn){
 					if(j == LowestSetBit(registers))
-						set_memory(address/4,originalRn);
+						set_MemA(address, 4, originalRn);
 					else
-						set_memory(address/4,0);
+						set_MemA(address, 4, 0);
 				}
 				else
-					set_memory(address/4,get_general_register(j));
+					set_MemA(address, 4, get_general_register(j));
 				address = address + 4;
 			}
 		}
@@ -370,7 +373,7 @@ void thumb_stm(short instruction)
 
 		for(j = 0;j <= 14;j++){
 			address = address - 4;
-			printf("	0x%X",get_memory(address/4));
+			printf("	0x%X",get_MemA(address, 4));
 		}
 		printf("	*****thumb_stm\n");
 
@@ -393,7 +396,7 @@ void thumb_ldm(short instruction)
 		set_general_register(rn, temp);
 		for (j = 0; j<=14; j++){
 			if(registers & (0x01<< j)){
-				loadvalue = get_memory(address / 4);
+				loadvalue = get_MemA(address, 4);
 				if (!(j == rn && wback !=0)) {
 					set_general_register(j,loadvalue);
 				}
@@ -401,10 +404,10 @@ void thumb_ldm(short instruction)
 			}
 		}
 		if(registers & (0x01<< 15)){
-			LoadWritePC(get_memory(address/4));
+			LoadWritePC(get_MemA(address, 4));
 			address = address + 4;
 		}
-		assert(address == originalRn + 4*BitCount(registers));			//ldm_db_ea
+		assert(address == originalRn + 4*BitCount(registers));
 		for(j = 0;j <= 12;j++)
 			printf("	R[%d] = 0x%X",j,get_general_register(j));
 		printf("	SP = 0x%X",get_sp());
@@ -415,109 +418,7 @@ void thumb_ldm(short instruction)
 	}
 }
 
-//Service Call
-void CallSupervisor(int n)
-{
-	printf("SVC exception\n");
-}
 
-void thumb_service_call(short instruction)
-{
-	int imm32;
-	*((short*) (&SVCall)) = instruction;
-	imm32 = SVCall.imm8;
-	printf("thumb_service_call : 0x%x\n",instruction);
-	printf("imm8 : 0x%x\n", SVCall.imm8);
-	CallSupervisor(imm32);
-}
-
-//special data processing
-void thumb_sepecial_data_pro(short instruction)
-{
-	int index;
-	func f_ptr;
-	*((short*) (&SpecialDataProcessing)) = instruction;
-	index  = SpecialDataProcessing.op;
-	printf("thumb_sepecial_data_pro : 0x%x\n", instruction);
-	printf("Rdn : 0x%x, Rm : 0x%x, DN : 0x%x, Op : 0x%x\n",
-		SpecialDataProcessing.rdn, SpecialDataProcessing.rm, SpecialDataProcessing.dn, SpecialDataProcessing.op);
-	f_ptr = special_data_processing[index];
-	f_ptr(instruction);
-}
-
-void thumb_add_reg(short instruction)
-{
-	int rd, rn, rm;
-	//int flag;
-	int shift_t, shift_n, shifted;
-	struct CALCULATECO* r;
-	//flag = 0;
-	*((short*) (&SpecialDataProcessing)) = instruction;
-	rm = SpecialDataProcessing.rm;
-	rd = rn = SpecialDataProcessing.rdn + 8 * SpecialDataProcessing.dn;
-	/*if ((rd >= $R8 && rd<= $R12) || rd == $LR || rd == $PC) 
-		flag = 1;
-	else if ((rm >= $R8 && rm<= $R12) || rm == $LR || rm == $PC) 
-		flag = 1;
-	if (!flag) {
-		printf("condition not pass\n");
-	}else{*/
-	shift_t = SRType_None;
-	shift_n = 0;
-	shifted = shift(get_general_register(rm), shift_t, shift_n, get_flag_c());
-	if (rd == 13 || rm == 13){						
-		r = addwithcarry((unsigned int)get_general_register($SP), (unsigned int)shifted, 0);
-		set_general_register(rd, r->result);
-		free(r);
-	}else{			
-		r = addwithcarry((unsigned int)get_general_register(rn), (unsigned int)shifted, 0);
-		if (rd == $PC)
-			ALUWritePC(r->result);
-		else
-			set_general_register(rd, r->result);
-		free(r);
-	}
-}
-
-void thumb_cmp_reg(short instruction)
-{
-	int rn, rm;
-	int shift_t, shift_n, shifted;
-	struct CALCULATECO* r;
-	*((short*) (&SpecialDataProcessing)) = instruction;
-	rm = SpecialDataProcessing.rm;
-	rn = SpecialDataProcessing.rdn + 8 * SpecialDataProcessing.dn;
-	shift_t = SRType_None;
-	shift_n = 0;
-	if (rn < 8 && rm < 8) 
-		printf("    it is unpredictable!\n");
-	else if (rn == 15)
-		printf("    it is unpredictable!\n");
-	else{
-		shifted = shift(get_general_register(rm), shift_t, shift_n, get_flag_c());		
-		r = addwithcarry((unsigned int)get_general_register(rn), ((unsigned int) ~shifted), 1);
-		if (r->result & 0x80000000) set_flag_n(); else cle_flag_n();
-		if (!r->result) set_flag_z(); else cle_flag_z();
-		if (r->carry_out) set_flag_c(); else cle_flag_c();
-		if (r->overflow) set_flag_v(); else cle_flag_v();
-	}
-}
-
-void thumb_mov_reg(short instruction)
-{
-	int rd, rm, result;	
-	*((short*) (&SpecialDataProcessing)) = instruction;
-	rm = SpecialDataProcessing.rm;
-	rd = SpecialDataProcessing.rdn + 8 * SpecialDataProcessing.dn;
-	if (rd == 15 && InITBlock() && !LastInITBlock())
-		printf("    it is unpredictable!\n");
-	result = get_general_register(rm);
-	if (rd == 15){
-		ALUWritePC(result);
-	}else{
-		set_general_register(rd, result);
-	}
-}
 
 
 
