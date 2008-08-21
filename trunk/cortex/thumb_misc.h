@@ -37,11 +37,13 @@ struct CONDITIONALBRANCH {
 	unsigned pass1	:4;
 } conditionalBranch;
 
-struct SERVICECALL {
-	unsigned imm8	:8;
-	unsigned pass1	:4;
-	unsigned pass2	:4;
-} serviceCall;
+//service (system) call
+//{0xFF00, 0xDF00, thumb_service_call
+struct SERVICECALL{
+	unsigned imm8		:8;
+	unsigned pass		:4;
+	unsigned pass1		:4;
+}SVCall;
 
 struct UNCONDITIONALBRANCH {
 	unsigned imm11	:11;
@@ -176,4 +178,5 @@ void* nop_compatible_hints[16] = {
 	(void *)thumb_opcode_error,
 	(void *)thumb_opcode_error,
 };
+
 #endif
