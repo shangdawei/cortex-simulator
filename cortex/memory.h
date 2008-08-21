@@ -9,14 +9,14 @@ void set_memory(int address, int value);
 void clear_momory(int target, int num);
 int get_memory_size();
 
-//Aligned Memory Access, byteNR can only be 4, 2, 1
-int get_MemA(int address, int byteNR);
-void set_MemA(int address, int byteNR, int value);
+//Aligned Memory Access, bytes can only be 4, 2, 1
+int get_MemA(int address, int bytes);
+void set_MemA(int address, int bytes, int value);
 //
 
-//Unaligned Memory Access, byteNR can only be 4, 2, 1
-int get_MemU(int address, int byteNR);
-void set_MemU(int address, int byteNR, int value);
+//Unaligned Memory Access, bytes can only be 4, 2, 1
+int get_MemU(int address, int bytes);
+void set_MemU(int address, int bytes, int value);
 //
 #endif
 
