@@ -355,5 +355,148 @@ void pop(int i);
 void push(int i);
 void stm_db_fd(int i);
 void stm_ia_ea(int i);
+
+/*
+ *
+ *Table for load store
+ *
+ */
+void thumb_str_reg(short instruction);
+void thumb_strh_reg(short instruction);
+void thumb_strb_reg(short instruction);
+void thumb_ldrsb_reg(short instruction);
+void thumb_ldr_reg(short instruction);
+void thumb_ldrh_reg(short instruction);
+void thumb_ldrb_reg(short instruction);
+void thumb_ldrsh_reg(short instruction);
+
+void thumb_str_imm(short instruction);
+void thumb_ldr_imm(short instruction);
+void thumb_strb_imm(short instruction);
+void thumb_ldrb_imm(short instruction);
+
+void thumb_strh_imm(short instruction);
+void thumb_ldrh_imm(short instruction);
+
+void thumb_str_sp_imm(short instruction);
+void thumb_ldr_sp_imm(short instruction);
+
+void thumb_stm(short instruction);
+void thumb_ldm(short instruction);
+
+void thumb_add_reg(short instruction);
+void thumb_cmp_reg(short instruction);
+void thumb_mov_reg(short instruction);
+
+/*
+ * to handle thumb_shift_move instruction
+ */
+ 
+void thumb_shift_move(short instruction); 
+void thumb_mov_reg_t2(short instruction);
+void thumb_lsl_imm5(short instruction);
+void thumb_lsr_imm5(short instruction);
+void thumb_asr_imm5(short instruction);
+void thumb_shift_move_err(short instruction);
+
+/*
+* to handle thumb_add_sub_reg instruction
+*/
+
+void thumb_add_sub_reg(short instruction);
+void thumb_add_reg_t1(short instruction);
+void thumb_sub_reg(short instruction );
+void thumb_add_sub_reg_err(short instruction);
+
+/*
+* to handle thumb_add_sub_imm instruction
+*/
+
+void thumb_add_sub_imm(short instruction);
+void thumb_add_imm(short instruction);
+void thumb_sub_imm(short instruction );
+void thumb_sub_imm(short instruction );
+void thumb_add_sub_imm_err(short instruction);
+
+/*
+* to handle thumb_add_sub_cmp_mov_imm instruction
+*/
+void thumb_add_sub_cmp_mov_imm8(short instruction);
+void thumb_mov_imm8(short instruction);
+void thumb_cmp_imm8(short instruction);
+void thumb_add_imm8(short instruction);
+void thumb_sub_imm8(short instruction);
+void thumb_add_sub_cmp_mov_imm8_err(short instruction);
+
+
+/*
+* to handle thumb_data_proc_reg instruction
+*/
+
+void thumb_data_proc_reg(short i);
+void thumb_data_proc_reg_err(short i);
+
+void thumb_and_reg(short i);
+void thumb_eor_reg(short i);
+void thumb_lsl_reg(short i);
+void thumb_lsr_reg(short i);
+
+void thumb_asr_reg(short i);
+void thumb_adc_reg(short i);
+void thumb_sbc_reg(short i);
+void thumb_ror_reg(short i); 
+
+void thumb_tst_reg(short i);
+void thumb_rsb_reg(short i);
+void thumb_cmp_reg_t1(short i);
+void thumb_cmn_reg(short i);
+
+void thumb_orr_reg(short i);
+void thumb_mul_reg(short i);
+void thumb_bic_reg(short i);
+void thumb_mvn_reg(short i);
+
+/*************************************************************************
+ *
+ *Miscellaneous
+ *
+ *************************************************************************/
+void thumb_opcode_error(short i);
+void thumb_branch_exchange_instruction_set(short instruction);
+void thumb_add_to_sp_or_pc(short instruction);
+void thumb_adjust_stack_pointer(short instruction);
+void thumb_sign_zero_extend(short instruction);
+void thumb_compare_and_branch(short instruction);
+void thumb_push_pop_register_list(short instruction);
+void thumb_branch_and_exchange(short i);
+void thumb_branch_with_link_and_exchange(short i);
+void thumb_add_to_pc(short i);
+void thumb_add_to_sp(short i);
+void thumb_increment_stack_pointer(short i);
+void thumb_decrement_stack_pointer(short i);
+void thumb_signed_extend_halfword(short i);
+void thumb_signed_extend_byte(short i);
+void thumb_unsigned_extend_halfword(short i);
+void thumb_unsigned_extned_byte(short i);
+void thumb_compare_and_branch_on_zero(short i);
+void thumb_compare_and_branch_on_nonzero(short i);
+void thumb_push_register(short i);
+void thumb_pop_register(short i);
+void thumb_change_processor_state(short instruction);
+void thumb_reverse_bytes(short instruction);
+void thumb_nop_compatible_hints(short instruction);
+void thumb_byte_reverse_word(short i);
+void thumb_byte_reverse_packed_halfword(short i);
+void thumb_byte_reverse_signed_halfword(short i);
+void thumb_software_breakpoint(short i);
+void thumb_if_then_instruction(short i);
+void thumb_no_operation(short i);
+void thumb_yield(short i);
+void thumb_wait_for_event(short i);
+void thumb_wait_for_interrupt(short i);
+void thumb_send_event(short i);
+void thumb_conditional_branch(short i);
+void thumb_unconditional_branch(short i);
+ 
 #endif
 
