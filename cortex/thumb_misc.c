@@ -814,3 +814,19 @@ void thumb_unconditional_branch(short i) {
 		BranchWritePC(get_pc() + imm32);
 	}
 }
+
+//Service Call
+void CallSupervisor(int n)
+{
+	printf("SVC exception\n");
+}
+
+void thumb_service_call(short instruction)
+{
+	int imm32;
+	*((short*) (&SVCall)) = instruction;
+	imm32 = SVCall.imm8;
+	printf("thumb_service_call : 0x%x\n",instruction);
+	printf("imm8 : 0x%x\n", SVCall.imm8);
+	CallSupervisor(imm32);
+}

@@ -4,7 +4,6 @@
 #include "helper_procedures.h"
 #include "register.h"
 #include "thumb_add_sub_cmp_mov_imm8.h"
-#include "calculate.h"
 
 void thumb_add_sub_cmp_mov_imm8(short ins)
 {
