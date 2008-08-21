@@ -1,0 +1,12 @@
+memory.c memory.h已更新，增加对内存的对齐和非对齐访问，建议取代之前的set_memory, get_memory, store_half, store_byte等函数
+
+新的函数声明如下，bytes表示要访问的字节数，如有bug请尽快说明 ^_^
+//Aligned Memory Access, bytes can only be 4, 2, 1
+int get_MemA(int address, int bytes);
+void set_MemA(int address, int bytes, int value);
+//
+
+//Unaligned Memory Access, bytes can only be 4, 2, 1
+int get_MemU(int address, int bytes);
+void set_MemU(int address, int bytes, int value);
+//
