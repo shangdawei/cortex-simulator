@@ -30,14 +30,14 @@ int get_memory_size(){
 	return MEM_SIZE;
 }
 
-//Aligned Memory Access, byteNR can only be 4, 2, 1
-int get_MemA(int address, int byteNR)
+//Aligned Memory Access, bytes can only be 4, 2, 1
+int get_MemA(int address, int bytes)
 {
 	int result;
 	char* ptr;		
 	assert(address < MEM_SIZE);
 	ptr = (char*) (&memory[address / 4]);
-	switch(byteNR)
+	switch(bytes)
 	{
 	case 4:		
 		result = *((int*) ptr);
@@ -48,17 +48,17 @@ int get_MemA(int address, int byteNR)
 	case 1:
 		result = *((char*) ptr);
 		return result;
-	default:	//invalid byteNR
+	default:	//invalid bytes
 		return 0x00;			
 	}
 }
 
-void set_MemA(int address, int byteNR, int value)
+void set_MemA(int address, int bytes, int value)
 {
 	char* ptr;	
 	assert(address < MEM_SIZE);
 	ptr = (char*) (&memory[address / 4]);
-	switch(byteNR)
+	switch(bytes)
 	{
 	case 4:
 		*((int*) ptr) = value;
@@ -69,21 +69,21 @@ void set_MemA(int address, int byteNR, int value)
 	case 1:
 		*((char*) ptr) = value;
 		break;
-	default:	//invalid byteNR
+	default:	//invalid bytes
 		break;
 	}
 } 
 
 
 
-//Unaligned Memory Access, byteNR can only be 4, 2, 1
-int get_MemU(int address, int byteNR)
+//Unaligned Memory Access, bytes can only be 4, 2, 1
+int get_MemU(int address, int bytes)
 {
 	int result;
 	char* ptr;	
-	assert(address + byteNR< MEM_SIZE);
+	assert(address + bytes< MEM_SIZE);
 	ptr = (char*)memory + address;
-	switch(byteNR)
+	switch(bytes)
 	{
 	case 4:		
 		result = *((int*) ptr);
@@ -94,17 +94,17 @@ int get_MemU(int address, int byteNR)
 	case 1:
 		result = *((char*) ptr);
 		return result;
-	default:	//invalid byteNR
+	default:	//invalid bytes
 		return 0x00;			
 	}
 }
 
-void set_MemU(int address, int byteNR, int value)
+void set_MemU(int address, int bytes, int value)
 {
 	char* ptr;	
-	assert(address + byteNR < MEM_SIZE);
+	assert(address + bytes < MEM_SIZE);
 	ptr = (char*)memory + address;
-	switch(byteNR)
+	switch(bytes)
 	{
 	case 4:
 		*((int*) ptr) = value;
@@ -115,7 +115,7 @@ void set_MemU(int address, int byteNR, int value)
 	case 1:
 		*((char*) ptr) = value;
 		break;
-	default:	//invalid byteNR
+	default:	//invalid bytes
 		break;
 	}
 }
