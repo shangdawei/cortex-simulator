@@ -1,5 +1,5 @@
 #include "memory.h"
-static int memory[MEM_SIZE]={0,1,2,3,4,5,6,7,8,9,};
+static int memory[MEM_SIZE / 4]={0,1,2,3,4,5,6,7,8,9,};
 void memory_copy(int target, int destination, int num){
 	int i;
 	for (i =0; i< num; i++){
@@ -25,6 +25,101 @@ void clear_memory(int target, int  num){
 	    memory[target+i]=0;
 	}
 }
+
 int get_memory_size(){
 	return MEM_SIZE;
 }
+
+//Aligned Memory Access, byteNR can only be 4, 2, 1
+int get_MemA(int address, int byteNR)
+{
+	int result;
+	char* ptr;		
+	assert(address < MEM_SIZE);
+	ptr = (char*) (&memory[address / 4]);
+	switch(byteNR)
+	{
+	case 4:		
+		result = *((int*) ptr);
+		return result;
+	case 2:
+		result = *((short*) ptr);
+		return result;
+	case 1:
+		result = *((char*) ptr);
+		return result;
+	default:	//invalid byteNR
+		return 0x00;			
+	}
+}
+
+void set_MemA(int address, int byteNR, int value)
+{
+	char* ptr;	
+	assert(address < MEM_SIZE);
+	ptr = (char*) (&memory[address / 4]);
+	switch(byteNR)
+	{
+	case 4:
+		*((int*) ptr) = value;
+		break;
+	case 2:
+		*((short*) ptr) = value;
+		break;
+	case 1:
+		*((char*) ptr) = value;
+		break;
+	default:	//invalid byteNR
+		break;
+	}
+} 
+
+
+
+//Unaligned Memory Access, byteNR can only be 4, 2, 1
+int get_MemU(int address, int byteNR)
+{
+	int result;
+	char* ptr;	
+	assert(address + byteNR< MEM_SIZE);
+	ptr = (char*)memory + address;
+	switch(byteNR)
+	{
+	case 4:		
+		result = *((int*) ptr);
+		return result;
+	case 2:
+		result = *((short*) ptr);
+		return result;
+	case 1:
+		result = *((char*) ptr);
+		return result;
+	default:	//invalid byteNR
+		return 0x00;			
+	}
+}
+
+void set_MemU(int address, int byteNR, int value)
+{
+	char* ptr;	
+	assert(address + byteNR < MEM_SIZE);
+	ptr = (char*)memory + address;
+	switch(byteNR)
+	{
+	case 4:
+		*((int*) ptr) = value;
+		break;
+	case 2:
+		*((short*) ptr) = value;
+		break;
+	case 1:
+		*((char*) ptr) = value;
+		break;
+	default:	//invalid byteNR
+		break;
+	}
+}
+//
+
+
+
