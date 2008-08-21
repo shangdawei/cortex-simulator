@@ -14,7 +14,7 @@
  *
  *To define the table for execute for these instructions
  */ 
-typedef void (*func)(int);
+typedef void (*func)(short);
 
 struct BRANCHEXCHANGEINSTRUCTIONSET {
 	unsigned pass1:3;
