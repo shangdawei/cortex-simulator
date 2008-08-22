@@ -1770,6 +1770,11 @@ R[d] = SignExtend(rotated<7:0>, 32);
 		result = 0xfff0|result;
 	}
 	set_general_register(signUnsignExtend.rd,result);
+#if DEBUG_I
+	printf(" rotation = %x",rotation);
+	printf(" rotated = %x",rotated);
+	printf(" result = %x",result);
+#endif
 }
 void sxth(int i)
 {
@@ -1796,6 +1801,11 @@ R[d] = SignExtend(rotated<15:0>, 32);
 		result = 0xff00|result;
 	}
 	set_general_register(signUnsignExtend.rd,result);
+#if DEBUG_I
+	printf(" rotation = %x",rotation);
+	printf(" rotated = %x",rotated);
+	printf(" result = %x",result);
+#endif
 }
 void uxtb(int i)
 {
@@ -1818,6 +1828,11 @@ R[d] = ZeroExtend(rotated<7:0>, 32);
 	rotated = ror(get_general_register(signUnsignExtend.rm),signUnsignExtend.rot);
 	result = rotated<<24>>24;
 	set_general_register(signUnsignExtend.rd,result);
+#if DEBUG_I
+	printf(" rotation = %x",rotation);
+	printf(" rotated = %x",rotated);
+	printf(" result = %x",result);
+#endif
 }
 void uxth(int i)
 {
@@ -1840,6 +1855,11 @@ R[d] = ZeroExtend(rotated<15:0>, 32);
 	rotated = ror(get_general_register(signUnsignExtend.rm),signUnsignExtend.rot);
 	result = rotated<<16>>16;
 	set_general_register(signUnsignExtend.rd,result);
+#if DEBUG_I
+	printf(" rotation = %x",rotation);
+	printf(" rotated = %x",rotated);
+	printf(" result = %x",result);
+#endif
 }
 
 /*************************************************************************************************
@@ -1866,6 +1886,9 @@ R[d] = result<31:0>;
 	}
 	result = 31 - HighestSetBit(get_general_register(otherThreeRegDataPro.rm));
 	set_general_register(otherThreeRegDataPro.rd,result);
+#if DEBUG_I
+	printf(" result = %x",result);
+#endif
 }
 void rbit(int i)
 {
@@ -1892,6 +1915,9 @@ R[d] = result;
 		mask = (source>>j)&1;
 		result = result|(mask<<(31-j));
 	}
+#if DEBUG_I
+	printf(" result = %x",result);
+#endif
 }
 void rev(int i)
 {
@@ -1921,6 +1947,10 @@ R[d] = result;
 	r4 = source>>24;
 	result = (r1<<24)|(r2<<16)|(r3<<8)|r4;
 	set_general_register(otherThreeRegDataPro.rd,result);
+#if DEBUG_I
+	printf(" source = %x",source);
+	printf(" result = %x",result);
+#endif
 }
 void rev16(int i)
 {
@@ -1950,6 +1980,10 @@ R[d] = result;
 	r4 = source>>24;
 	result = (r3<<24)|(r4<<16)|(r1<<8)|r2;
 	set_general_register(otherThreeRegDataPro.rd,result);
+#if DEBUG_I
+	printf(" source = %x",source);
+	printf(" result = %x",result);
+#endif
 }
 void revsh(int i)
 {
@@ -1981,6 +2015,10 @@ R[d] = result;
 	r2 = (source&0x00f0)>>8;
 	result = r1|r2;
 	set_general_register(otherThreeRegDataPro.rd,result);
+#if DEBUG_I
+	printf(" source = %x",source);
+	printf(" result = %x",result);
+#endif
 }
 
 /*************************************************************************************************
@@ -2014,6 +2052,12 @@ R[d] = result<31:0>;
 	addend = get_general_register(bit32MultiplyAcc.racc);
 	result = op1*op2+addend;
 	set_general_register(bit32MultiplyAcc.rd,result);
+#if DEBUG_I
+	printf(" operand1 = %x",op1);
+	printf(" operand2 = %x",op2);
+	printf(" addend = %x",addend);
+	printf(" result = %x",result);
+#endif
 }
 void mls(int i)
 {
@@ -2040,6 +2084,12 @@ R[d] = result<31:0>;
 	addend = get_general_register(bit32MultiplyAcc.racc);
 	result = addend-op1*op2;
 	set_general_register(bit32MultiplyAcc.rd,result);
+#if DEBUG_I
+	printf(" operand1 = %x",op1);
+	printf(" operand2 = %x",op2);
+	printf(" addend = %x",addend);
+	printf(" result = %x",result);
+#endif
 }
 void mul(int i)
 {
@@ -2069,6 +2119,11 @@ APSR.C = UNKNOWN;
 	op2 = get_general_register(bit32MultiplyAcc.rm);
 	result = op1*op2;
 	set_general_register(bit32MultiplyAcc.rd,result);
+#if DEBUG_I
+	printf(" operand1 = %x",op1);
+	printf(" operand2 = %x",op2);
+	printf(" result = %x",result);
+#endif
 }
 /*************************************************************************************************
  *
@@ -2100,6 +2155,11 @@ R[dLo] = result<31:0>;
 	result = rn*rm;
 	set_general_register(bit64Multiply.rdhi,(result&0xffffffff00000000)>>32);
 	set_general_register(bit64Multiply.rdlo,(result&0x00000000ffffffff));
+#if DEBUG_I
+	printf(" R[dHi] = %l",rn);
+	printf(" R[dLo] = %l",rm);
+	printf(" result = %l",result);
+#endif
 }
 void sdiv(int i)
 {
@@ -2138,6 +2198,11 @@ R[d] = result<31:0>;
 		result = get_general_register(bit64Multiply.rn)/get_general_register(bit64Multiply.rm);
 	}
 	set_general_register(bit64Multiply.rdhi,result);
+#if DEBUG_I
+	printf(" SInt(R[n]) = %x",get_general_register(bit64Multiply.rn));
+	printf(" SInt(R[m]) = %x",get_general_register(bit64Multiply.rm));
+	printf(" result = %x",result);
+#endif
 }
 void umull(int i)
 {
@@ -2164,6 +2229,11 @@ R[dLo] = result<31:0>;
 	result = rn*rm;
 	set_general_register(bit64Multiply.rdhi,(result&0xffffffff00000000)>>32);
 	set_general_register(bit64Multiply.rdlo,(result&0x00000000ffffffff));
+#if DEBUG_I
+	printf(" R[dHi] = %l",rn);
+	printf(" R[dLo] = %l",rm);
+	printf(" result = %l",result);
+#endif
 }
 void udiv(int i)
 {
@@ -2202,6 +2272,11 @@ R[d] = result<31:0>;
 		result = get_general_register(bit64Multiply.rn)/get_general_register(bit64Multiply.rm);
 	}
 	set_general_register(bit64Multiply.rdhi,result);
+#if DEBUG_I
+	printf(" R[dHi] = %l",rn);
+	printf(" R[dLo] = %l",rm);
+	printf(" result = %l",result);
+#endif
 }
 void smlal(int i)
 {
@@ -2230,6 +2305,13 @@ R[dLo] = result<31:0>;
 	result = rn*rm+(rh<<32)&rl;
 	set_general_register(bit64Multiply.rdhi,(result&0xffffffff00000000)>>32);
 	set_general_register(bit64Multiply.rdlo,(result&0x00000000ffffffff));
+#if DEBUG_I
+	printf(" R[dHi] = %l",rh);
+	printf(" R[dLo] = %l",rl);
+	printf(" Rn = %l",rn);
+	printf(" Rm = %l",rm);
+	printf(" result = %l",result);
+#endif
 }
 void umlal(int i)
 {
@@ -2258,5 +2340,12 @@ R[dLo] = result<31:0>;
 	result = rn*rm+rh<<32&rl;
 	set_general_register(bit64Multiply.rdhi,(result&0xffffffff00000000)>>32);
 	set_general_register(bit64Multiply.rdlo,(result&0x00000000ffffffff));
+#if DEBUG_I
+	printf(" R[dHi] = %l",rh);
+	printf(" R[dLo] = %l",rl);
+	printf(" Rn = %l",rn);
+	printf(" Rm = %l",rm);
+	printf(" result = %l",result);
+#endif
 }
 
