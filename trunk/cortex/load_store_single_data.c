@@ -243,7 +243,7 @@ void ldr_lit(int i){
 			address = base + imm32;
 		else
 			address = base - imm32;
-		address1 = address & 0xFFFFFFFC;
+		address1 = address & 0x00000003;
 		if(rt == 15)
 			if(address1 != 0)
 				printf("	it is unpredictable!");
@@ -358,7 +358,7 @@ void ldr_imm(int i){
 		printf("	it is unpredictable!");
 	else{
 		address = get_general_register(rn) + imm32;
-		address1 = address & 0xFFFFFFFC;
+		address1 = address & 0x00000003;
 		if(rt == 15)
 			if(address1 != 0)
 				printf("	it is unpredictable!");
@@ -518,7 +518,7 @@ void ldr_neg_imm(int i){
 		printf("	it is unpredictable!");
 	else{
 		address = get_general_register(rn) - imm32;
-		address1 = address & 0xFFFFFFFC;
+		address1 = address & 0x00000003;
 		if(rt == 15)
 			if(address1 != 0)
 				printf("	it is unpredictable!");
@@ -819,7 +819,7 @@ void ldr_post(int i){
 			offset_addr = get_general_register(rn) - imm32;
 		address = get_general_register(rn);
 		set_general_register(rn,offset_addr);
-		address1 = address & 0xFFFFFFFC;
+		address1 = address & 0x00000003;
 		if(rt == 15)
 			if(address1 != 0)
 				printf("	it is unpredictable!");
@@ -1016,7 +1016,7 @@ void ldr_pre(int i){
 			offset_addr = get_general_register(rn) - imm32;
 		address = offset_addr;
 		set_general_register(rn,offset_addr);
-		address1 = address & 0xFFFFFFFC;
+		address1 = address & 0x00000003;
 		if(rt == 15)
 			if(address1 != 0)
 				printf("	it is unpredictable!");
@@ -1209,7 +1209,7 @@ void ldr_reg(int i){
 		printf("	it is unpredictable!");
 	else{
 		address = get_general_register(rn) + lsl(get_general_register(rm),shift_n);
-		address1 = address & 0xFFFFFFFC;
+		address1 = address & 0x00000003;
 		if(rt == 15)
 			if(address1 != 0)
 				printf("	it is unpredictable!");
