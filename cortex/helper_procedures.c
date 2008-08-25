@@ -28,6 +28,20 @@ bool Bad_Reg(int n)
 	return (n == 13 || n == 15);
 }
 
+/* 
+Cortex-M3 处理器内核有一个配置管脚 BIGEND，能够使用它来选择小端格式或大端格式。
+Thumb 指令 SETEND 可以设置存储器格式，但 Cortex-M3 处理器不支持该指令。	
+	——摘自 蓝色书
+*/
+bool BigEndian()
+{
+/*	
+This function returns TRUE if load/store operations are currently big-endian, and FALSE if they are 
+little-endian.
+*/
+	return false;
+}
+
 void BranchWritePC(int value)
 {
 //This procedure writes a value to the PC with the correct semantics for such writes by simple branches - that is, just a change to the PC in all circumstances.
@@ -74,4 +88,13 @@ SDIV and UDIV.
 In the M profile, this is a UsageFault exception.
 */
 	printf("Usage fault exception: a division by zero in the integer division instructions!\n");
+}
+
+int ThisInstr()
+{
+/*
+This function returns the currently-executing instruction. It is only used on 32-bit instruction encodings at 
+present. 
+*/
+	return get_MemA(get_pc(), 4);
 }

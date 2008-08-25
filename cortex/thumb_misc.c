@@ -369,7 +369,7 @@ void thumb_push_register(short i) {
 			for (j = 0; j <= 14; j++) {
 				mask = 1;
 				if (registers & (mask<<j)) {
-					set_memory(address / 4, get_general_register(i));
+					set_MemA(address, 4, get_general_register(i));
 					address += 4;
 				}
 			}
@@ -417,13 +417,13 @@ void thumb_pop_register(short i) {
 			for (j = 0; j <= 14; j++) {
 				mask = 1;
 				if (registers & (mask<<j)) {
-					loadedvalue = get_memory(address / 4);
+					loadedvalue = get_MemA(address, 4);
 					set_general_register(j, loadedvalue);
 					address += 4;
 				}
 			}
 			if (registers & 0x8000) {
-				LoadWritePC(get_memory(address / 4));
+				LoadWritePC(get_MemA(address, 4));
 				address += 4;
 			}
 			assert(address == originalSP + 4 * BitCount(registers));
@@ -459,12 +459,12 @@ void thumb_change_processor_state(short instruction) {
 		EncodingSpecificOperations();
 		if (CurrentModeIsPrivileged()) {
 			if (enable) {
-				if (affectPRI) PRIMASK = 0;
-				if (affectFAULT) FAULTMASK = 0;
+				if (affectPRI) set_primask(0);
+				if (affectFAULT) set_faultmask(0);
 			}
 			if (disable) {
-				if (affectPRI) PRIMASK = 1;
-				if (affectFAULT && ExecutionPriority()) FAULTMASK = 1;
+				if (affectPRI) set_primask(1);
+				if (affectFAULT && ExecutionPriority()) set_faultmask(1);
 			}
 		}
 	}
