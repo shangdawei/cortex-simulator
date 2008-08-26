@@ -2273,8 +2273,8 @@ R[d] = result<31:0>;
 	}
 	set_general_register(bit64Multiply.rdhi,result);
 #if DEBUG_I
-	printf(" R[dHi] = %l",rn);
-	printf(" R[dLo] = %l",rm);
+	printf(" R[dHi] = %l",get_general_register(bit64Multiply.rn));
+	printf(" R[dLo] = %l",get_general_register(bit64Multiply.rm));
 	printf(" result = %l",result);
 #endif
 }
