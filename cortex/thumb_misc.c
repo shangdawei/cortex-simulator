@@ -522,7 +522,7 @@ void thumb_byte_reverse_word(short i) {
 		result<7:0>   = R[m]<31:24>;
 		R[d] = result;
 	*/
-	if (ConditonPassed()) {
+	if (ConditionPassed()) {
 		EncodingSpecificOperations();
 		result = 0;
 		source = get_general_register(m);
@@ -619,7 +619,7 @@ void thumb_software_breakpoint(short i) {
 	Breakpoint();
 	*/
 	EncodingSpecificOperations();
-	Breakpoint();
+	BreakPoint();
 }
 
 /*
@@ -813,12 +813,6 @@ void thumb_unconditional_branch(short i) {
 		EncodingSpecificOperations();
 		BranchWritePC(get_pc() + imm32);
 	}
-}
-
-//Service Call
-void CallSupervisor(int n)
-{
-	printf("SVC exception\n");
 }
 
 void thumb_service_call(short instruction)
