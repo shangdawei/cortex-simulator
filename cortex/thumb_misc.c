@@ -761,10 +761,10 @@ void thumb_conditional_branch(short i) {
 		imm32 = conditionalBranch.imm8<<1;
 	}
 
-	if (conditionalBranch.cond == 0x0E) {
+	if (conditionalBranch.cond == 0xE) {
 		printf("	Undefined instruction: 0x%x! \n", i);
 	}
-	if (conditionalBranch.cond == 0x0F) {
+	if (conditionalBranch.cond == 0xF) {
 		thumb_service_call(i);
 	}
 	if (InITBlock()) {
@@ -775,7 +775,7 @@ void thumb_conditional_branch(short i) {
 		EncodingSpecificOperations();
 		BranchWritePC(PC + imm32);
 	*/
-	if (ConditionPassed()) {
+	if (conditionalBranch.cond != 0x0) {
 		EncodingSpecificOperations();
 		BranchWritePC(get_pc() + imm32);
 	}
@@ -822,5 +822,5 @@ void thumb_service_call(short instruction)
 	imm32 = SVCall.imm8;
 	printf("thumb_service_call : 0x%x\n",instruction);
 	printf("imm8 : 0x%x\n", SVCall.imm8);
-	CallSupervisor(imm32);
+	CallSupervisor();
 }
