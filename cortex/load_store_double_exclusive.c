@@ -62,7 +62,7 @@ void tbb(int i){
 	else if(InITBlock() && !LastInITBlock())
 		printf("	It is unpredictable!");
 	else{
-		halfwords = load_byte(get_general_register(n) + get_general_register(m),0);
+		halfwords = get_MemU(get_general_register(n) + get_general_register(m),1);
 		halfwords = halfwords << 1;
 		BranchWritePC(get_pc() + halfwords);
 		printf("	*****tbb");
@@ -79,7 +79,7 @@ void tbh(int i){
 	else if(InITBlock() && !LastInITBlock())
 		printf("	It is unpredictable!");
 	else{
-		halfwords = load_half(get_general_register(n) + lsl(get_general_register(m),1),0);
+		halfwords = get_MemU(get_general_register(n) + lsl(get_general_register(m),1),1);
 		halfwords = halfwords << 1;
 		BranchWritePC(get_pc() + halfwords);
 		printf("	*****tbh");
@@ -112,9 +112,9 @@ void ldrd(int i){
 			address = get_general_register(n);
 		if(LdrD.w == 1)
 			set_general_register(n,offset_addr);
-		temp1 = get_memory(address/4);
+		temp1 = get_MemA(address,4);
 		set_general_register(t,temp1);
-		temp2 = get_memory(address/4 + 1);
+		temp2 = get_MemA(address + 4,4);
 		set_general_register(t2,temp2);
 		printf("	Rt = 0x%X",get_general_register(t));
 		printf("	Rt2 = 0x%X",get_general_register(t2));
@@ -146,8 +146,8 @@ void strd(int i){
 			address = get_general_register(n);
 		if(LdrD.w == 1)
 			set_general_register(n,offset_addr);
-		set_memory(address/4,get_general_register(t));
-		set_memory(address/4 + 1,get_general_register(t2));
+		set_MemA(address,4,get_general_register(t));
+		set_MemA(address + 4,4,get_general_register(t2));
 		printf("	*****strd");
 	}
 }
