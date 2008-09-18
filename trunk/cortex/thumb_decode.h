@@ -3,5 +3,5 @@
 #include "instruction.h"
 #define MAXSIZE	100
 #define DEBUG 0
-void decode(unsigned int instruction);
+void thumb_decode(unsigned int instruction);
 #endif
