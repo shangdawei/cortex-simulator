@@ -19,9 +19,9 @@ typedef struct {
 typedef void (*func_ptr)(int);
 	
 
-TranslateTable table[MAXSIZE] = {
+TranslateTable thumbtable[MAXSIZE] = {
 	//*************************************************************************************************
-	{0xF000,0xB000,(unsigned char*)table+14*4}, //go to entry 14,which is to define Miscelllaneous
+	{0xF000,0xB000,(unsigned char*)thumbtable+14*4}, //go to entry 14,which is to define Miscelllaneous
 	
 	//*************************************************************************************************
 	//entry 2: all functions before Miscelllaneous
@@ -75,7 +75,7 @@ TranslateTable table[MAXSIZE] = {
 		void (*p2)(int)=(void *)table[7].point;
 		(*p2)(instruction);
 */
-void decode(unsigned int instruction){
+void thumb_decode(unsigned int instruction){
 	int index =0;
 	while (1){
 #if DEBUG
@@ -86,10 +86,10 @@ void decode(unsigned int instruction){
 	printf("The value is %X \n",table[index].value);
 	printf("The point is %d \n", table[index].point);
 #endif	
-		if( (instruction & table[index].mask) == table[index].value){
-			int* point =(int *) table[index].point;
-			if(point > (int *)table && point <(int *)(table +MAXSIZE*4)){ 
-				index=(point-(int *)table);
+		if( (instruction & thumbtable[index].mask) == thumbtable[index].value){
+			int* point =(int *) thumbtable[index].point;
+			if(point > (int *)thumbtable && point <(int *)(thumbtable +MAXSIZE*4)){ 
+				index=(point-(int *)thumbtable);
 #if DEBUG
 		printf("The point to skip in the table is %d the index is : %d\n", point, index);
 #endif

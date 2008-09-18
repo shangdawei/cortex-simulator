@@ -388,6 +388,13 @@ void thumb_add_reg(short instruction);
 void thumb_cmp_reg(short instruction);
 void thumb_mov_reg(short instruction);
 
+void thumb_ldr_lit(short instruction);
+void thumb_ld_st_reg_off(short instruction);
+void thumb_ld_st_word_byte_imm_off(short instruction);
+void thumb_ld_st_hw_imm_off(short instruction);
+void thumb_ld_st_stack(short instruction);
+void thumb_ld_st_multiple(short instruction);
+
 /*
  * to handle thumb_shift_move instruction
  */
@@ -498,6 +505,7 @@ void thumb_send_event(short i);
 void thumb_conditional_branch(short i);
 void thumb_unconditional_branch(short i);
 void thumb_service_call(short instruction);
+void thumb_sepecial_data_pro(short instruction);
  
 #endif
 
