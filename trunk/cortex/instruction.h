@@ -367,6 +367,7 @@ void branch_instr(int instruction);
 void branch_with_link(int instruction);
 void conditional_branch(int instruction);
 void move_to_status(int instruction);
+void move_to_reg(int instruction);
 void no_op_hints(int instruction);
 void special_ctrl_operations(int instruction);
 void branch_reserved(int instruction);
