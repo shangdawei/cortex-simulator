@@ -356,11 +356,57 @@ void push(int i);
 void stm_db_fd(int i);
 void stm_ia_ea(int i);
 
+
+
+/**************************************************************************
+ *
+ *Branches, miscellaneous control instructions
+ *
+ **************************************************************************/
+void branch_instr(int instruction);
+void branch_with_link(int instruction);
+void conditional_branch(int instruction);
+void move_to_status(int instruction);
+void no_op_hints(int instruction);
+void special_ctrl_operations(int instruction);
+void branch_reserved(int instruction);
+void err_branch(int instruction);
+
+
+void b_t3(int i);
+void b_t4(int i);
+void bl(int i);
+void mrs(int i);
+void msr(int i);
 /*
  *
- *Table for load store
+ *Table for dealing with no operation and hint instructions
  *
  */
+void nop(int i);
+void yield(int i);
+void wfe(int i);
+void wfi(int i);
+void sev(int i);
+void dbg(int i);
+
+
+/*
+ *
+ *Table for dealing with special control operations
+ *
+ */
+void clrex(int i);
+void dsb(int i);
+void dmb(int i);
+void isb(int i);
+
+
+/**************************************************************************
+ *
+ *Thumb Load and store: multiple
+ *
+ **************************************************************************/
 void thumb_str_reg(short instruction);
 void thumb_strh_reg(short instruction);
 void thumb_strb_reg(short instruction);
