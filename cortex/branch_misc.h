@@ -113,24 +113,24 @@ struct MOVETOREG{
 }moveToReg;
 
 void* branch_i[1]={
-	(void *)b_t4,
+	(void *)b_t4
 };
 
 void* branch_with_l[1]={
-	(void *)bl,
+	(void *)bl
 };
 
 void* conditional_b[1]={
-	(void *) b_t3,
+	(void *) b_t3
 };
 
 void* move_to_s[1]={
-	(void *) msr,
+	(void *) msr
 };
 
 void* no_op_h[6]={
 	(void *) nop,
-	(void *) yeild,
+	(void *) yield,
 	(void *) wfe,
 	(void *) wfi,
 	(void *) sev,

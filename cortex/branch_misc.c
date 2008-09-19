@@ -21,7 +21,7 @@ void branch_instr(int instruction)
 	func f_ptr;
 	*((int *)(&branch)) = instruction;
 	printf("branch instruction: 0x%x \n",instruction);
-	prinft("offset1 = %x",branch);
+	printf("offset1 = %x",branch);
 }
 
 void branch_with_link(int instruction)
@@ -34,7 +34,10 @@ void no_op_hints(int instruction)
 {}
 void special_ctrl_operations(int instruction)
 {}
-
+void move_to_reg(int instruction)
+{}
+void branch_reserved(int instrution)
+{}
 
 
 
