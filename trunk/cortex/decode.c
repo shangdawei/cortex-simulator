@@ -14,7 +14,7 @@ typedef struct {
 	int mask;
 	int value;
 	void *point;
-} TranslateTable;
+}TranslateTable;
 
 typedef void (*func_ptr)(int);
 	
@@ -80,7 +80,14 @@ TranslateTable table[MAXSIZE] = {
     	//these 2 entries is to define Load & Store Multible, which is on Page 91
    	//***********************************************************j**************************************
 	//Entry 36: there should be 8 functions
-	
+		{0xF800D000,0xF0009000,(void *)branch_instr},
+		{0xF800D000,0xF000D000,(void *)branch_with_link},
+		{0xF800D000,0xF0008000,(void *)conditional_branch},
+		{0xFFF0DF00,0xF3808800,(void *)move_to_status},
+		{0xFFF0D700,0xF3A08000,(void *)no_op_hints},
+		{0xFFF0D000,0xF3B08000,(void *)special_ctrl_operations},
+		{0xFFF0D000,0xF3E08000,(void *)move_to_reg},
+		{0xFFF0F0F0,0xF7F0A0F0,(void *)branch_reserved},
 	
     	//these 8 entries is to define Branches, miscellaneous control, which is on Page 92
 	//*************************************************************************************************
