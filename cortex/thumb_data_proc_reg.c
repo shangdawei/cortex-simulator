@@ -41,9 +41,9 @@ void thumb_and_reg(short i)
 	
 	unsigned result;
 	*((short *)&DataProcReg)=i;
-	n==(unsigned)get_general_register(DataProcReg.Rdn);
+	n=(unsigned)get_general_register(DataProcReg.Rdn);
 	m=(unsigned)get_general_register(DataProcReg.Rm);
-	result==n & m;
+	result=n & m;
 
 	set_general_register((int)DataProcReg.Rdn,(int)result);
 	
@@ -64,7 +64,7 @@ void thumb_and_reg(short i)
 		else
 			cle_flag_c();
 	}
-	
+	printf("hello world !\n");
 	
 	
 }
