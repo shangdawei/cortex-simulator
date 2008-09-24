@@ -170,18 +170,58 @@ void move_to_reg(int instruction)
 
 }
 void branch_reserved(int instrution)
-{}
+{
+	printf("branch reserved instruction!");
+}
 
 
 
 void b_t3(int i)
-{}
+{
+/*
+imm32 = SignExtend(S:J2:J1:imm6:imm11:'0', 32);
+if cond<3:1> == '111' then
+SEE Branches, miscellaneous control instructions on page A4-30;
+if InITBlock() then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+BranchWritePC(PC + imm32);
+*/
+	*((int*)(&conditionalBranch))=i;
+}
 void b_t4(int i)
-{}
+{
+/*
+I1 = NOT(J1 EOR S); I2 = NOT(J2 EOR S);
+imm32 = SignExtend(S:I1:I2:imm10:imm11:'0', 32);
+if InITBlock() && !LastInITBlock() then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+BranchWritePC(PC + imm32);
+*/
+	*((int *)(&branch)) = i;
+
+}
 void bl(int i)
-{}
+{
+/*
+I1 = NOT(J1 EOR S); I2 = NOT(J2 EOR S);
+imm32 = SignExtend(S:I1:I2:imm10:imm11:'0', 32);
+if InITBlock() && !LastInITBlock() then UNPREDICTABLE;
+if ConditionPassed() then
+EncodingSpecificOperations();
+next_instr_addr = PC;
+LR = next_instr_addr<31:1> : '1';
+SelectInstrSet(InstrSet_Thumb);
+BranchWritePC(PC + imm32);
+*/
+}
 void mrs(int i)
-{}
+{
+/*P463
+
+*/
+}
 void msr(int i)
 {}
 /*
@@ -190,11 +230,28 @@ void msr(int i)
  *
  */
 void nop(int i)
-{}
+{
+// Do nothing
+}
 void yield(int i)
-{}
+{
+/*
+if ConditionPassed() then
+EncodingSpecificOperations();
+Hint_Yield();
+*/
+}
 void wfe(int i)
-{}
+{
+/*
+if ConditionPassed() then
+EncodingSpecificOperations();
+if EventRegistered() then
+ClearEventRegister();
+else
+WaitForEvent();
+*/
+}
 void wfi(int i)
 {}
 void sev(int i)
