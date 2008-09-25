@@ -187,7 +187,31 @@ if ConditionPassed() then
 EncodingSpecificOperations();
 BranchWritePC(PC + imm32);
 */
+	int imm32;
 	*((int*)(&conditionalBranch))=i;
+	imm32=conditionalBranch.s<<20+conditionalBranch.j2<<19+conditionalBranch.j1>>18+
+		  conditionalBranch.off2<<17+conditionalBranch.off1<<1;
+	imm32 &= 0xFFFFFFFE;
+	//SignExtend
+	if(imm32 & 0x00100000)
+		imm32 |= 0xFFE00000;
+	else
+		imm32 &= 0x001FFFFF;
+
+	if(conditionalBranch.cond>=14){
+	//question?
+		printf("Error!Branch conditonal instruction,con<3:1>=111\n");
+		return;
+	}
+	else if(InITBlock())
+		printf("UNPREDICTABLE instruction\n");
+	else{
+		EncodingSpecificOperations();
+		BranchWritePC(get_pc()+imm32);
+	}
+	
+
+
 }
 void b_t4(int i)
 {
@@ -199,8 +223,27 @@ if ConditionPassed() then
 EncodingSpecificOperations();
 BranchWritePC(PC + imm32);
 */
+	int imm32,i1,i2;
 	*((int *)(&branch)) = i;
+	i1=~(branch.j1^branch.s);
+	i2=~(branch.j2^branch.s);
+	imm32=branch.s>>24+i1>>23+i2>>22+branch.off2>>21+branch.off1>>11;
+	imm32 &= 0xFFFFFFFE;
+	//SignExtend
+	if(imm32 & 0x01000000)
+		imm32 |= 0xFE000000;
+	else
+		imm32 &= 0x01FFFFFF;
 
+	if(InITBlock() && !LastInITBlock())
+		printf("UNPREDICTABLE instruction.\n");
+	else{
+		EncodingSpecificOperations();
+		BranchWritePC(get_pc()+imm32);
+	}
+
+	
+	
 }
 void bl(int i)
 {
@@ -215,15 +258,171 @@ LR = next_instr_addr<31:1> : '1';
 SelectInstrSet(InstrSet_Thumb);
 BranchWritePC(PC + imm32);
 */
+	int i1,i2,imm32,next_instr_addr;
+	*((int *)(&branchWithLink)) = i;
+	i1=~(branchWithLink.j1^branchWithLink.s);
+	i2=~(branchWithLink.j2^branchWithLink.s);
+	imm32=branchWithLink.s>>24+i1>>23+i2>>22+branchWithLink.off2>>21+branchWithLink.off1>>11;
+	imm32 &= 0xFFFFFFFE;
+	//SignExtend
+	if(imm32 & 0x01000000)
+		imm32 |= 0xFE000000;
+	else
+		imm32 &= 0x01FFFFFF;
+	if(InITBlock() && !LastInITBlock())
+		printf("UNPREDICTABLE instruction.\n");
+	else{
+		EncodingSpecificOperations();
+		next_instr_addr=get_pc();
+		set_lr(next_instr_addr | 0x00000001);
+		//SelectInstrSet(InstrSet_Thumb);           question
+		BranchWritePC(get_pc()+imm32);
+	}
 }
 void mrs(int i)
 {
 /*P463
 
 */
+	unsigned int n,result;
+	*((int *)(&moveToReg)) = i;
+	n=(unsigned int) moveToReg.rd;
+	if(Bad_Reg(n))
+		printf("UNPREDICTABLE instruciton\n");
+	else{
+		unsigned sysmTemp=moveToReg.sysm;
+		result=0;
+		sysmTemp=sysmTemp>>3;
+		if(sysmTemp==0){
+			if(sysmTemp&0x1 && CurrentModeIsPrivileged()){  //question
+				result=get_ipsr();
+				result &= 0x000000FF;
+			}
+			if(sysmTemp&0x02){
+				result &= 0xF8FF03FF;
+			}
+			if(sysmTemp&0x04){
+				unsigned int temp=0;
+				temp=get_apsr();
+				temp=temp<<27;
+				temp &= 0xF8000000;
+				result &= 0x07FFFFFF;
+				result = result | temp;
+			}
+		}
+		else if(sysmTemp==1){
+			if(CurrentModeIsPrivileged()){
+				unsigned temp=moveToReg.sysm;
+				temp &= 0x07;
+				switch(temp){
+					case 0:
+						result=get_msp();
+						break;
+					case 1:
+						result=get_psp();
+						break;
+				}
+			}
+		}
+		else if(sysmTemp==2){
+			unsigned temp=(moveToReg.sysm& 0x07);
+			switch(temp){
+				case 0:
+					if(CurrentModeIsPrivileged()){
+						result=get_primask();
+						result &= 0x01;
+					}
+					else
+						result &= 0x0;
+					break;
+				case 1:
+					if(CurrentModeIsPrivileged()){
+						result =get_basepri();
+						result &= 0xFF;
+					}
+					else
+						result &= 0x0;
+					break;
+				case 2:
+					if(CurrentModeIsPrivileged()){
+						result =get_basepri();
+						result &= 0xFF;
+					}
+					else
+						result &= 0x0;
+					break;
+				case 3:
+					if(CurrentModeIsPrivileged()){
+						result=get_faultmask();
+						result &= 0x01;
+					}
+					else
+						result &=0x0;
+					break;
+				case 4:
+					result=get_control();
+					result &= 0x03;
+					break;
+			}
+		}
+		
+	}
+	set_general_register(moveToReg.rd,result);
 }
 void msr(int i)
-{}
+{
+	unsigned int n; 
+	*((int *)(&moveToStatus)) = i;
+	n=(unsigned int) moveToStatus.rn;
+	if(Bad_Reg(n))
+		printf("UNPREDICTABLE instruciton\n");
+	else{
+		unsigned sysmTemp=moveToStatus.sysm;
+		sysmTemp=sysmTemp>>3;
+		if(sysmTemp==0){
+			if(moveToStatus.sysm & 0x04)
+				set_apsr(get_general_register(moveToStatus.rn)>>27);
+		}
+		else if(sysmTemp==1){
+			if(CurrentModeIsPrivileged()){
+				if((moveToStatus.sysm & 0x07)==0)
+					set_msp(get_general_register(moveToStatus.rn));
+				else if((moveToStatus.sysm & 0x07)==1)
+					set_psp(get_general_register(moveToStatus.rn));
+
+			}
+		}
+		else if(sysmTemp==2){
+			unsigned int temp=(moveToStatus.sysm & 0x07);
+			if(temp==0 && CurrentModeIsPrivileged()){
+				set_primask(get_general_register(moveToStatus.rn)&0x01);
+			}
+			else if(temp==1 && CurrentModeIsPrivileged()){
+				set_basepri(get_general_register(moveToStatus.rn)&0xFF);
+			}
+			else if(temp==2 && CurrentModeIsPrivileged()){
+				if((get_general_register(moveToStatus.rn)&0xFF)!=0 && 
+					((get_general_register(moveToStatus.rn)&0xFF)<get_basepri || get_basepri==0))
+					set_basepri(get_general_register(moveToStatus.rn)&0xFF);
+			}
+			else if(temp==3 && CurrentModeIsPrivileged() && (ExecutionPriority() > -1)){
+					set_faultmask(get_general_register(moveToStatus.rn)&0x01);
+			}
+			else if(temp==4 && CurrentModeIsPrivileged()){
+				/* when `100`
+						if CurrentModeIsPrivileged() then
+						CONTROL<0> = R[n]<1:0>;
+						If Mode == Thread then CONTROL<1> = R[n]<1>;
+
+				*/// question
+
+			}
+		}
+
+	}
+}
+
+
 /*
  *
  *Table for dealing with no operation and hint instructions
@@ -240,24 +439,55 @@ if ConditionPassed() then
 EncodingSpecificOperations();
 Hint_Yield();
 */
+	if(ConditionPassed()){
+		EncodingSpecificOperations();
+		Hint_Yield();
+	}
+
+
 }
 void wfe(int i)
 {
 /*
 if ConditionPassed() then
-EncodingSpecificOperations();
-if EventRegistered() then
-ClearEventRegister();
-else
-WaitForEvent();
+	EncodingSpecificOperations();
+	if EventRegistered() then
+		ClearEventRegister();
+	else
+		WaitForEvent();
 */
+	if(ConditionPassed()){
+		EncodingSpecificOperations();
+		if(EventRegistered())
+			ClearEventRegister();
+		else
+			WaitForEvent();
+	}
+
 }
 void wfi(int i)
-{}
+{
+	if(ConditionPassed()){
+		EncodingSpecificOperations();
+		WaitForInterrupt();
+	}
+}
+
 void sev(int i)
-{}
+{
+	if(ConditionPassed()){
+		EncodingSpecificOperations();
+		Hint_SendEvent();
+	}
+}
 void dbg(int i)
-{}
+{
+	*((int *)(&specialCtrlOp)) = i;
+	if(ConditionPassed()){
+		EncodingSpecificOperations();
+		Hint_Debug(specialCtrlOp.option);
+	}
+}
 
 
 /*
@@ -266,10 +496,33 @@ void dbg(int i)
  *
  */
 void clrex(int i)
-{}
+{
+	if(ConditionPassed()){
+		EncodingSpecificOperations();
+		ClearExclusiveMonitors();
+	}
+}
 void dsb(int i)
-{}
+{
+	*((int *)(&specialCtrlOp)) = i;
+	if(ConditionPassed()){
+		EncodingSpecificOperations();
+		DataSynchronizationBarrier(specialCtrlOp.option);
+	}
+}
 void dmb(int i)
-{}
+{
+	*((int *)(&specialCtrlOp)) = i;
+	if(ConditionPassed()){
+		EncodingSpecificOperations();
+		DataMemoryBarrier(specialCtrlOp.option);
+	}
+}
 void isb(int i)
-{}
+{
+	*((int *)(&specialCtrlOp)) = i;
+	if(ConditionPassed()){
+		EncodingSpecificOperations();
+		InstructionSynchronizationBarrier(specialCtrlOp.option);
+	}
+}
