@@ -431,6 +431,9 @@ void msr(int i)
 void nop(int i)
 {
 // Do nothing
+	if(ConditionPassed()){
+		EncodingSpecificOperations();
+	}
 }
 void yield(int i)
 {
