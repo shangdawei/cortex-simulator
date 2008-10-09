@@ -68,7 +68,7 @@ void reg_ctrl_shift(int instruction)
 	printf("Rd: 0x%x \n", regCtrlShift.rd);
 	printf("Rm: 0x%x \n", regCtrlShift.rm);
 
-	if(!regCtrlShift.op2)
+	if(regCtrlShift.op2)
 	{
 		printf("UNDEFINED instructions!\n");
 		return;
@@ -107,7 +107,7 @@ void sign_unsign_extend(int instruction)
 	printf("index : %d", index);
 
 
-	f_ptr=(void *)reg_ctrl_s[index];
+	f_ptr=(void *)sign_unsign_e[index];
 	f_ptr(instruction);
 }
 void simd_add_sub(int instruction)
@@ -1759,7 +1759,7 @@ R[d] = SignExtend(rotated<7:0>, 32);
 	*((int *)(&signUnsignExtend)) = i;
 	if(Bad_Reg(signUnsignExtend.rd)||Bad_Reg(signUnsignExtend.rm))
 	{
-		printf("UNPREDICTABLE instructions!!/n");
+		printf("UNPREDICTABLE instructions!!\n");
 		return;
 	}
 	rotation = signUnsignExtend.rot<<3;
@@ -1774,6 +1774,8 @@ R[d] = SignExtend(rotated<7:0>, 32);
 	printf(" rotation = %x",rotation);
 	printf(" rotated = %x",rotated);
 	printf(" result = %x",result);
+	printf("	***sxtb\n");	
+	printf("********SXTB<c>.W <Rd>,<Rm>{,<rotation>}******* \n");
 #endif
 }
 void sxth(int i)
@@ -1790,7 +1792,7 @@ R[d] = SignExtend(rotated<15:0>, 32);
 	*((int *)(&signUnsignExtend)) = i;
 	if(Bad_Reg(signUnsignExtend.rd)||Bad_Reg(signUnsignExtend.rm))
 	{
-		printf("UNPREDICTABLE instructions!!/n");
+		printf("UNPREDICTABLE instructions!!\n");
 		return;
 	}
 	rotation = signUnsignExtend.rot<<3;
@@ -1805,6 +1807,8 @@ R[d] = SignExtend(rotated<15:0>, 32);
 	printf(" rotation = %x",rotation);
 	printf(" rotated = %x",rotated);
 	printf(" result = %x",result);
+	printf("          ****sxth\n");
+	printf(" ******SXTH<c>.W <Rd>,<Rm>{,<rotation>}*****\n");
 #endif
 }
 void uxtb(int i)
@@ -1821,7 +1825,7 @@ R[d] = ZeroExtend(rotated<7:0>, 32);
 	*((int *)(&signUnsignExtend)) = i;
 	if(Bad_Reg(signUnsignExtend.rd)||Bad_Reg(signUnsignExtend.rm))
 	{
-		printf("UNPREDICTABLE instructions!!/n");
+		printf("UNPREDICTABLE instructions!!\n");
 		return;
 	}
 	rotation = signUnsignExtend.rot<<3;
@@ -1832,6 +1836,8 @@ R[d] = ZeroExtend(rotated<7:0>, 32);
 	printf(" rotation = %x",rotation);
 	printf(" rotated = %x",rotated);
 	printf(" result = %x",result);
+	printf("   *******uxtb\n");
+	printf("  ***UXTB<c>.W <Rd>,<Rm>{,<rotation>}***\n");
 #endif
 }
 void uxth(int i)
@@ -1848,7 +1854,7 @@ R[d] = ZeroExtend(rotated<15:0>, 32);
 	*((int *)(&signUnsignExtend)) = i;
 	if(Bad_Reg(signUnsignExtend.rd)||Bad_Reg(signUnsignExtend.rm))
 	{
-		printf("UNPREDICTABLE instructions!!/n");
+		printf("UNPREDICTABLE instructions!!\n");
 		return;
 	}
 	rotation = signUnsignExtend.rot<<3;
@@ -1859,6 +1865,8 @@ R[d] = ZeroExtend(rotated<15:0>, 32);
 	printf(" rotation = %x",rotation);
 	printf(" rotated = %x",rotated);
 	printf(" result = %x",result);
+	printf("  ****uxth***\n");
+	printf("  ***UXTH<c>.W <Rd>,<Rm>{,<rotation>}***\n");
 #endif
 }
 
@@ -1888,6 +1896,7 @@ R[d] = result<31:0>;
 	set_general_register(otherThreeRegDataPro.rd,result);
 #if DEBUG_I
 	printf(" result = %x",result);
+	printf("  ******clz\n");
 #endif
 }
 void rbit(int i)
@@ -1906,7 +1915,7 @@ R[d] = result;
 	*((int *)(&otherThreeRegDataPro)) = i;
 	if(Bad_Reg(otherThreeRegDataPro.rd)||Bad_Reg(otherThreeRegDataPro.rm)||(otherThreeRegDataPro.rn!=otherThreeRegDataPro.rm))
 	{
-		printf("UNPREDICTABLE instructions!!/n");
+		printf("UNPREDICTABLE instructions!!\n");
 		return;
 	} 
 	source = get_general_register(otherThreeRegDataPro.rm);
@@ -1915,8 +1924,11 @@ R[d] = result;
 		mask = (source>>j)&1;
 		result = result|(mask<<(31-j));
 	}
+	set_general_register(otherThreeRegDataPro.rd,result);
 #if DEBUG_I
 	printf(" result = %x",result);
+	printf("     ******rbit\n");
+
 #endif
 }
 void rev(int i)
@@ -1937,7 +1949,7 @@ R[d] = result;
 	*((int *)(&otherThreeRegDataPro)) = i;
 	if(Bad_Reg(otherThreeRegDataPro.rd)||Bad_Reg(otherThreeRegDataPro.rm)||(otherThreeRegDataPro.rn!=otherThreeRegDataPro.rm))
 	{
-		printf("UNPREDICTABLE instructions!!/n");
+		printf("UNPREDICTABLE instructions!!\n");
 		return;
 	} 
 	source = get_general_register(otherThreeRegDataPro.rm);	
@@ -1950,6 +1962,7 @@ R[d] = result;
 #if DEBUG_I
 	printf(" source = %x",source);
 	printf(" result = %x",result);
+	printf("    *****rev\n");
 #endif
 }
 void rev16(int i)
@@ -1970,7 +1983,7 @@ R[d] = result;
 	*((int *)(&otherThreeRegDataPro)) = i;
 	if(Bad_Reg(otherThreeRegDataPro.rd)||Bad_Reg(otherThreeRegDataPro.rm)||(otherThreeRegDataPro.rn!=otherThreeRegDataPro.rm))
 	{
-		printf("UNPREDICTABLE instructions!!/n");
+		printf("UNPREDICTABLE instructions!!\n");
 		return;
 	} 
 	source = get_general_register(otherThreeRegDataPro.rm);	
@@ -1983,6 +1996,8 @@ R[d] = result;
 #if DEBUG_I
 	printf(" source = %x",source);
 	printf(" result = %x",result);
+	printf("    *****rev16\n");
+
 #endif
 }
 void revsh(int i)
@@ -1999,25 +2014,41 @@ result<31:8> = SignExtend(R[m]<7:0>, 24);
 result<7:0> = R[m]<15:8>;
 R[d] = result;
 */
-	unsigned int r1=0,r2=0,result=0,source,flag;
+	unsigned int r1=0,r2=0,result=0,source,flag,temp;
 	*((int *)(&otherThreeRegDataPro)) = i;
 	if(Bad_Reg(otherThreeRegDataPro.rd)||Bad_Reg(otherThreeRegDataPro.rm)||(otherThreeRegDataPro.rn!=otherThreeRegDataPro.rm))
 	{
-		printf("UNPREDICTABLE instructions!!/n");
+		printf("UNPREDICTABLE instructions!!\n");
 		return;
 	} 
 	source = get_general_register(otherThreeRegDataPro.rm);
-	flag = source<<24>>31;
+
+/*	flag = source<<24>>31;
 	if(flag)
 	{
 		r1 = ((source<<8)&0x00f0)|0xff00;
 	}
 	r2 = (source&0x00f0)>>8;
-	result = r1|r2;
+	result = r1|r2;*/
+	temp=source;
+		//SignExtend
+	if(temp & 0x010)
+		temp |= 0xFFFFFF00;
+	else
+		temp &= 0x000000FF;
+
+	temp=temp>>8;
+	result=temp;
+	temp=source;
+
+	temp=temp<<16>>24;
+
+	result += temp;
 	set_general_register(otherThreeRegDataPro.rd,result);
 #if DEBUG_I
 	printf(" source = %x",source);
 	printf(" result = %x",result);
+	printf("       ****revsh\n");
 #endif
 }
 
@@ -2057,6 +2088,7 @@ R[d] = result<31:0>;
 	printf(" operand2 = %x",op2);
 	printf(" addend = %x",addend);
 	printf(" result = %x",result);
+	printf("    ****mla\n");
 #endif
 }
 void mls(int i)
@@ -2089,6 +2121,7 @@ R[d] = result<31:0>;
 	printf(" operand2 = %x",op2);
 	printf(" addend = %x",addend);
 	printf(" result = %x",result);
+	printf("   ***mls\n");
 #endif
 }
 void mul(int i)
@@ -2123,6 +2156,7 @@ APSR.C = UNKNOWN;
 	printf(" operand1 = %x",op1);
 	printf(" operand2 = %x",op2);
 	printf(" result = %x",result);
+	printf("   ****mul\n");
 #endif
 }
 /*************************************************************************************************
@@ -2156,9 +2190,10 @@ R[dLo] = result<31:0>;
 	set_general_register(bit64Multiply.rdhi,(result&0xffffffff00000000)>>32);
 	set_general_register(bit64Multiply.rdlo,(result&0x00000000ffffffff));
 #if DEBUG_I
-	printf(" R[dHi] = %l",rn);
-	printf(" R[dLo] = %l",rm);
-	printf(" result = %l",result);
+	printf(" R[dHi] = %d",get_general_register(bit64Multiply.rdhi));
+	printf(" R[dLo] = %d",get_general_register(bit64Multiply.rdlo));
+	printf(" result = %d",result);
+	printf("   *******smull\n");
 #endif
 }
 void sdiv(int i)
@@ -2178,6 +2213,7 @@ result = RoundTowardsZero(SInt(R[n]) / SInt(R[m]));
 R[d] = result<31:0>;
 */
 	int result;
+//	int rn,rm;
 	*((int *)(&bit64Multiply)) = i;
 	if(Bad_Reg(bit64Multiply.rdhi)||Bad_Reg(bit64Multiply.rm)||Bad_Reg(bit64Multiply.rn))
 	{
@@ -2186,9 +2222,10 @@ R[d] = result<31:0>;
 	} 
 	if(!get_general_register(bit64Multiply.rm))
 	{
-		if(IntegerZeroDivideTrappingEnabled())
+		if(IntegerZeroDivideTrappingEnabled())   //question?
 		{
 			RaiseIntegerZeroDivide();
+			return;
 		}
 		else
 			result = 0;
@@ -2197,11 +2234,15 @@ R[d] = result<31:0>;
 	{
 		result = get_general_register(bit64Multiply.rn)/get_general_register(bit64Multiply.rm);
 	}
+//	rn=get_general_register(bit64Multiply.rn);
+//	rm=get_general_register(bit64Multiply.rm);
 	set_general_register(bit64Multiply.rdhi,result);
 #if DEBUG_I
-	printf(" SInt(R[n]) = %x",get_general_register(bit64Multiply.rn));
-	printf(" SInt(R[m]) = %x",get_general_register(bit64Multiply.rm));
+	//printf(" SInt(R[n]) = %x",rn);
+//	printf(" SInt(R[m]) = %x",rm);
 	printf(" result = %x",result);
+		printf("   *******sdiv\n");
+
 #endif
 }
 void umull(int i)
@@ -2230,9 +2271,11 @@ R[dLo] = result<31:0>;
 	set_general_register(bit64Multiply.rdhi,(result&0xffffffff00000000)>>32);
 	set_general_register(bit64Multiply.rdlo,(result&0x00000000ffffffff));
 #if DEBUG_I
-	printf(" R[dHi] = %l",rn);
-	printf(" R[dLo] = %l",rm);
-	printf(" result = %l",result);
+	printf(" R[dHi] = %d",get_general_register(bit64Multiply.rdhi));
+	printf(" R[dLo] = %d",get_general_register(bit64Multiply.rdlo));
+	printf(" result = %d",result);
+		printf("   *******umull\n");
+
 #endif
 }
 void udiv(int i)
@@ -2253,6 +2296,7 @@ R[d] = result<31:0>;
 */
 	int result;
 	*((int *)(&bit64Multiply)) = i;
+
 	if(Bad_Reg(bit64Multiply.rdhi)||Bad_Reg(bit64Multiply.rm)||Bad_Reg(bit64Multiply.rn))
 	{
 		printf("UNPREDICTABLE instructions!!/n");
@@ -2263,6 +2307,7 @@ R[d] = result<31:0>;
 		if(IntegerZeroDivideTrappingEnabled())
 		{
 			RaiseIntegerZeroDivide();
+			return;
 		}
 		else
 			result = 0;
@@ -2276,6 +2321,8 @@ R[d] = result<31:0>;
 	printf(" R[dHi] = %l",get_general_register(bit64Multiply.rn));
 	printf(" R[dLo] = %l",get_general_register(bit64Multiply.rm));
 	printf(" result = %l",result);
+	printf("   *******udiv\n");
+
 #endif
 }
 void smlal(int i)
@@ -2302,15 +2349,20 @@ R[dLo] = result<31:0>;
 	rm = get_general_register(bit64Multiply.rm);
 	rh = get_general_register(bit64Multiply.rdhi);
 	rl = get_general_register(bit64Multiply.rdlo);
-	result = rn*rm+(rh<<32)&rl;
+	//result = rn*rm+(rh<<32)&rl;
+	//rh=rh<<32;
+	//rl=rh|rl;
+	result=rn*rm+((rh<<32)|rl);
 	set_general_register(bit64Multiply.rdhi,(result&0xffffffff00000000)>>32);
 	set_general_register(bit64Multiply.rdlo,(result&0x00000000ffffffff));
 #if DEBUG_I
-	printf(" R[dHi] = %l",rh);
-	printf(" R[dLo] = %l",rl);
-	printf(" Rn = %l",rn);
-	printf(" Rm = %l",rm);
-	printf(" result = %l",result);
+	printf(" R[dHi] = %d",rh);
+	printf(" R[dLo] = %d",rl);
+	printf(" Rn = %d",rn);
+	printf(" Rm = %d",rm);
+	printf(" result = %d",result);
+	printf("   *******smlal\n");
+
 #endif
 }
 void umlal(int i)
@@ -2337,15 +2389,17 @@ R[dLo] = result<31:0>;
 	rm = get_general_register(bit64Multiply.rm);
 	rh = get_general_register(bit64Multiply.rdhi);
 	rl = get_general_register(bit64Multiply.rdlo);
-	result = rn*rm+rh<<32&rl;
+	result = rn*rm+(rh<<32|rl);
 	set_general_register(bit64Multiply.rdhi,(result&0xffffffff00000000)>>32);
 	set_general_register(bit64Multiply.rdlo,(result&0x00000000ffffffff));
 #if DEBUG_I
-	printf(" R[dHi] = %l",rh);
-	printf(" R[dLo] = %l",rl);
-	printf(" Rn = %l",rn);
-	printf(" Rm = %l",rm);
-	printf(" result = %l",result);
+	printf(" R[dHi] = %d",rh);
+	printf(" R[dLo] = %d",rl);
+	printf(" Rn = %d",rn);
+	printf(" Rm = %d",rm);
+	printf(" result = %d",result);
+	printf("   *******umlal\n");
+
 #endif
 }
 
