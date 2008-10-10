@@ -130,10 +130,14 @@ void pop(int i){
 	*((int *)(&Pop)) = i;
 	sp = get_sp();
 	registers = (Pop.p << 15) + (Pop.m << 14) + (Pop.pass1 << 13) + Pop.mask;
-	if(BitCount(registers) < 2)
+	if(BitCount(registers) < 2){
 		printf("	It is unpredictable!");
-	else if(Pop.p == 1 && Pop.m == 1)
+		return;
+	}
+	else if(Pop.p == 1 && Pop.m == 1){
 		printf("	It is unpredictable!");
+		return;
+	}
 	else{
 		originalSP = sp;
 		address = sp;
