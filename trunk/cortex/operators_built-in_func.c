@@ -48,7 +48,7 @@ If x is a bitstring, BitCount(x) produces an integer result equal to the number 
 int BitCount(int x){
 	int i,count = 0,mask = 0x80000000;
 	for(i = 0;i <= 31;i++){
-		x << i;
+		x=x << 1;
 		if(mask & x)
 			count++;
 	}
