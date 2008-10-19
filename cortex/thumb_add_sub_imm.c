@@ -65,7 +65,7 @@ void thumb_add_imm(short ins)
 		else
 			cle_flag_v();			
 	}
-	
+	printf("*********thumb_add_reg_t1***********\n");
 }
 
 
@@ -106,6 +106,7 @@ void thumb_sub_imm(short ins)
 		else
 			cle_flag_v();			
 	}
+	printf("*********thumb_add_reg_t1***********\n");
 }
 
 

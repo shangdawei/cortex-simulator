@@ -64,7 +64,7 @@ void thumb_and_reg(short i)
 		else
 			cle_flag_c();
 	}
-	printf("hello world !\n");
+	printf("*********thumb_and_reg***********\n");
 	
 	
 }
@@ -134,7 +134,7 @@ void thumb_eor_reg(short i)
 		else
 			cle_flag_c();
 	}
-	
+	printf("*********thumb_eor_reg***********\n");
 	
 }
 
@@ -175,7 +175,7 @@ void thumb_lsl_reg(short i)
 			cle_flag_c();
 		
 	}
-	
+	printf("*********thumb_lsl_reg***********\n");
 }
 
    
@@ -214,6 +214,7 @@ void thumb_lsr_reg(short i)
 			cle_flag_c();
 		
 	}
+	printf("*********thumb_lsr_reg***********\n");
 }
    
 void thumb_asr_reg(short i)
@@ -252,7 +253,7 @@ void thumb_asr_reg(short i)
 			cle_flag_c();
 		
 	}
-	
+	printf("*********thumb_asr_reg***********\n");
 }
 
 
@@ -294,6 +295,7 @@ void thumb_adc_reg(short i)
 		else
 			cle_flag_v();			
 	}
+	printf("*********thumb_adc_reg***********\n");
 }
 
 
@@ -335,6 +337,7 @@ void thumb_sbc_reg(short i)
 		else
 			cle_flag_v();			
 	}
+	printf("*********thumb_sbc_reg***********\n");
 }
 
 
@@ -374,6 +377,7 @@ void thumb_ror_reg(short i)
 			cle_flag_c();
 		
 	}
+	printf("*********thumb_ror_reg***********\n");
 } 
    
 void thumb_tst_reg(short i)
@@ -407,6 +411,7 @@ void thumb_tst_reg(short i)
 		else
 			cle_flag_c();
 	}
+	printf("*********thumb_tst_reg***********\n");
 }
 
 
@@ -447,6 +452,7 @@ void thumb_rsb_reg(short i)
 		else
 			cle_flag_v();			
 	}
+	printf("*********thumb_rsb_reg***********\n");
 }
 
 
@@ -485,6 +491,7 @@ void thumb_cmp_reg_t1(short i)
 		else
 			cle_flag_v();			
 	}
+	printf("*********thumb_cmp_reg_t1***********\n");
 }
 
 
@@ -522,6 +529,7 @@ void thumb_cmn_reg(short i)
 		else
 			cle_flag_v();			
 	}
+	printf("*********thumb_cmn_reg***********\n");
 }
    
 void thumb_orr_reg(short i)
@@ -554,7 +562,7 @@ void thumb_orr_reg(short i)
 		else
 			cle_flag_c();
 	}
-	
+	printf("*********thumb_orr_reg***********\n");
 }
 
 
@@ -592,6 +600,7 @@ void thumb_mul_reg(short i)
 		if(ArchVersion()==4)
 			printf("mul_reg:flag_c unknow!\n");
 	}
+	printf("*********thumb_mul_reg***********\n");
 }
 
 void thumb_bic_reg(short i)
@@ -624,6 +633,7 @@ void thumb_bic_reg(short i)
 		else
 			cle_flag_c();
 	}
+	printf("*********thumb_bic_reg***********\n");
 }
 
 void thumb_mvn_reg(short i)
@@ -654,6 +664,7 @@ void thumb_mvn_reg(short i)
 		else
 			cle_flag_c();
 	}
+	printf("*********thumb_mvn_reg***********\n");
 }
 
 
