@@ -1,7 +1,7 @@
 #include "register.h"
 #include "string.h"
 #include "stdio.h"
-static int registers[REG_SIZE]={0};
+static int registers[REG_SIZE]={0,1,2,3,0};
 //static int imm_carry = 0;//ImmExpand will product it. it is a template
 //static int calculate_carry = 0;//It is a template carry
 //static int calculate_overflow = 0;// It is a template overflow

@@ -100,17 +100,19 @@ void thumb_mov_reg_t2(short ins)
 		set_flag_c();
 	else
 		cle_flag_c();
+	printf("*********thumb_mov_reg_t2***********\n");
 				
 }
 
 void thumb_lsl_imm5(short ins)
 {
 	int result;
-	struct RESULTCARRY *rc=lsl_c(result,(int)DataShiftMove.imm5);
+	struct RESULTCARRY *rc;//=lsl_c(result,(int)DataShiftMove.imm5);
 
 	*((short*)&DataShiftMove)=ins;	
 	
-	result=get_general_register((int)DataShiftMove.Rm);			
+	result=get_general_register((int)DataShiftMove.Rm);
+	rc = lsl_c(result,(int)DataShiftMove.imm5);
 	set_general_register((int)DataShiftMove.Rd, rc->result);
 	
 	
@@ -133,6 +135,7 @@ void thumb_lsl_imm5(short ins)
 			cle_flag_c();
 		
 	}
+	printf("*********thumb_lsl_imm5***********\n");
 	
 }
 
@@ -166,6 +169,7 @@ void thumb_lsr_imm5(short ins)
 			cle_flag_c();
 		
 	}
+	printf("*********thumb_lsr_imm5***********\n");
 	
 }
 
@@ -199,6 +203,7 @@ void thumb_asr_imm5(short ins)
 			cle_flag_c();
 		
 	}
+	printf("*********thumb_asr_imm5***********\n");
 }
 
 
