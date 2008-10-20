@@ -74,19 +74,19 @@ void thumb_eor_reg(short i)
 {
 	
 	
-	unsigned result,shift,m,n;
+	unsigned result,m,n,apsr_c;
 	
 	
-	int carry;
+	//int carry;
 	
 	struct RESULTCARRY *rc;
 	*((short *)&DataProcReg)=i;
-	result=(unsigned)get_general_register((int)DataProcReg.Rdn);
-	shift=(unsigned)get_general_register((int)DataProcReg.Rm);
-	rc=lsr_c(result,shift);
-
-	set_general_register((int)DataProcReg.Rdn, rc->result);
-	
+	n = (unsigned)get_general_register((int)DataProcReg.Rdn);
+	m = (unsigned)get_general_register((int)DataProcReg.Rm);
+	apsr_c = get_flag_c();
+	apsr_c = apsr_c >> 29;
+	rc=shift_c(m,SRType_None,0,apsr_c);
+	//set_general_register((int)DataProcReg.Rdn, rc->result);
 	
 	if(!InITBlock())
 	{
@@ -108,12 +108,12 @@ void thumb_eor_reg(short i)
 		
 	};
 	
-	carry=get_flag_c();
+	//carry=get_flag_c();
 	
-	n=(unsigned)get_general_register(DataProcReg.Rdn);
-	m=(unsigned)get_general_register(DataProcReg.Rm);
+	//n=(unsigned)get_general_register(DataProcReg.Rdn);
+	//m=(unsigned)get_general_register(DataProcReg.Rm);
 	
-	result=((~n)&m)|(n&(~m));
+	result = n^rc->result;
 	
 	set_general_register((int)DataProcReg.Rdn,(int)result);
 	
@@ -129,7 +129,7 @@ void thumb_eor_reg(short i)
 		else
 			cle_flag_z();
 			
-		if(carry)//whether carry
+		if(rc->carry)//whether carry
 			set_flag_c();
 		else
 			cle_flag_c();

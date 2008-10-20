@@ -6,7 +6,7 @@ int main(){
 	while(1){
 		unsigned int instruction = fetch(i++);
 			if(instruction!=0){
-				if(instruction & 0xE0000000)
+				if(instruction & 0xE0000000)//there is a problem,how do thumb instrutions be arranged in memory?
 					decode(instruction);
 				else
 					thumb_decode(instruction);
