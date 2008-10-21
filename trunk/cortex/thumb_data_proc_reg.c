@@ -9,10 +9,10 @@
 void thumb_data_proc_reg(short i)
 {
 	
-	int opc=(int)DataProcReg.opc;
+	short opc;
 	func p;
 	*((short *)&DataProcReg)=i;
-
+	opc=(int)DataProcReg.opc;
 	if(opc<0 || opc>15)
 	{
 		thumb_data_proc_reg_err(i);
