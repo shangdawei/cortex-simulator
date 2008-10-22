@@ -225,9 +225,9 @@ BranchWritePC(PC + imm32);
 */
 	int imm32,i1,i2;
 	*((int *)(&branch)) = i;
-	i1=~(branch.j1^branch.s);
-	i2=~(branch.j2^branch.s);
-	imm32=branch.s>>24+i1>>23+i2>>22+branch.off2>>21+branch.off1>>11;
+	i1=!(branch.j1^branch.s);
+	i2=!(branch.j2^branch.s);
+	imm32=(branch.s<<24)+(i1<<23)+(i2<<22)+(branch.off2<<12)+(branch.off1<<1);
 	imm32 &= 0xFFFFFFFE;
 	//SignExtend
 	if(imm32 & 0x01000000)
@@ -260,9 +260,9 @@ BranchWritePC(PC + imm32);
 */
 	int i1,i2,imm32,next_instr_addr;
 	*((int *)(&branchWithLink)) = i;
-	i1=~(branchWithLink.j1^branchWithLink.s);
-	i2=~(branchWithLink.j2^branchWithLink.s);
-	imm32=branchWithLink.s>>24+i1>>23+i2>>22+branchWithLink.off2>>21+branchWithLink.off1>>11;
+	i1=!(branchWithLink.j1^branchWithLink.s);
+	i2=!(branchWithLink.j2^branchWithLink.s);
+	imm32=(branchWithLink.s<<24)+(i1<<23)+(i2<<22)+(branchWithLink.off2<<12)+(branchWithLink.off1<<1);
 	imm32 &= 0xFFFFFFFE;
 	//SignExtend
 	if(imm32 & 0x01000000)
@@ -275,7 +275,7 @@ BranchWritePC(PC + imm32);
 		EncodingSpecificOperations();
 		next_instr_addr=get_pc();
 		set_lr(next_instr_addr | 0x00000001);
-		//SelectInstrSet(InstrSet_Thumb);           question
+		//SelectInstrSet(InstrSet_Thumb);           questionhi
 		BranchWritePC(get_pc()+imm32);
 	}
 }
@@ -293,15 +293,16 @@ void mrs(int i)
 		unsigned sysmTemp=moveToReg.sysm;
 		result=0;
 		sysmTemp=sysmTemp>>3;
+		sysmTemp&=0x01F;
 		if(sysmTemp==0){
-			if(sysmTemp&0x1 && CurrentModeIsPrivileged()){  //question
+			if(moveToReg.sysm&0x1 && CurrentModeIsPrivileged()){  //question
 				result=get_ipsr();
 				result &= 0x000000FF;
 			}
-			if(sysmTemp&0x02){
-				result &= 0xF8FF03FF;
+			if(moveToReg.sysm&0x02){
+				//result &= 0xF8FF03FF;
 			}
-			if(sysmTemp&0x04){
+			if(moveToReg.sysm&0x04){
 				unsigned int temp=0;
 				temp=get_apsr();
 				temp=temp<<27;
@@ -379,8 +380,9 @@ void msr(int i)
 	else{
 		unsigned sysmTemp=moveToStatus.sysm;
 		sysmTemp=sysmTemp>>3;
+		sysmTemp&=0x01F;
 		if(sysmTemp==0){
-			if(moveToStatus.sysm & 0x04)
+			if(!(moveToStatus.sysm & 0x04))
 				set_apsr(get_general_register(moveToStatus.rn)>>27);
 		}
 		else if(sysmTemp==1){
@@ -401,8 +403,8 @@ void msr(int i)
 				set_basepri(get_general_register(moveToStatus.rn)&0xFF);
 			}
 			else if(temp==2 && CurrentModeIsPrivileged()){
-				if((get_general_register(moveToStatus.rn)&0xFF)!=0 && 
-					((get_general_register(moveToStatus.rn)&0xFF)<get_basepri || get_basepri==0))
+				if((get_general_register(moveToStatus.rn)&0xFF)!=0 && ((get_general_register(moveToStatus.rn)&0xFF)!=0) && 
+					(((get_general_register(moveToStatus.rn)&0xFF)<get_basepri()) || get_basepri()==0))
 					set_basepri(get_general_register(moveToStatus.rn)&0xFF);
 			}
 			else if(temp==3 && CurrentModeIsPrivileged() && (ExecutionPriority() > -1)){
@@ -415,7 +417,7 @@ void msr(int i)
 						If Mode == Thread then CONTROL<1> = R[n]<1>;
 
 				*/// question
-
+				set_control((get_control()&0xFFFFFFFE)|(get_general_register(moveToStatus.rn)&0x01));
 			}
 		}
 
@@ -433,6 +435,7 @@ void nop(int i)
 // Do nothing
 	if(ConditionPassed()){
 		EncodingSpecificOperations();
+		printf("nop\n");
 	}
 }
 void yield(int i)
