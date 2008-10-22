@@ -80,9 +80,10 @@ void set_MemA(int address, int bytes, int value)
 int get_MemU(int address, int bytes)
 {
 	int result;
-	char* ptr;	
+	char* ptr;
 	assert(address + bytes< MEM_SIZE);
 	ptr = (char*)memory + address;
+
 	switch(bytes)
 	{
 	case 4:		

@@ -241,8 +241,13 @@ void ldr_lit(int i){
 		base = align(get_pc(),4);
 		if(LsSinglePc.u == 1)
 			address = base + imm32;
-		else
-			address = base - imm32;
+		else{
+			if(base<imm32){
+				printf("error\n");
+				return;
+			}
+			address = base - imm32;                   
+		}
 		address1 = address & 0x00000003;
 		if(rt == 15)
 			if(address1 != 0)
@@ -264,15 +269,20 @@ void ldrb_lit(int i){
 	rt = LsSinglePc.rt;
 	imm32 = LsSinglePc.imm12;
 	if(rt == 15)
-		printf("	it is error in this situation!");
+		printf("	it is error in this situation!");                //有问题，此处与数据手册上所说的不符
 	else if(rt == 13)
 		printf("	it is unpredictable!");
 	else{
 		base = align(get_pc(),4);
 		if(LsSinglePc.u == 1)
 			address = base + imm32;
-		else
-			address = base - imm32;
+		else{
+			if(base<imm32){
+				printf("error\n");
+				return;
+			}
+			address = base - imm32;                   
+		}
 		result = get_MemU(address,1);
 		set_general_register(rt,result);
 		printf("	Rt = %X",get_general_register(rt));
@@ -286,15 +296,20 @@ void ldrsb_lit(int i){
 	rt = LsSinglePc.rt;
 	imm32 = LsSinglePc.imm12;
 	if(rt == 15)
-		printf("	it is error in this situation!");
+		printf("	it is error in this situation!");//有问题，此处与数据手册上所说的不符
 	else if(rt == 13)
 		printf("	it is unpredictable!");
 	else{
 		base = align(get_pc(),4);
 		if(LsSinglePc.u == 1)
 			address = base + imm32;
-		else
-			address = base - imm32;
+		else{
+			if(base<imm32){
+				printf("error\n");
+				return;
+			}
+			address = base - imm32;                   
+		}
 		result = get_MemU(address,1);
 		temp = result & 0x00000080;
 		if(LsSinglePc.s && temp)
@@ -311,15 +326,20 @@ void ldrh_lit(int i){
 	rt = LsSinglePc.rt;
 	imm32 = LsSinglePc.imm12;
 	if(rt == 15)
-		printf("	it is error in this situation!");
+		printf("	it is error in this situation!");   ////有问题，此处与数据手册上所说的不符
 	else if(rt == 13)
 		printf("	it is unpredictable!");
 	else{
 		base = align(get_pc(),4);
 		if(LsSinglePc.u == 1)
 			address = base + imm32;
-		else
-			address = base - imm32;
+		else{
+			if(base<imm32){
+				printf("error\n");
+				return;
+			}
+			address = base - imm32;                   
+		}
 		result = get_MemU(address,2);
 		set_general_register(rt,result);
 		printf("	Rt = %X",get_general_register(rt));
@@ -333,15 +353,20 @@ void ldrsh_lit(int i){
 	rt = LsSinglePc.rt;
 	imm32 = LsSinglePc.imm12;
 	if(rt == 15)
-		printf("	it is error in this situation!");
+		printf("	it is error in this situation!");       //有问题，此处与数据手册上所说的不符
 	else if(rt == 13)
 		printf("	it is unpredictable!");
 	else{
 		base = align(get_pc(),4);
 		if(LsSinglePc.u == 1)
 			address = base + imm32;
-		else
-			address = base - imm32;
+		else{
+			if(base<imm32){
+				printf("error\n");
+				return;
+			}
+			address = base - imm32;                   
+		}
 		result = get_MemU(address,2);
 		temp = result & 0x00008000;
 		if(LsSinglePc.s && temp)
