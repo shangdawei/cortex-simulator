@@ -183,14 +183,15 @@ void thumb_lsr_reg(short i)
 {
 	
 	struct RESULTCARRY *rc;
-	unsigned result,shift;
+	unsigned result,shift,apsr_c;
 
 	*((short *)&DataProcReg)=i;
 	result=(unsigned)get_general_register((int)DataProcReg.Rdn);
 	shift=(unsigned)(get_general_register((int)DataProcReg.Rm) & 0xff);
+	apsr_c = get_flag_c();
+	apsr_c = apsr_c >> 29;	
 	
-	
-	rc=lsr_c(result,shift);
+	rc=shift_c(result,SRType_LSR,shift,apsr_c);//lsr_c(result,shift);
 	
 	set_general_register((int)DataProcReg.Rdn, rc->result);
 	
