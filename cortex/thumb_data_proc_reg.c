@@ -423,7 +423,7 @@ void thumb_rsb_reg(short i)
 	struct CALCULATECO *result;
 
 	*((short *)&DataProcReg)=i;
-	n=(unsigned)get_general_register((int)DataProcReg.Rdn);
+	n=(unsigned)get_general_register((int)DataProcReg.Rm);
 	m=0;
 
 	
