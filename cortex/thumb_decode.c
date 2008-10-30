@@ -31,6 +31,7 @@ TranslateTable thumbtable[MAXSIZE] = {
 	{0xE000,0x2000,(void*)thumb_add_sub_cmp_mov_imm8},
 	{0xFC00,0x4000,(void*)thumb_data_proc_reg},
 	{0xFC00,0x4400,(void*)thumb_sepecial_data_pro},
+	//{0xFF00,0x4700,(void*)thumb_branch_exchange},
 	{0xF800,0x4800,(void*)thumb_ldr_lit},
 	{0xF000,0x5000,(void*)thumb_ld_st_reg_off},
 	{0xE000,0x6000,(void*)thumb_ld_st_word_byte_imm_off},
