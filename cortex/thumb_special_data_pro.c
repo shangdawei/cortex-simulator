@@ -50,6 +50,7 @@ void thumb_add_reg(short instruction)
 			set_general_register(rd, r->result);
 		free(r);
 	}
+	printf("*********thumb_add_reg***********\n");
 }
 
 void thumb_cmp_reg(short instruction)
@@ -74,6 +75,7 @@ void thumb_cmp_reg(short instruction)
 		if (r->carry_out) set_flag_c(); else cle_flag_c();
 		if (r->overflow) set_flag_v(); else cle_flag_v();
 	}
+	printf("*********thumb_cmp_reg***********\n");
 }
 
 void thumb_mov_reg(short instruction)
@@ -90,4 +92,5 @@ void thumb_mov_reg(short instruction)
 	}else{
 		set_general_register(rd, result);
 	}
+	printf("*********thumb_mov_reg***********\n");
 }
