@@ -3,6 +3,7 @@
 #define MEM_SIZE 8192		//bytes
 #include <stdio.h>
 #include <assert.h>
+static int memory[MEM_SIZE / 4]={0,1,2,3,4,5,6,7,8,9,};
 void memory_copy(int target, int destination, int num);
 int get_memory(int address);
 void set_memory(int address, int value);
