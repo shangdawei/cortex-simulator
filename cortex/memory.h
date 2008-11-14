@@ -1,9 +1,58 @@
-#ifndef _MEMORY
+﻿#ifndef _MEMORY
 #define _MEMORY
-#define MEM_SIZE 8192		//bytes
+/*
+	This file is designed to map the memory address
+	modified by Jacky on 08.11.11
+*/
 #include <stdio.h>
 #include <assert.h>
-static int memory[MEM_SIZE / 4]={0,1,2,3,4,5,6,7,8,9,};
+
+#define FLASH_SIZE		262144			//256K Flash					from 0x00000000 to 0x0003FFFF
+#define SRAM_SIZE		65536			//64K SRAM						from 0x20000000 to 0x2000FFFF
+#define PERI_SIZE		1048576			//1M peripheral device	 		from 0x40000000	to 0x400FFFFF
+
+#define FLASH_BASE		0x00000000
+#define SRAM_BASE		0x20000000
+#define PERI_BASE		0x40000000
+
+#define FLASH_BEGIN		0x00000000	
+#define FLASH_END		0x0003FFFF
+#define SRAM_BEGIN		0x20000000		
+#define SRAM_END		0x2000FFFF
+#define SRAM_BB_BEGIN	0x22000000
+#define SRAM_BB_END		0x23FFFFFF
+#define	PERI_BEGIN		0x40000000
+#define PERI_END		0x400FFFFF
+#define	PERI_BB_BEGIN	0x42000000
+#define PERI_BB_END		0x43FFFFFF
+
+//define that which memory array it access
+#define FLASH			0 
+#define SRAM			1
+#define SRAM_BB			2
+#define PERI			3
+#define PERI_BB			4
+
+//
+static int flash[FLASH_SIZE/4]={0,1,2,3,4,5,6,7,8,9,};
+static int sram[SRAM_SIZE/4] = {0xFFFFFFFF,};
+static int peripheral[PERI_SIZE/4] = {0x12345678,};
+
+
+typedef struct{
+	int type;
+	int offset;
+}MemoryTranslate;
+
+
+/*
+	By given the mapped address, do some memory translation, return the memory infomation: 
+	1.which type of memory segment (flash, sram or peripheral) it belongs, 
+	2.the offset in the memory segment
+*/
+MemoryTranslate* addr_transfer(unsigned int address);	//to jugde which memory array the given belongs, 
+									//address is the mapped memory address, return value is the address in each memory array
+
 void memory_copy(int target, int destination, int num);
 int get_memory(int address);
 void set_memory(int address, int value);
@@ -19,5 +68,18 @@ void set_MemA(int address, int bytes, int value);
 int get_MemU(int address, int bytes);
 void set_MemU(int address, int bytes, int value);
 //
+
+/*
+The Cortex-M3 memory map has two 32-MB alias regions that map to two 1-MB bit-band regions:
+• Accesses to the 32-MB SRAM alias region map to the 1-MB SRAM bit-band region.
+• Accesses to the 32-MB peripheral alias region map to the 1-MB peripheral bit-band region.
+
+Writing to a word in the alias region has the same effect as a read-modify-write
+operation on the targeted bit in the bit-band region.
+*/
+//address is in alias region, value is the to write in the address
+void bit_binding_write(int bitWordOffset, int bitBandBaseType, int value);
+int bit_binding_read(int bitWordOffset, int bitBandBaseType);
+
 #endif
 

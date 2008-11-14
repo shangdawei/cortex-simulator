@@ -9,10 +9,12 @@ int main(){
 	load_elf("0706.elf");
 //--------------//
 	while(1){
-		unsigned int instruction = fetch(i++);
+		unsigned int instruction = fetch(flash[get_pc()/4]);
 			if(instruction!=0){
-				if(instruction & 0xE0000000)//there is a problem,how do thumb instrutions be arranged in memory?
+				if(instruction & 0xE0000000){//there is a problem,how do thumb instrutions be arranged in memory?
+					set_pc(get_pc()+1);
 					decode(instruction);
+				}
 				else
 					thumb_decode(instruction);
 				printf("------------------------------------------------------------- \n");

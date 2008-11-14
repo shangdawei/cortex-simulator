@@ -17,9 +17,9 @@ bool load_elf(char *p)
 	Elf32_Phdr *prog_headers;
 	Elf32_Phdr *elf_phdr;
 	FILE *input;
-	p_memory = (char *)memory;
-	(char *)memory;
-	input = fopen(p,"r");
+	//p_memory = (char *)flash;
+	//(char *)memory;
+	input = fopen(p,"rb");
 //	printf("%d\n",sizeof(Elf32_Ehdr));
 	if(input==NULL)
 	{
@@ -95,9 +95,10 @@ bool load_elf(char *p)
 		//}
 		fseek(input,elf_phdr->p_offset,SEEK_SET);
 		buffer_size = elf_phdr->p_filesz;
-		p_memory += elf_phdr->p_paddr;
+		p_memory += elf_phdr->p_paddr;							//指向内存地址的指针指向存放地址
 		buffer_flag = elf_phdr->p_offset;
-		buffer_num=1;
+		ret = fread(p_memory, buffer_size, 1, input);
+/*		buffer_num=1;
 		while(!fread(p_memory,buffer_size,1,input))				//一次读取过大filesize可能出错，buffer_size/=2直到成功读取,
 		{														//则该buffer_size为合理读取大小
 				fseek(input,elf_phdr->p_offset,SEEK_SET);
@@ -137,86 +138,19 @@ bool load_elf(char *p)
 		if(feof(input))
 		{
 			printf("end of file \n");
-		}
+		}*/
 		if(ret != 1)
 		{
 			printf("segment %d loading error!",i);
 		}
 	}
-//
-//				Elf32_Phdr *elf_phdr;
-//				XTInt32 elf_prot;
-//				XTInt32 elf_flags;
-//				XTInt32 page_offset;
-//				XTInt32 i;
-//
-//				XTMemAddr highest_addr = 0x0;
-//				XTUint32  highest_file_size = 0;	
-//				XTUint32  highest_mem_size = 0;	
-//
-//				for( i = 0, elf_phdr = (Elf32_Phdr*)(prog_headers); i < file_header.e_phnum; i++, elf_phdr++ )
-//				{
-//								if( elf_phdr->p_type != PT_LOAD )
-//												continue;
-//
-//								if( elf_phdr->p_flags & PF_R )
-//												elf_prot |= PROT_READ;
-//								if( elf_phdr->p_flags & PF_W )
-//												elf_prot |= PROT_WRITE;
-//								if( elf_phdr->p_flags & PF_X )
-//												elf_prot |= PROT_EXEC;
-//
-//								//elf_flags = MAP_ANON|MAP_PRIVATE|MAP_DENYWRITE|MAP_EXECUTABLE|MAP_FIXED;
-//								elf_flags = MAP_PRIVATE | MAP_FIXED;
-//
-//								page_offset = PAGEOFFSET(elf_phdr->p_vaddr);
-//
-//								if( MAP_FAILED == SYSCALL::XTMmap((void *)PAGESTART(elf_phdr->p_vaddr), elf_phdr->p_filesz + page_offset, elf_prot, elf_flags, mi_file, elf_phdr->p_offset - page_offset) )
-//								{
-//												UTIL::XTLOG("mmap error!\n");
-//												SYSCALL::XTExit(-1);
-//								}
-//
-//#if 0
-//								XTUint8 *tmp_buf = new XTUint8[elf_phdr->p_filesz+1];
-//								//need TODO
-//								SYSCALL::XTLseek(mi_file, elf_phdr->p_offset, SEEK_SET);
-//								SYSCALL::XTRead(mi_file, tmp_buf, elf_phdr->p_filesz);
-//								UTIL::XTMemcpy((void *)elf_phdr->p_vaddr, tmp_buf, elf_phdr->p_filesz);
-//#endif
-//
-//								if( elf_phdr->p_vaddr > highest_addr )
-//								{
-//												highest_addr = PAGESTART(elf_phdr->p_vaddr);
-//												highest_file_size = elf_phdr->p_filesz + page_offset;
-//												highest_mem_size = elf_phdr->p_memsz + page_offset;
-//								}
-//				}
-//				delete[] prog_headers;
-//
-//				//Special deal with bss segment.
-//				elf_prot = PROT_READ | PROT_WRITE;
-//				elf_flags = MAP_ANON | MAP_PRIVATE | MAP_FIXED;
-//				if( MAP_FAILED == SYSCALL::XTMmap((void *)PAGEALIGN(highest_addr + highest_file_size), (highest_mem_size - highest_file_size), elf_prot, elf_flags, 0, 0) )
-//				{
-//								UTIL::XTLOG("mmap error!\n");
-//								SYSCALL::XTExit(-1);
-//				}
-//				UTIL::XTMemset((void *)(highest_addr + highest_file_size), 0, (highest_mem_size-highest_file_size));
-//
-////				mi_brk = PAGEALIGN(highest_addr + highest_file_size) + PAGEALIGN(highest_mem_size - highest_file_size);
-//				mi_brk = PAGEALIGN(highest_addr + highest_mem_size);
-//				SYSCALL::sys_brk = mi_brk;
-//				//SYSCALL::sys_brk = 0x10017000;
-//				
-//				//map memory for heap & stack
-//				elf_prot = PROT_READ | PROT_WRITE;
-//				elf_flags = MAP_ANON | MAP_PRIVATE | MAP_FIXED;
-//				if( MAP_FAILED == SYSCALL::XTMmap((void *)PAGESTART(mi_brk), GLOBAL::STACK_BASE - mi_brk, elf_prot, elf_flags, 0, 0) )
-//				{
-//								UTIL::XTLOG("mmap error!\n");
-//								SYSCALL::XTExit(-1);
-//				}
-
+	initial_entry(file_header.e_entry);
 	return true;
+}
+
+int initial_entry(int entry)
+{
+	char* p_memory;
+	p_memory = (char *)flash +entry;
+	set_pc(entry);
 }
