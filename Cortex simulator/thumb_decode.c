@@ -75,7 +75,7 @@ TranslateTable table[MAXSIZE] = {
 		void (*p2)(int)=(void *)table[7].point;
 		(*p2)(instruction);
 */
-void decode(unsigned int instruction){
+void thumb_decode(short instruction){
 	int index =0;
 	while (1){
 #if DEBUG
