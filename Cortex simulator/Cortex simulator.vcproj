@@ -175,6 +175,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\cortex\branch_misc.c"
+				>
+			</File>
+			<File
 				RelativePath="..\cortex\byte_half_loadstore.c"
 				>
 			</File>
@@ -191,7 +195,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\cortex\decode.c"
+				RelativePath="..\cortex\elf_loader.c"
 				>
 			</File>
 			<File
