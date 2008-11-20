@@ -34,9 +34,9 @@
 #define PERI_BB			4
 
 //
-static int flash[FLASH_SIZE/4]={0,1,2,3,4,5,6,7,8,9,};
-static int sram[SRAM_SIZE/4] = {0xFFFFFFFF,};
-static int peripheral[PERI_SIZE/4] = {0x12345678,};
+int flash[FLASH_SIZE];//={0,1,2,3,4,5,6,7,8,9,};
+int sram[SRAM_SIZE/4];// = {0xFFFFFFFF,};
+int peripheral[PERI_SIZE/4];// = {0x12345678,};
 
 
 typedef struct{
