@@ -1,0 +1,12 @@
+#define  LED1   GPIO_PIN_0   /*  PE0 */
+#define  LED2   GPIO_PIN_1   /*  PE1 */
+#define  LED3   GPIO_PIN_2   /*  PE2 */
+#define  LED4   GPIO_PIN_3   /*  PE3 */
+#define  PHLA1  GPIO_PIN_4   /*  PC4, LEFT STEP MOTOR PHASE A1 */
+#define  PHLA2  GPIO_PIN_5   /*  PC5, LEFT STEP MOTOR PHASE A2 */
+#define  PHLB1  GPIO_PIN_6   /*  PC6, LEFT STEP MOTOR PHASE B1 */
+#define  PHLB2  GPIO_PIN_7   /*  PC7, LEFT STEP MOTOR PHASE B2 */
+#define  PHRA1  GPIO_PIN_4   /*  PG4, RIGHT STEP MOTOR PHASE A1 */
+#define  PHRA2  GPIO_PIN_5   /*  PG5, RIGHT STEP MOTOR PHASE A2 */
+#define  PHRB1  GPIO_PIN_6   /*  PG6, RIGHT STEP MOTOR PHASE B1 */
+#define  PHRB2  GPIO_PIN_7   /*  PG7, RIGHT STEP MOTOR PHASE B2 */
