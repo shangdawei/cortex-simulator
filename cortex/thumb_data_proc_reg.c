@@ -47,7 +47,7 @@ void thumb_and_reg(short i)
 
 	set_general_register((int)DataProcReg.Rdn,(int)result);
 	
-	if(!InITBlock())
+	if(ConditionPassed(15))
 	{
 		if(result & 0x8000 !=0)
 			set_flag_n();
@@ -88,9 +88,9 @@ void thumb_eor_reg(short i)
 	rc=shift_c(m,SRType_None,0,apsr_c);
 	//set_general_register((int)DataProcReg.Rdn, rc->result);
 	
-	if(!InITBlock())
+/*	if(ConditionPassed(15))
 	{
-		/********* set or cle flags ************/
+		// set or cle flags 
 		if(rc->result & 0x8000 !=0)
 			set_flag_n();
 		else
@@ -107,7 +107,7 @@ void thumb_eor_reg(short i)
 			cle_flag_c();
 		
 	};
-	
+*/	
 	//carry=get_flag_c();
 	
 	//n=(unsigned)get_general_register(DataProcReg.Rdn);
@@ -117,7 +117,7 @@ void thumb_eor_reg(short i)
 	
 	set_general_register((int)DataProcReg.Rdn,(int)result);
 	
-	if(!InITBlock())
+	if(ConditionPassed(15))
 	{
 		if(result & 0x8000 !=0)
 			set_flag_n();
@@ -156,7 +156,7 @@ void thumb_lsl_reg(short i)
 	set_general_register((int)DataProcReg.Rdn, rc->result);
 	
 	
-	if(!InITBlock())
+	if(ConditionPassed(15))
 	{
 		/********* set or cle flags ************/
 		if(rc->result & 0x8000 !=0)
@@ -196,7 +196,7 @@ void thumb_lsr_reg(short i)
 	set_general_register((int)DataProcReg.Rdn, rc->result);
 	
 	
-	if(!InITBlock())
+	if(ConditionPassed(15))
 	{
 		/********* set or cle flags ************/
 		if(rc->result & 0x8000 !=0)
@@ -235,7 +235,7 @@ void thumb_asr_reg(short i)
 	set_general_register((int)DataProcReg.Rdn, rc->result);
 	
 	
-	if(!InITBlock())
+	if(ConditionPassed(15))
 	{
 		/********* set or cle flags ************/
 		if(rc->result & 0x8000 !=0)
@@ -274,7 +274,7 @@ void thumb_adc_reg(short i)
 	
 	set_general_register((int)DataProcReg.Rdn,result->result);
 	
-	if(!InITBlock())
+	if(ConditionPassed(15))
 	{
 		if(result->result & 0x8000 !=0)
 			set_flag_n();
@@ -316,7 +316,7 @@ void thumb_sbc_reg(short i)
 	
 	set_general_register((int)DataProcReg.Rdn,result->result);
 	
-	if(!InITBlock())
+	if(ConditionPassed(15))
 	{
 		if(result->result & 0x8000 !=0)
 			set_flag_n();
@@ -359,7 +359,7 @@ void thumb_ror_reg(short i)
 	set_general_register((int)DataProcReg.Rdn, rc->result);
 	
 	
-	if(!InITBlock())
+	if(ConditionPassed(15))
 	{
 		/********* set or cle flags ************/
 		if(rc->result & 0x8000 !=0)
@@ -395,7 +395,7 @@ void thumb_tst_reg(short i)
 	
 	
 	
-	if(!InITBlock())
+	if(ConditionPassed(15))
 	{
 		if(result & 0x8000 !=0)
 			set_flag_n();
@@ -431,7 +431,7 @@ void thumb_rsb_reg(short i)
 	
 	set_general_register((int)DataProcReg.Rdn,result->result);
 	
-	if(!InITBlock())
+	if(ConditionPassed(15))
 	{
 		if(result->result & 0x8000 !=0)
 			set_flag_n();
@@ -470,7 +470,7 @@ void thumb_cmp_reg_t1(short i)
 	
 	result=addwithcarry(Rdn,~Rm,1);
 	
-	if(InITBlock())
+	if(ConditionPassed(15))
 	{
 		if(result->result & 0x8000 !=0)
 			set_flag_n();
@@ -508,7 +508,7 @@ void thumb_cmn_reg(short i)
 	
 	result=addwithcarry(Rdn,Rm,0);
 	
-	if(InITBlock())
+	if(ConditionPassed(15))
 	{
 		if(result->result & 0x8000 !=0)
 			set_flag_n();
@@ -546,7 +546,7 @@ void thumb_orr_reg(short i)
 	
 	set_general_register((int)DataProcReg.Rdn,(int)result);
 	
-	if(!InITBlock())
+	if(ConditionPassed(15))
 	{
 		if(result & 0x8000 !=0)
 			set_flag_n();
@@ -586,7 +586,7 @@ void thumb_mul_reg(short i)
 	
 	set_general_register((int)DataProcReg.Rm,result);
 	
-	if(!InITBlock())
+	if(ConditionPassed(15))
 	{
 		if(result & 0x8000 !=0)
 			set_flag_n();
@@ -617,7 +617,7 @@ void thumb_bic_reg(short i)
 	
 	set_general_register((int)DataProcReg.Rdn,(int)result);
 	
-	if(!InITBlock())
+	if(ConditionPassed(15))
 	{
 		if(result & 0x8000 !=0)
 			set_flag_n();
@@ -648,7 +648,7 @@ void thumb_mvn_reg(short i)
 	carry=get_flag_c();
 	set_general_register((int)DataProcReg.Rdn,~result);
 	
-	if(InITBlock())
+	if(ConditionPassed(15))
 	{
 		if(result & 0x8000 !=0)
 			set_flag_n();

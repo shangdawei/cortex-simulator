@@ -78,14 +78,15 @@ TranslateTable thumbtable[MAXSIZE] = {
 */
 void thumb_decode(unsigned int instruction){
 	int index =0;
+	instruction &= 0x0ffff;
 	while (1){
 #if DEBUG
 	printf("the instruction to be decode  is %X \n", instruction);
 	printf("The table index is %d \n", index);
-	printf("The mask  is %X \n", table[index].mask);
-	printf("The result after & is %X \n",instruction & table[index].mask);
-	printf("The value is %X \n",table[index].value);
-	printf("The point is %d \n", table[index].point);
+	printf("The mask  is %X \n", thumbtable[index].mask);
+	printf("The result after & is %X \n",instruction & thumbtable[index].mask);
+	printf("The value is %X \n",thumbtable[index].value);
+	printf("The point is %d \n", thumbtable[index].point);
 #endif	
 		if( (instruction & thumbtable[index].mask) == thumbtable[index].value){
 			int* point =(int *) thumbtable[index].point;

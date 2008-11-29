@@ -133,6 +133,8 @@ void thumb_branch_and_exchange(short i) {
 		printf("	it is unpredictable! \n");
 	else {											// if ConditionPassed() then
 		BXWritePC(get_general_register(m));			// BXWritePC(R[m]);
+		set_pc(get_pc()+2);//modified
+
 	}
 }
 
@@ -154,6 +156,8 @@ void thumb_branch_with_link_and_exchange(short i) {
 		next_instr_addr = get_pc() - 2;						// next_instr_addr = PC - 2;
 		set_lr(next_instr_addr & 0xfffffffe | 0x00000001);	// LR = next_instr_addr<31:1> : '1';
 		BXWritePC(get_general_register(m));					// BXWritePC(R[m]);
+		set_pc(get_pc()+2);//modified
+		
 	}
 }
 
@@ -307,6 +311,8 @@ void thumb_compare_and_branch_on_zero(short i) {
 	} else {
 		if (get_general_register(n) == 0) {							// if IsZeroBit(R[n]) == '1' then
 			BranchWritePC(get_pc() + imm32);						// BranchWritePC(PC + imm32);
+	    	set_pc(get_pc()+2);//modified
+
 		}
 	}
 }
@@ -332,6 +338,8 @@ void thumb_compare_and_branch_on_nonzero(short i) {
 		EncodingSpecificOperations();
 		if (get_general_register(n) != 0) {							// if IsZeroBit(R[n]) == '0' then
 			BranchWritePC(get_pc() + imm32);						// BranchWritePC(PC + imm32);
+			set_pc(get_pc()+2);//modified
+
 		}
 	}
 }
@@ -361,7 +369,7 @@ void thumb_push_register(short i) {
 					address = address + 4;
 			assert address == originalSP;
 		*/
-		if (ConditionPassed()) {
+		if (ConditionPassed(15)) {
 			EncodingSpecificOperations();
 			originalSP = get_sp();
 			address = get_sp() - 4 * BitCount(registers);
@@ -369,7 +377,7 @@ void thumb_push_register(short i) {
 			for (j = 0; j <= 14; j++) {
 				mask = 1;
 				if (registers & (mask<<j)) {
-					set_MemA(address, 4, get_general_register(i));
+					set_MemA(address, 4, get_general_register(j));
 					address += 4;
 				}
 			}
@@ -409,7 +417,7 @@ void thumb_pop_register(short i) {
 				address = address + 4;
 			assert address == originalSP + 4*BitCount(registers);
 		*/
-		if (ConditionPassed()) {
+		if (ConditionPassed(15)) {
 			EncodingSpecificOperations();
 			originalSP = get_sp();
 			address = get_sp();
@@ -522,7 +530,7 @@ void thumb_byte_reverse_word(short i) {
 		result<7:0>   = R[m]<31:24>;
 		R[d] = result;
 	*/
-	if (ConditionPassed()) {
+	if (ConditionPassed(15)) {
 		EncodingSpecificOperations();
 		result = 0;
 		source = get_general_register(m);
@@ -554,7 +562,7 @@ void thumb_byte_reverse_packed_halfword(short i) {
 		result<7:0>   = R[m]<15:8>;
 		R[d] = result;
 	*/
-	if (ConditionPassed()) {
+	if (ConditionPassed(15)) {
 		EncodingSpecificOperations();
 		source = get_general_register(m);
 		result = 0;
@@ -585,7 +593,7 @@ void thumb_byte_reverse_signed_halfword(short i) {
 		result<7:0>   = R[m]<15:8>;
 		R[d] = result;
 	*/
-	if (ConditionPassed()) {
+	if (ConditionPassed(15)) {
 		EncodingSpecificOperations();
 		source = get_general_register(m);
 		result = 0;
@@ -677,7 +685,7 @@ void thumb_yield(short i) {
 		EncodingSpecificOperations();
 		Hint_Yield();
 	*/
-	if (ConditionPassed()) {
+	if (ConditionPassed(15)) {
 		EncodingSpecificOperations();
 		Hint_Yield();
 	}
@@ -697,7 +705,7 @@ void thumb_wait_for_event(short i) {
 		else
 			WaitForEvent();
 	*/
-	if (ConditionPassed()) {
+	if (ConditionPassed(15)) {
 		EncodingSpecificOperations();
 		if (EventRegistered()) {
 			ClearEventRegister();
@@ -718,7 +726,7 @@ void thumb_wait_for_interrupt(short i) {
 		EncodingSpecificOperations();
 		WaitForInterrupt();
 	*/
-	if (ConditionPassed()) {
+	if (ConditionPassed(15)) {
 		EncodingSpecificOperations();
 		WaitForInterrupt();
 	}
@@ -734,7 +742,7 @@ void thumb_send_event(short i) {
 	    EncodingSpecificOperations();
 	    Hint_SendEvent();
 	*/
-	if (ConditionPassed()) {
+	if (ConditionPassed(15)) {
 	    EncodingSpecificOperations();
 		Hint_SendEvent();
 	}
@@ -756,7 +764,7 @@ void thumb_conditional_branch(short i) {
 
 	// SignExtend
 	if (conditionalBranch.imm8 & 0x80) {
-		imm32 = 0xfffffe | conditionalBranch.imm8<<1;
+		imm32 = (0xffffff00 | conditionalBranch.imm8)<<1;
 	} else {
 		imm32 = conditionalBranch.imm8<<1;
 	}
@@ -775,9 +783,11 @@ void thumb_conditional_branch(short i) {
 		EncodingSpecificOperations();
 		BranchWritePC(PC + imm32);
 	*/
-	if (conditionalBranch.cond != 0x0) {
+	if (ConditionPassed(conditionalBranch.cond)) {
 		EncodingSpecificOperations();
 		BranchWritePC(get_pc() + imm32);
+     	set_pc(get_pc()+2);//modified
+
 	}
 }
 
@@ -805,13 +815,15 @@ void thumb_unconditional_branch(short i) {
 	}
 
 	/*
-	if ConditionPassed() then
+	if ConditionPassed(15) then
 		EncodingSpecificOperations();
 		BranchWritePC(PC + imm32);
 	*/
-	if (ConditionPassed()) {
+	if (true) {
 		EncodingSpecificOperations();
 		BranchWritePC(get_pc() + imm32);
+		set_pc(get_pc()+2);//modified
+
 	}
 }
 

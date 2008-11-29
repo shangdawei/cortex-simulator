@@ -20,7 +20,7 @@ void BXWritePC(int value);
 void CallSupervisor();
 void ClearEventRegister();
 void ClearExclusiveMonitors();
-bool ConditionPassed();
+bool ConditionPassed(short cond);
 bool Coproc_Accepted(int cp_num, int instr);
 bool Coproc_DoneLoading(int cp_num, int instr);
 bool Coproc_DoneStoring(int cp_num, int instr);

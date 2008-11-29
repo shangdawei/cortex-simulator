@@ -89,6 +89,10 @@ void set_memory(int address, int value){
 		default:
 			printf("memory address:%d access error in get_memory!\n",address);
 	}
+
+	#ifdef DEBUG
+		Logs(address,value);
+	#endif
 }
 
 
@@ -181,6 +185,11 @@ void set_MemA(int address, int bytes, int value)
 		break;
 	}
 	printf("set_MemA result:%d\n",*((int*)ptr));
+
+	#ifdef DEBUG
+		Logs(address,value);
+	#endif
+
 } 
 
 
@@ -220,9 +229,11 @@ int get_MemU(int address, int bytes)
 		break;
 	case 2:
 		result = *((short*) ptr);
+		result &= 0x0ffff;
 		break;
 	case 1:
 		result = *((char*) ptr);
+		result &= 0x0ff;
 		break;
 	default:	//invalid bytes
 		result = 0x00;			
@@ -272,6 +283,10 @@ void set_MemU(int address, int bytes, int value)
 		break;
 	}
 	printf("set_MemU result:%d\n",*((int*)ptr));
+
+	#ifdef DEBUG
+		Logs(address,value);
+	#endif
 }
 //
 
@@ -346,3 +361,84 @@ void memory_copy(int target, int destination, int num){
 	//	memory[destination+i] = memory[target+i];
 	//}
 }
+
+
+
+
+#ifdef DUBUG
+  
+
+/*
+this function is just for testing
+It append some logs to a txt file,when the program modifies some special memory,sush as GPIO,UARTR,etc.
+
+*/
+Logs(int address, int value){
+	FILE *file;
+	char* label[1];
+	int address;
+	int value;
+	int flag=0;
+	address=0x40004333;
+	value=5;
+	
+	if(file==NULL)
+		printf("error occurs when open a file");
+
+	else{
+		if(address>=0x40004000 && address<=0x40004FFF){
+			*label="GPIOA,";
+			flag=1;
+		}
+		else if(address>=0x40005000 && address<=0x40005FFF){
+			*label="GPIOB,";
+			flag=1;
+		}
+		else if(address>=0x40006000 && address<=0x40006FFF){
+			*label="GPIOC,";
+			flag=1;
+		}
+		else if(address>=0x40007000 && address<=0x40007FFF){
+			*label="GPIOD,";
+			flag=1;
+	    }
+		else if(address>=0x4000C000 && address<=0x4000CFFF){
+			*label="UART0,";
+			flag=1;
+		}
+		else if(address>=0x4000D000 && address<=0x4000DFFF){
+			*label="UART1,";
+			flag=1;
+		}
+		else if(address>=0x4000E000 && address<=0x4000EFFF){
+			*label="UART2,";
+			flag=1;
+		}
+		else if(address>=0x40024000 && address<=0x40024FFF){
+			*label="GPIOE,";
+			flag=1;
+		}
+		else if(address>=0x40025000 && address<=0x40025FFF){
+			*label="GPIOF,";
+			flag=1;
+		}
+		else if(address>=0x40026000 && address<=0x40026FFF){
+			*label="GPIOG,";
+			flag=1;
+		}
+		else if(address>=0x40027000 && address<=0x40027FFF){
+			*label="GPIOH,";
+			flag=1;
+		}
+	}
+	if(flag==1){
+		file=fopen("logs.dat","at+");
+		fputs(*label,file);
+		fprintf(file,"0x%x,0x%d\n",address,value);
+    	fclose(file);
+	}
+
+}
+
+
+#endif
