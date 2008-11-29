@@ -94,5 +94,6 @@ int initial_entry(int entry)
 {
 //	char* p_memory;
 //	p_memory = (char *)flash +entry;
+//	entry--;
 	set_pc(entry);
 }

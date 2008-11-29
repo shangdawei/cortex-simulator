@@ -433,7 +433,7 @@ void msr(int i)
 void nop(int i)
 {
 // Do nothing
-	if(ConditionPassed()){
+	if(ConditionPassed(15)){
 		EncodingSpecificOperations();
 		printf("nop\n");
 	}
@@ -445,7 +445,7 @@ if ConditionPassed() then
 EncodingSpecificOperations();
 Hint_Yield();
 */
-	if(ConditionPassed()){
+	if(ConditionPassed(15)){
 		EncodingSpecificOperations();
 		Hint_Yield();
 	}
@@ -462,7 +462,7 @@ if ConditionPassed() then
 	else
 		WaitForEvent();
 */
-	if(ConditionPassed()){
+	if(ConditionPassed(15)){
 		EncodingSpecificOperations();
 		if(EventRegistered())
 			ClearEventRegister();
@@ -473,7 +473,7 @@ if ConditionPassed() then
 }
 void wfi(int i)
 {
-	if(ConditionPassed()){
+	if(ConditionPassed(15)){
 		EncodingSpecificOperations();
 		WaitForInterrupt();
 	}
@@ -481,7 +481,7 @@ void wfi(int i)
 
 void sev(int i)
 {
-	if(ConditionPassed()){
+	if(ConditionPassed(15)){
 		EncodingSpecificOperations();
 		Hint_SendEvent();
 	}
@@ -489,7 +489,7 @@ void sev(int i)
 void dbg(int i)
 {
 	*((int *)(&specialCtrlOp)) = i;
-	if(ConditionPassed()){
+	if(ConditionPassed(15)){
 		EncodingSpecificOperations();
 		Hint_Debug(specialCtrlOp.option);
 	}
@@ -503,7 +503,7 @@ void dbg(int i)
  */
 void clrex(int i)
 {
-	if(ConditionPassed()){
+	if(ConditionPassed(15)){
 		EncodingSpecificOperations();
 		ClearExclusiveMonitors();
 	}
@@ -511,7 +511,7 @@ void clrex(int i)
 void dsb(int i)
 {
 	*((int *)(&specialCtrlOp)) = i;
-	if(ConditionPassed()){
+	if(ConditionPassed(15)){
 		EncodingSpecificOperations();
 		DataSynchronizationBarrier(specialCtrlOp.option);
 	}
@@ -519,7 +519,7 @@ void dsb(int i)
 void dmb(int i)
 {
 	*((int *)(&specialCtrlOp)) = i;
-	if(ConditionPassed()){
+	if(ConditionPassed(15)){
 		EncodingSpecificOperations();
 		DataMemoryBarrier(specialCtrlOp.option);
 	}
@@ -527,7 +527,7 @@ void dmb(int i)
 void isb(int i)
 {
 	*((int *)(&specialCtrlOp)) = i;
-	if(ConditionPassed()){
+	if(ConditionPassed(15)){
 		EncodingSpecificOperations();
 		InstructionSynchronizationBarrier(specialCtrlOp.option);
 	}
