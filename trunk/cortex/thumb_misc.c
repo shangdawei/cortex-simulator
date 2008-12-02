@@ -649,21 +649,23 @@ void thumb_if_then_instruction(short i) {
 	if (ifThenInstruction.mask == 0x00) {
 		thumb_nop_compatible_hints(i);
 	}
-	if (ifThenInstruction.cond == 0x0F) {
+	else if (ifThenInstruction.cond == 0x0F) {
 		printf("	it is unpredictable! \n");
 	}
-	if (ifThenInstruction.cond == 0x0E && BitCount(ifThenInstruction.mask) != 1) {
+	else if (ifThenInstruction.cond == 0x0E && BitCount(ifThenInstruction.mask) != 1) {
 		printf("	it is unpredictable! \n");
 	}
-	if (InITBlock()) {
+	else if (InITBlock()) {
 		printf("	it is unpredictable! \n");
 	}
 	/*
 	EncodingSpecificOperations();
 	StartITBlock(firstcond, mask);
 	*/
-	EncodingSpecificOperations();
-	StartITBlock(ifThenInstruction.cond, ifThenInstruction.mask);
+	else{
+		EncodingSpecificOperations();
+		StartITBlock(ifThenInstruction.cond, ifThenInstruction.mask);
+	}
 }
 
 /*
@@ -772,10 +774,10 @@ void thumb_conditional_branch(short i) {
 	if (conditionalBranch.cond == 0xE) {
 		printf("	Undefined instruction: 0x%x! \n", i);
 	}
-	if (conditionalBranch.cond == 0xF) {
+	else if (conditionalBranch.cond == 0xF) {
 		thumb_service_call(i);
 	}
-	if (InITBlock()) {
+	else if (InITBlock()) {
 		printf("	it is unpredictable! \n");
 	}
 	/*
@@ -783,7 +785,7 @@ void thumb_conditional_branch(short i) {
 		EncodingSpecificOperations();
 		BranchWritePC(PC + imm32);
 	*/
-	if (ConditionPassed(conditionalBranch.cond)) {
+	else if (ConditionPassed(conditionalBranch.cond)) {
 		EncodingSpecificOperations();
 		BranchWritePC(get_pc() + imm32);
      	set_pc(get_pc()+2);//modified
@@ -819,7 +821,7 @@ void thumb_unconditional_branch(short i) {
 		EncodingSpecificOperations();
 		BranchWritePC(PC + imm32);
 	*/
-	if (true) {
+	else if (true) {
 		EncodingSpecificOperations();
 		BranchWritePC(get_pc() + imm32);
 		set_pc(get_pc()+2);//modified
