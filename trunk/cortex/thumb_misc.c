@@ -431,7 +431,7 @@ void thumb_pop_register(short i) {
 				}
 			}
 			if (registers & 0x8000) {
-				LoadWritePC(get_MemA(address, 4));
+				LoadWritePC(get_MemA(address, 4)+2);
 				address += 4;
 			}
 			assert(address == originalSP + 4 * BitCount(registers));

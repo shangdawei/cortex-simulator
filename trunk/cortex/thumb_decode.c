@@ -21,7 +21,7 @@ typedef void (*func_ptr)(int);
 
 TranslateTable thumbtable[MAXSIZE] = {
 	//*************************************************************************************************
-	{0xF000,0xB000,(unsigned char*)thumbtable+14*4}, //go to entry 14,which is to define Miscelllaneous
+	{0xF000,0xB000,(unsigned char*)thumbtable+13*4}, //go to entry 14,which is to define Miscelllaneous
 	
 	//*************************************************************************************************
 	//entry 2: all functions before Miscelllaneous
