@@ -12,8 +12,14 @@ int main(){
 //--------------//
 	while(1){
 
-
 		unsigned int instruction= get_MemU(get_pc()& 0xfffffffe,2);
+		if(get_sp()==0x200001fc)
+			printf("lkdsl");
+
+		if(get_pc()==0x323){
+			printf("kldssl");
+		}
+
 	//	instruction &= 0x0ffff;
 	//	if(state==1){
 	//		set_pc(get_pc()+2);
@@ -43,13 +49,12 @@ int main(){
 					set_pc(get_pc()+4);
 					if(InITBlock()){   //in IT Block
 						if(ConditionPassed((get_epsr()>>12)&0x0f))
-							decode(instruction);
+							thumb_decode(instruction);
 
 						if(LastInITBlock())
 							set_epsr(get_epsr()&0xf9ff03ff);
 						else
-							set_epsr((((get_epsr()&0x06001c00)<<1)&0x06001c00)|(get_epsr()&0x0100e000));
-					}
+							set_epsr((((get_epsr()&0x06001c00)<<1)&0x06001c00)|(get_epsr()&0x0100e000)|((get_epsr()>>16)&0x00000400));					}
 
 					else   //not in IT Block
 						thumb_decode(instruction);
