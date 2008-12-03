@@ -189,8 +189,8 @@ BranchWritePC(PC + imm32);
 */
 	int imm32;
 	*((int*)(&conditionalBranch))=i;
-	imm32=conditionalBranch.s<<20+conditionalBranch.j2<<19+conditionalBranch.j1>>18+
-		  conditionalBranch.off2<<17+conditionalBranch.off1<<1;
+	imm32=(conditionalBranch.s<<20)|(conditionalBranch.j2<<19)|(conditionalBranch.j1<<18)|
+		  (conditionalBranch.off2<<12)|(conditionalBranch.off1<<1);
 	imm32 &= 0xFFFFFFFE;
 	//SignExtend
 	if(imm32 & 0x00100000)
@@ -205,7 +205,7 @@ BranchWritePC(PC + imm32);
 	}
 	else if(InITBlock())
 		printf("UNPREDICTABLE instruction\n");
-	else{
+	else if(ConditionPassed(conditionalBranch.cond)){
 		EncodingSpecificOperations();
 		BranchWritePC(get_pc()+imm32);
 	}
@@ -227,7 +227,7 @@ BranchWritePC(PC + imm32);
 	*((int *)(&branch)) = i;
 	i1=!(branch.j1^branch.s);
 	i2=!(branch.j2^branch.s);
-	imm32=(branch.s<<24)+(i1<<23)+(i2<<22)+(branch.off2<<12)+(branch.off1<<1);
+	imm32=(branch.s<<24)|(i1<<23)+(i2<<22)|(branch.off2<<12)|(branch.off1<<1);
 	imm32 &= 0xFFFFFFFE;
 	//SignExtend
 	if(imm32 & 0x01000000)
@@ -262,7 +262,7 @@ BranchWritePC(PC + imm32);
 	*((int *)(&branchWithLink)) = i;
 	i1=!(branchWithLink.j1^branchWithLink.s);
 	i2=!(branchWithLink.j2^branchWithLink.s);
-	imm32=(branchWithLink.s<<24)+(i1<<23)+(i2<<22)+(branchWithLink.off2<<12)+(branchWithLink.off1<<1);
+	imm32=(branchWithLink.s<<24)|(i1<<23)|(i2<<22)|(branchWithLink.off2<<12)|(branchWithLink.off1<<1);
 	imm32 &= 0xFFFFFFFE;
 	//SignExtend
 	if(imm32 & 0x01000000)
