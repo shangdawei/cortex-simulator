@@ -1,4 +1,4 @@
-﻿#ifndef _MEMORY
+#ifndef _MEMORY
 #define _MEMORY
 /*
 	This file is designed to map the memory address
@@ -6,6 +6,7 @@
 */
 #include <stdio.h>
 #include <assert.h>
+#include <windows.h>
 
 #define FLASH_SIZE		262144			//256K Flash					from 0x00000000 to 0x0003FFFF
 #define SRAM_SIZE		65536			//64K SRAM						from 0x20000000 to 0x2000FFFF
@@ -80,6 +81,27 @@ operation on the targeted bit in the bit-band region.
 //address is in alias region, value is the to write in the address
 void bit_binding_write(int bitWordOffset, int bitBandBaseType, int value);
 int bit_binding_read(int bitWordOffset, int bitBandBaseType);
+
+//output the PERI datas to a file
+void PeriOut(int pc_reg, int address, int value);
+//convert the inner address to device address
+//-1: failed other: the address value
+int AddConvert(int address);
+//0: sucessful 1: failed
+int writePeri(int address, int value);
+int readPeri(int address);
+
+//Peripherals Address Map
+
+typedef struct{
+	int inner_add;
+	int inner_len;
+	int peri_add;
+	int peri_len;
+}PAM_item;
+
+#define PAM_SIZE 4
+#define SMEM_ID "ShareMem"
 
 #endif
 
