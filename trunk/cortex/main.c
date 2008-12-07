@@ -4,19 +4,17 @@
 
 int main(){
 	int i=0;
+	getchar();
 	//int state=1;//1 stands for the first statement
 
 //--------------//
 //initial the memory, load the target elf file to the memory//
-	load_elf("test.elf");
+	load_elf("testelf.elf");
 //--------------//
 	while(1){
 
 		unsigned int instruction= get_MemU(get_pc()& 0xfffffffe,2);
-		if(get_sp()==0x200001fc)
-			printf("lkdsl");
-
-		if(get_pc()==0x323){
+		if(get_pc()==0x48d){
 			printf("kldssl");
 		}
 

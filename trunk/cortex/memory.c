@@ -1,4 +1,13 @@
 #include "memory.h"
+
+PAM_item cortex_PAM[4] = {
+	{0x400263c0,0x00000001,0x00000000,0x00000001},//wheel
+	{0x400063c0,0x00000001,0x00000001,0x00000001},//wheel
+	{0x40024004,0x00000001,0x00000002,0x00000001},//led
+	{0x40024008,0x00000001,0x00000003,0x00000001},//led
+};
+
+
 MemoryTranslate* addr_transfer(unsigned int address){
 	MemoryTranslate* result = (MemoryTranslate*)malloc(sizeof(MemoryTranslate));
 	if((FLASH_BEGIN <= address)&&(FLASH_END >= address)){
@@ -53,7 +62,8 @@ int get_memory(int address){
 			//bit-binding in sram
 			break;
 		case PERI:
-			result = peripheral[memoryInfo->offset/4];
+			result = readPeri(AddConvert(address));
+			//result = peripheral[memoryInfo->offset/4];
 			break;
 		case PERI_BB:
 			//bit-binding in sram
@@ -82,6 +92,8 @@ void set_memory(int address, int value){
 			break;
 		case PERI:
 			peripheral[memoryInfo->offset/4]  = value;
+			PeriOut(get_pc(),address,value);
+			writePeri(AddConvert(address),value);
 			break;
 		case PERI_BB:
 			//bit-binding in sram
@@ -89,10 +101,6 @@ void set_memory(int address, int value){
 		default:
 			printf("memory address:%d access error in get_memory!\n",address);
 	}
-
-	#ifdef DEBUG
-		Logs(address,value);
-	#endif
 }
 
 
@@ -117,6 +125,7 @@ int get_MemA(int address, int bytes)
 			return bit_binding_read(memoryInfo->offset,SRAM_BB);
 			break;
 		case PERI:
+			peripheral[memoryInfo->offset/4] = readPeri(AddConvert(address));
 			ptr = (char*)(&peripheral[memoryInfo->offset/4]);
 			break;
 		case PERI_BB:
@@ -163,6 +172,8 @@ void set_MemA(int address, int bytes, int value)
 			return;
 		case PERI:
 			ptr = (char*)(&peripheral[memoryInfo->offset/4]);
+			PeriOut(get_pc(),address,value);
+			writePeri(AddConvert(address),value);
 			break;
 		case PERI_BB:
 			bit_binding_write(memoryInfo->offset,PERI_BB,value);
@@ -185,11 +196,6 @@ void set_MemA(int address, int bytes, int value)
 		break;
 	}
 	printf("set_MemA result:%d\n",*((int*)ptr));
-
-	#ifdef DEBUG
-		Logs(address,value);
-	#endif
-
 } 
 
 
@@ -213,6 +219,7 @@ int get_MemU(int address, int bytes)
 			printf("SRAM bit binding in get_MemU() is not permit!");
 			return 0;
 		case PERI:
+			peripheral[memoryInfo->offset/4] = readPeri(AddConvert(address));
 			ptr = (char*)peripheral + memoryInfo->offset;
 			break;
 		case PERI_BB:
@@ -260,6 +267,8 @@ void set_MemU(int address, int bytes, int value)
 			return;
 		case PERI:
 			ptr = (char*)peripheral + memoryInfo->offset;
+			writePeri(AddConvert(address),value);
+			PeriOut(get_pc(),address,value);
 			break;
 		case PERI_BB:
 			//bit-binding in peripheral cannot be Unaligned access
@@ -283,10 +292,6 @@ void set_MemU(int address, int bytes, int value)
 		break;
 	}
 	printf("set_MemU result:%d\n",*((int*)ptr));
-
-	#ifdef DEBUG
-		Logs(address,value);
-	#endif
 }
 //
 
@@ -362,83 +367,73 @@ void memory_copy(int target, int destination, int num){
 	//}
 }
 
-
-
-
-#ifdef DUBUG
-  
-
 /*
 this function is just for testing
 It append some logs to a txt file,when the program modifies some special memory,sush as GPIO,UARTR,etc.
 
 */
-Logs(int address, int value){
-	FILE *file;
-	char* label[1];
-	int address;
-	int value;
-	int flag=0;
-	address=0x40004333;
-	value=5;
-	
-	if(file==NULL)
-		printf("error occurs when open a file");
-
-	else{
-		if(address>=0x40004000 && address<=0x40004FFF){
-			*label="GPIOA,";
-			flag=1;
-		}
-		else if(address>=0x40005000 && address<=0x40005FFF){
-			*label="GPIOB,";
-			flag=1;
-		}
-		else if(address>=0x40006000 && address<=0x40006FFF){
-			*label="GPIOC,";
-			flag=1;
-		}
-		else if(address>=0x40007000 && address<=0x40007FFF){
-			*label="GPIOD,";
-			flag=1;
-	    }
-		else if(address>=0x4000C000 && address<=0x4000CFFF){
-			*label="UART0,";
-			flag=1;
-		}
-		else if(address>=0x4000D000 && address<=0x4000DFFF){
-			*label="UART1,";
-			flag=1;
-		}
-		else if(address>=0x4000E000 && address<=0x4000EFFF){
-			*label="UART2,";
-			flag=1;
-		}
-		else if(address>=0x40024000 && address<=0x40024FFF){
-			*label="GPIOE,";
-			flag=1;
-		}
-		else if(address>=0x40025000 && address<=0x40025FFF){
-			*label="GPIOF,";
-			flag=1;
-		}
-		else if(address>=0x40026000 && address<=0x40026FFF){
-			*label="GPIOG,";
-			flag=1;
-		}
-		else if(address>=0x40027000 && address<=0x40027FFF){
-			*label="GPIOH,";
-			flag=1;
-		}
-	}
-	if(flag==1){
-		file=fopen("logs.dat","at+");
-		fputs(*label,file);
-		fprintf(file,"0x%x,0x%d\n",address,value);
-    	fclose(file);
-	}
-
+void PeriOut(int pc_reg, int address, int value)
+{
+	FILE *file = fopen("periout.dat", "at+");
+	fprintf(file, "PC : 0x%x\tADD : 0x%x\tVAL : 0x%x\n", pc_reg, address, value);
+	fclose(file);
 }
 
+int AddConvert(int address)
+{
+	int i;
 
-#endif
+	for(i=0; i < PAM_SIZE; i++){
+		if(address >= cortex_PAM[i].inner_add && address < cortex_PAM[i].inner_add + cortex_PAM[i].inner_len)
+			return cortex_PAM[i].peri_add + (address - cortex_PAM[i].inner_add);
+	}
+
+	return -1;
+}
+
+int writePeri(int address, int value)
+{
+	HANDLE hMemMap = OpenFileMapping(FILE_MAP_WRITE, FALSE, SMEM_ID);
+	LPBYTE pMemView;
+	if(address == -1){
+		CloseHandle(hMemMap);
+		return 1;
+	}
+
+	if(hMemMap != NULL){
+		pMemView = (LPBYTE)MapViewOfFile(hMemMap,FILE_MAP_WRITE,0,0,0);
+		if(pMemView == NULL){
+			CloseHandle(hMemMap);
+			return 1;
+		}
+	}
+	else
+		return 1;
+
+	pMemView[address] = (char)value;
+	pMemView[address+PAM_SIZE]++;
+	if(pMemView[address+PAM_SIZE] > 250)
+		pMemView[address+4] = 1;
+
+	return 0;
+}
+
+int readPeri(int address)
+{
+	HANDLE hMemMap = OpenFileMapping(FILE_MAP_READ, FALSE, SMEM_ID);
+	LPBYTE pMemView;
+	if(address == -1){
+		CloseHandle(hMemMap);
+		return 0;
+	}
+	if(hMemMap != NULL){
+		pMemView = (LPBYTE)MapViewOfFile(hMemMap,FILE_MAP_READ,0,0,0);
+		if(pMemView == NULL){
+			CloseHandle(hMemMap);
+			return 0;
+		}
+	}
+	else
+		return 0;
+	return pMemView[address];
+}
