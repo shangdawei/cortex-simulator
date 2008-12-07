@@ -63,7 +63,7 @@ void thumb_cmp_imm8(short ins)
 	
 	if(!InITBlock())
 	{
-		if(result->result & 0x8000 !=0)
+		if((result->result & 0x8000) !=0)
 			set_flag_n();
 		else
 			cle_flag_n();
