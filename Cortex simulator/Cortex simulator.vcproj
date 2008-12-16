@@ -195,6 +195,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\cortex\decode.c"
+				>
+			</File>
+			<File
 				RelativePath="..\cortex\elf_loader.c"
 				>
 			</File>
@@ -271,7 +275,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\thumb_decode.c"
+				RelativePath="..\cortex\thumb_decode.c"
 				>
 			</File>
 			<File
@@ -306,6 +310,14 @@
 			</File>
 			<File
 				RelativePath="..\cortex\decode.h"
+				>
+			</File>
+			<File
+				RelativePath="..\cortex\elf.h"
+				>
+			</File>
+			<File
+				RelativePath="..\cortex\elf_loader.h"
 				>
 			</File>
 			<File
@@ -369,7 +381,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\thumb_decode.h"
+				RelativePath="..\cortex\thumb_decode.h"
 				>
 			</File>
 			<File
