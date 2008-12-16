@@ -22,13 +22,17 @@ void data_pro_modified_12m(int instruction){
 	int imm12,index;
 	func f_ptr;
 	*((int *)(&dataProModified)) = instruction;
+#if DEBUG
 	printf("data_pro_modified_12m: 0x%X \n",instruction);
 	printf("Operate Code : 0x%x \n", dataProModified.op);
 	printf("S: 0x%x \n", dataProModified.s);
 	printf("Rn: 0x%x \n", dataProModified.rn);
 	printf("Rd: 0x%x \n", dataProModified.rd);
+#endif
 	imm12=decode_imm12(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+#if DEBUG
 	printf("imm 12: 0x%x \n",imm12);
+#endif
 
 	index = dataProModified.op;
 //	printf("index : %d", index);
@@ -46,7 +50,9 @@ void data_pro_modified_12m(int instruction){
 	}else if((dataProModified.op == 0) &&(dataProModified.rd ==15)&&(dataProModified.s==1 )){
 		index = dataProModified.op+16;
 	}
+#if DEBUG
 	printf("index is %d", index);
+#endif
 	f_ptr=(void *)data_pro_m[index];
 	f_ptr(instruction);
 }
@@ -54,21 +60,29 @@ void data_pro_modified_12m(int instruction){
 void data_pro_add_12m(int instruction){
 	int op,imm12,index;
 	func f_ptr;
+#if DEBUG
 	printf("data_pro_add_12m: 0x%X \n",instruction);
+#endif
 	*((int *)(&dataProAdd)) = instruction;
 	op=(dataProAdd.op<<2)+dataProAdd.op2;
+#if DEBUG
 	printf("Operate Code : 0x%x \n", op);
 	printf("Rn: 0x%x \n", dataProAdd.rn);
 	printf("Rd: 0x%x \n", dataProAdd.rd);
+#endif
 	imm12=decode_imm12(dataProAdd.imm1, dataProAdd.imm3,dataProAdd.imm8);
+#if DEBUG
 	printf("imm 12: 0x%x \n",imm12);
+#endif
 	index = op;
 	if((op == 0) && (dataProAdd.rn == 15)){
 		index = op + 4;
 	}else if((op == 6) && (dataProAdd.rn == 15)){
 		index = op - 4;
 	}
+#if DEBUG
 	printf("index is %d", index);
+#endif
 	f_ptr=(void *)data_pro_p[index];
 	f_ptr(instruction);
 }
@@ -76,15 +90,15 @@ void data_pro_add_12m(int instruction){
 void data_pro_mov_16m(int instruction){
 	int op, imm16,index;
 	func f_ptr;
-	printf("data_pro_mov_16m: 0x%X \n",instruction);
+	//printf("data_pro_mov_16m: 0x%X \n",instruction);
 	*((int *)(&dataProMov)) = instruction;
 	op = (dataProMov.op<<2)+dataProMov.op2;
-	printf("Operate Code : 0x%x \n",op);
-	printf("Rd: 0x%x \n", dataProMov.rd);
+	//printf("Operate Code : 0x%x \n",op);
+	//printf("Rd: 0x%x \n", dataProMov.rd);
 	imm16=decode_imm16(dataProMov.imm1,dataProMov.imm4, dataProMov.imm3,dataProMov.imm8);
-	printf("imm 16: 0x%x \n",imm16);
+	//printf("imm 16: 0x%x \n",imm16);
 	index = op;
-	printf("index is %d", index);
+	//printf("index is %d", index);
 	f_ptr=(void *)move_p[index];
 	f_ptr(instruction);
 }
@@ -92,23 +106,23 @@ void data_pro_mov_16m(int instruction){
 void data_pro_bitoperation(int instruction){
 	int index;
 	func f_ptr;
-	printf("data_pro_bitoperation: 0x%X \n",instruction);
+	//printf("data_pro_bitoperation: 0x%X \n",instruction);
 	*((int *)(&dataProBit)) = instruction;
-	printf("Operate Code : 0x%x \n", dataProBit.op);
-	printf("Rn: 0x%x \n", dataProBit.rn);
-	printf("Rd: 0x%x \n", dataProBit.rd);
+	//printf("Operate Code : 0x%x \n", dataProBit.op);
+	//printf("Rn: 0x%x \n", dataProBit.rn);
+	//printf("Rd: 0x%x \n", dataProBit.rd);
 	//imm12=decode_bitOperation(dataProBit.imm3, dataProBit.imm2,dataProBit.imm5);
 	//printf("imm 12: 0x%x \n",imm12);
 	index = dataProBit.op;
 	if((dataProBit.op == 3) && (dataProBit.rn == 15))
 		index = dataProBit.op + 4;
-	printf("index is %d", index);
+	//printf("index is %d", index);
 	f_ptr=(void *)bitfield_saturate[index];
 	f_ptr(instruction);	
 }
 
 void data_pro_reserved(int instruction){
-	printf("data_pro_reserved: 0x%X \n",instruction);
+	//printf("data_pro_reserved: 0x%X \n",instruction);
 
 }
 
@@ -148,10 +162,12 @@ void add_with_carry_imm(int i){
 			else
 				cle_flag_v();
 		}
+#if DEBUG
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProModified.rd));
 		printf("	***add with carry\n");	
 		printf("********ADC{s}<c><q>	{<Rd>,} <Rn>, #<const>******* \n");
+#endif
 	}
 }
 
@@ -187,9 +203,11 @@ void add_imm(int i){
 			else
 				cle_flag_v();
 		}
+	#if DEBUG
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProModified.rd));
 		printf("	***add\n");
+#endif
 	}
 }
 
@@ -222,9 +240,11 @@ void logical_and_imm(int i){
 			else
 				set_flag_c();
 		}
+	#if DEBUG
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProModified.rd));
 		printf("	***logical and\n");
+#endif
 	}
 }
 
@@ -257,9 +277,11 @@ void bit_clear_imm(int i){
 			else
 				set_flag_c();
 		}
+		#if DEBUG
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProModified.rd));
 		printf("	***bit_clear\n");
+#endif
 	}
 }
 
@@ -290,9 +312,9 @@ void compare_negative_imm(int i){
 			set_flag_v();
 		else
 			cle_flag_v();
-		printf(" APSR = %X",get_apsr());
+		//printf(" APSR = %X",get_apsr());
 		//printf(" rd = %X",get_general_register(dataProModified.rd));
-		printf("	***compare_negative\n");
+		//printf("	***compare_negative\n");
 	}
 }
 
@@ -323,9 +345,9 @@ void compare_imm(int i){
 			set_flag_v();
 		else
 			cle_flag_v();
-		printf(" APSR = %X",get_apsr());
+		//printf(" APSR = %X",get_apsr());
 		//printf(" rd = %X",get_general_register(dataProModified.rd));
-		printf("	***compare\n");
+		//printf("	***compare\n");
 	}
 }
 
@@ -358,9 +380,9 @@ void exclusive_or_imm(int i){
 			else
 				set_flag_c();
 		}
-		printf(" APSR = %X",get_apsr());
-		printf(" rd = %X",get_general_register(dataProModified.rd));
-		printf("	***exclusive or\n");
+		//printf(" APSR = %X",get_apsr());
+		//printf(" rd = %X",get_general_register(dataProModified.rd));
+		//printf("	***exclusive or\n");
 	}
 }
 
@@ -391,9 +413,9 @@ void move_imm(int i){
 			else
 				set_flag_c();
 		}
-		printf(" APSR = %X",get_apsr());
-		printf(" rd = %X",get_general_register(dataProModified.rd));
-		printf("	***move\n");
+		//printf(" APSR = %X",get_apsr());
+		//printf(" rd = %X",get_general_register(dataProModified.rd));
+		//printf("	***move\n");
 	}
 }
 
@@ -428,9 +450,11 @@ void move_negative_imm(int i){
 			else
 				set_flag_c();
 		}
+		#if DEBUG
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProModified.rd));
 		printf("	***move negative\n");
+#endif
 	}
 }
 
@@ -460,9 +484,11 @@ void logical_or_not_imm(int i){
 			else
 				set_flag_c();
 		}
+		#if DEBUG
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProModified.rd));
 		printf("	***logical or not\n");
+#endif
 	}
 
 }
@@ -493,9 +519,11 @@ void logical_or_imm(int i){
 			else
 				set_flag_c();
 		}
+	#if DEBUG
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProModified.rd));
 		printf("	***logical or\n");
+#endif
 	}
 }
 
@@ -531,9 +559,11 @@ void reverse_subtract_imm(int i){
 			else
 				cle_flag_v();
 		}
+		#if DEBUG
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProModified.rd));
 		printf("	***reverse subtract\n");
+#endif
 	}
 }
 
@@ -570,9 +600,11 @@ void subtract_with_carry_imm(int i){
 			else
 				cle_flag_v();
 		}
+		#if DEBUG
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProModified.rd));
 		printf("	***subtract with carry \n");
+#endif
 	}
 }
 
@@ -606,9 +638,11 @@ void subtract_imm(int i){
 			else
 				cle_flag_v();
 		}
+		#if DEBUG
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProModified.rd));
 		printf("	***subtract\n");
+#endif
 	}
 }
 
@@ -635,8 +669,8 @@ void test_equal_imm(int i){
 			cle_flag_c();
 		else
 			set_flag_c();
-		printf(" APSR = %X",get_apsr());
-		printf("	***test equal\n");	
+		//printf(" APSR = %X",get_apsr());
+		//printf("	***test equal\n");	
 	}
 }
 
@@ -663,8 +697,8 @@ void test_imm(int i){
 			cle_flag_c();
 		else
 			set_flag_c();
-		printf(" APSR = %X",get_apsr());
-		printf("	***test\n");
+		//printf(" APSR = %X",get_apsr());
+		//printf("	***test\n");
 	}
 }
 
@@ -680,9 +714,11 @@ void add_wide_imm(int i){
 		source = get_general_register(dataProAdd.rn);
 		result = addwithcarry(source,imm,0);
 		set_general_register(dataProAdd.rd, result->result);
+		#if DEBUG
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProAdd.rd));
 		printf("	***add_wide\n");
+#endif
 	}
 }
 
@@ -698,9 +734,11 @@ void sub_wide_imm(int i){
 		source = get_general_register(dataProAdd.rn);
 		result = addwithcarry(source,~imm,1);
 		set_general_register(dataProAdd.rd, result->result);
+		#if DEBUG
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProAdd.rd));
 		printf("	***subtract_wide\n");
+#endif
 	}
 }
 
@@ -716,9 +754,11 @@ void address_before_current(int i){
 		base = align(pc,4);
 		result = base - imm;
 		set_general_register(dataProAdd.rd, result);
+		#if DEBUG
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProAdd.rd));	
 		printf("	***address_before_ins\n");
+#endif
 	}
 }
 
@@ -734,9 +774,11 @@ void address_after_current(int i){
 		base = align(pc,4);
 		result = base + imm;
 		set_general_register(dataProAdd.rd, result);
+		#if DEBUG
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProAdd.rd));
 		printf("	***address_after_ins\n");
+#endif
 	}
 }
 
@@ -753,9 +795,11 @@ void move_top_imm(int i){
 		result = result & 0x0000FFFF;
 		result = result | imm;
 		set_general_register(dataProMov.rd, result);
+		#if DEBUG
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProMov.rd));	
 		printf("	***move_top\n");
+#endif
 	}
 }
 
@@ -769,9 +813,11 @@ void move_wide_imm(int i){
 	else{
 		result = imm;
 		set_general_register(dataProMov.rd, result);
+		#if DEBUG
 		printf(" APSR = %X",get_apsr());
 		printf(" rd = %X",get_general_register(dataProMov.rd));	
 		printf("	***move_wide\n");
+#endif
 	}
 }
 
@@ -800,12 +846,12 @@ void bit_field_clear(int i){
 			result = get_general_register(dataProBit.rd);
 			result = result & temp;
 			set_general_register(dataProBit.rd, result);
-			printf(" APSR = %X",get_apsr());
-			printf(" rd = %X",get_general_register(dataProBit.rd));
+			//printf(" APSR = %X",get_apsr());
+			//printf(" rd = %X",get_general_register(dataProBit.rd));
 		}
 		else
 			printf(" it is unpredictable!\n");
-		printf("	***bit_field_clear\n");
+		//printf("	***bit_field_clear\n");
 	}
 }
 
@@ -847,12 +893,12 @@ void bit_field_inset(int i){
 			//printf(" result = %X",result);
 			result = result | source;
 			set_general_register(dataProBit.rd, result);
-			printf(" APSR = %X",get_apsr());
-			printf(" rd = %X",get_general_register(dataProBit.rd));
+			//printf(" APSR = %X",get_apsr());
+			//printf(" rd = %X",get_general_register(dataProBit.rd));
 		}
 		else
 			printf(" it is unpredictable!\n");
-		printf("	***bit_field_inset\n");
+		//printf("	***bit_field_inset\n");
 	}
 }
 
@@ -899,12 +945,12 @@ void signed_bit_field_extract(int i){
 			}
 			result = source;
 			set_general_register(dataProBit.rd, result);
-			printf(" APSR = %X",get_apsr());
-			printf(" rd = %X",get_general_register(dataProBit.rd));
+			//printf(" APSR = %X",get_apsr());
+			//printf(" rd = %X",get_general_register(dataProBit.rd));
 		}
 		else
 			printf(" it is unpredictable!\n");
-		printf("	***signed_bit_field_extract\n");
+		//printf("	***signed_bit_field_extract\n");
 	}
 }
 
@@ -933,9 +979,11 @@ void signed_lsl(int i){
 		set_general_register(dataProBit.rd, result->result);//it exsit a problem.
 		if(result->carry)
 			set_flag_q();
+		#if DEBUG
 		printf(" APSR = 0x%x",get_apsr());
 		printf(" rd = 0x%x",get_general_register(dataProBit.rd));
 		printf("	***signed_lsl\n");
+#endif
 	}
 }
 
@@ -963,10 +1011,10 @@ void signed_asr(int i){
 			set_general_register(dataProBit.rd, result->result);//it exsit a problem.
 			if(result->carry)
 				set_flag_q();
-			printf(" APSR = %X",get_apsr());
-			printf(" rd = %X",get_general_register(dataProBit.rd));
+			//printf(" APSR = %X",get_apsr());
+			//printf(" rd = %X",get_general_register(dataProBit.rd));
 		}
-		printf("	***signed_asr\n");
+		//printf("	***signed_asr\n");
 	}
 }
 
@@ -996,12 +1044,12 @@ void unsinged_bit_field_extract(int i){
 				source = source >> 1;
 			result = source;
 			set_general_register(dataProBit.rd, result);
-			printf(" APSR = %X",get_apsr());
-			printf(" rd = %X",get_general_register(dataProBit.rd));
+			//printf(" APSR = %X",get_apsr());
+			//printf(" rd = %X",get_general_register(dataProBit.rd));
 		}
 		else
 			printf(" it is unpredictable!\n");
-		printf("	***unsinged_bit_field_extract\n");
+		//printf("	***unsinged_bit_field_extract\n");
 	}
 }
 
@@ -1026,9 +1074,9 @@ void unsigned_lsl(int i){
 		set_general_register(dataProBit.rd, result->result);
 		if(result->carry)
 			set_flag_q();
-		printf(" APSR = %X",get_apsr());
-		printf(" rd = %X",get_general_register(dataProBit.rd));
-		printf("	***unsigned_lsl\n");
+		//printf(" APSR = %X",get_apsr());
+		//printf(" rd = %X",get_general_register(dataProBit.rd));
+		//printf("	***unsigned_lsl\n");
 	}
 }
 
@@ -1056,9 +1104,9 @@ void unsigned_asr(int i){
 			set_general_register(dataProBit.rd, result->result);
 			if(result->carry)
 				set_flag_q();
-			printf(" APSR = %X",get_apsr());
-			printf(" rd = %X",get_general_register(dataProBit.rd));
+			//printf(" APSR = %X",get_apsr());
+			//printf(" rd = %X",get_general_register(dataProBit.rd));
 		}
-		printf("	***unsigned_asr\n");
+		//printf("	***unsigned_asr\n");
 	}
 }

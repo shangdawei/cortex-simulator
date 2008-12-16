@@ -23,12 +23,16 @@ void thumb_branch_exchange_instruction_set(short instruction) {
 	func f_ptr;
 	*((short *)(&branchExchangeInstructionSet)) = instruction;
 
+#if DEBUG
 	printf("thumb_branch_exchange_instruction_set: 0x%X \n", instruction);
 	printf("L: 0x%x \n", branchExchangeInstructionSet.l);
 	printf("Rm: 0x%x \n", branchExchangeInstructionSet.rm);
+#endif
 
 	index = branchExchangeInstructionSet.l;
+#if DEBUG
 	printf("index is %d \n", index);
+#endif
 
 	f_ptr = (void *)branch_exchange_instruction_set[index];
 	f_ptr(instruction);
@@ -39,13 +43,16 @@ void thumb_add_to_sp_or_pc(short instruction) {
 	func f_ptr;
 	*((short *)(&addToSpOrPc)) = instruction;
 
+#if DEBUG
 	printf("thumb_add_to_sp_or_pc: 0x%X \n", instruction);
 	printf("SP: 0x%x \n", addToSpOrPc.sp);
 	printf("Rd: 0x%x \n", addToSpOrPc.rd);
 	printf("imm8: 0x%x \n", addToSpOrPc.imm8);
-
+#endif
 	index = addToSpOrPc.sp;
+#if DEBUG
 	printf("index is %d \n", index);
+#endif
 
 	f_ptr = (void *)add_to_sp_or_pc[index];
 	f_ptr(instruction);
@@ -55,13 +62,15 @@ void thumb_adjust_stack_pointer(short instruction) {
 	int index;
 	func f_ptr;
 	*((short *)(&adjustStackPointer)) = instruction;
-
+#if DEBUG
 	printf("thumb_adjust_stack_pointer: 0x%X \n", instruction);
 	printf("Operate Code: 0x%x \n", adjustStackPointer.opc);
 	printf("imm7: 0x%x \n", adjustStackPointer.imm7);
-
+#endif
 	index = adjustStackPointer.opc;
+#if DEBUG
 	printf("index is %d \n", index);
+#endif
 
 	f_ptr = (void *)adjust_stack_pointer[index];
 	f_ptr(instruction);
@@ -71,14 +80,16 @@ void thumb_sign_zero_extend(short instruction) {
 	int index;
 	func f_ptr;
 	*((short *)(&signZeroExtend)) = instruction;
-
+#if DEBUG
 	printf("thumb_sign_zero_extend: 0x%X \n", instruction);
 	printf("Operate Code: 0x%x \n", signZeroExtend.opc);
 	printf("Rm: 0x%x \n", signZeroExtend.rm);
 	printf("Rd: 0x%x \n", signZeroExtend.rd);
-
+#endif
 	index = signZeroExtend.opc;
+#if DEBUG
 	printf("index is %d \n", index);
+#endif
 
 	f_ptr = (void *)sign_zero_extend[index];
 	f_ptr(instruction);
@@ -88,15 +99,17 @@ void thumb_compare_and_branch(short instruction) {
 	int index;
 	func f_ptr;
 	*((short *)(&compareAndBranch)) = instruction;
-
+#if DEBUG
 	printf("thumb_compare_and_branch: 0x%X \n", instruction);
 	printf("N: 0x%x \n", compareAndBranch.n);
 	printf("i: 0x%x \n", compareAndBranch.i);
 	printf("imm5: 0x%x \n", compareAndBranch.imm5);
 	printf("Rn: 0x%x \n", compareAndBranch.rn);
-
+#endif
 	index = compareAndBranch.n;
+#if DEBUG
 	printf("index is %d \n", index);
+#endif
 
 	f_ptr = (void *)compare_and_branch[index];
 	f_ptr(instruction);
@@ -106,14 +119,16 @@ void thumb_push_pop_register_list(short instruction) {
 	int index;
 	func f_ptr;
 	*((short *)(&pushPopRegisterList)) = instruction;
-
+#if DEBUG
 	printf("thumb_push_pop_register_list: 0x%X \n", instruction);
 	printf("L: 0x%x \n", pushPopRegisterList.l);
 	printf("R: 0x%x \n", pushPopRegisterList.r);
 	printf("register list: 0x%x", pushPopRegisterList.regList);
-
+#endif
 	index = pushPopRegisterList.l;
+#if DEBUG
 	printf("index is %d \n", index);
+#endif
 
 	f_ptr = (void *)push_pop_register_list[index];
 	f_ptr(instruction);
@@ -482,14 +497,16 @@ void thumb_reverse_bytes(short instruction) {
 	int index;
 	func f_ptr;
 	*((short *)(&reverseBytes)) = instruction;
-
+#if DEBUG
 	printf("reverse_bytes: 0x%X \n", instruction);
 	printf("Operate Code: 0x%x \n", reverseBytes.opc);
 	printf("Rm: 0x%x \n", reverseBytes.rm);
 	printf("Rd: 0x%x \n", reverseBytes.rd);
-
+#endif
 	index = reverseBytes.opc;
+#if DEBUG
 	printf("index is %d \n", index);
+#endif
 
 	f_ptr = (void *)reverse_bytes[index];
 	f_ptr(instruction);
@@ -499,13 +516,14 @@ void thumb_nop_compatible_hints(short instruction) {
 	int index;
 	func f_ptr;
 	*((short *)(&nopCompatibleHints)) = instruction;
-
+#if DEBUG
 	printf("nop_compatible_hints: 0x%X \n", instruction);
 	printf("hint: 0x%x \n", nopCompatibleHints.hint);
-
+#endif
 	index = nopCompatibleHints.hint;
+#if DEBUG
 	printf("index is %d \n", index);
-
+#endif
 	f_ptr = (void *)nop_compatible_hints[index];
 	f_ptr(instruction);
 }
@@ -834,7 +852,9 @@ void thumb_service_call(short instruction)
 	int imm32;
 	*((short*) (&SVCall)) = instruction;
 	imm32 = SVCall.imm8;
+#if DEBUG
 	printf("thumb_service_call : 0x%x\n",instruction);
 	printf("imm8 : 0x%x\n", SVCall.imm8);
+#endif
 	CallSupervisor();
 }

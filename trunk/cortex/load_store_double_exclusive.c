@@ -10,10 +10,12 @@ void ls_exbh_tb(int instruction){
 	int index;
 	func f_ptr;
 	*((int *)(&TbB)) = instruction;
+#if DEBUG
 	printf("ls_exbh_tb: 0x%X \n",instruction);
 	printf("Op: 0x%X \n",TbB.op);
 	printf("Rt: 0x%X \n",TbB.rt);
 	printf("Rt2: 0x%X \n",TbB.rt2);
+#endif
 	if(TbB.l == 1 && TbB.op == 4)
 		index = 0;
 	else if(TbB.l == 1 && TbB.op == 5)
@@ -28,7 +30,7 @@ void ls_exbh_tb(int instruction){
 		index = 5;
 	else
 		index = 6;
-	printf("index is %d", index);
+	//printf("index is %d", index);
 	f_ptr=(void *)ls_ex_bh_tb[index];
 	f_ptr(instruction);
 }
@@ -37,17 +39,19 @@ void ls_double(int instruction){
 	int index;
 	func f_ptr;
 	*((int *)(&LdrD)) = instruction;
+#if DEBUG
 	printf("ls_double: 0x%X \n",instruction);
 	printf("Imm8: 0x%X \n",LdrD.imm8);
 	printf("Rt: 0x%X \n",LdrD.rt);
 	printf("Rt2: 0x%X \n",LdrD.rt2);
+#endif
 	if(LdrD.l == 1)
 		index = 0;
 	else if(LdrD.l == 0)
 		index = 1;
 	else
 		index = 2;
-	printf("index is %d",index);
+	//printf("index is %d",index);
 	f_ptr=(void *)ls_doub[index];
 	f_ptr(instruction);
 }
@@ -65,7 +69,7 @@ void tbb(int i){
 		halfwords = get_MemU(get_general_register(n) + get_general_register(m),1);
 		halfwords = halfwords << 1;
 		BranchWritePC(get_pc() + halfwords);
-		printf("	*****tbb");
+		//printf("	*****tbb");
 	}
 }
 
@@ -82,7 +86,7 @@ void tbh(int i){
 		halfwords = get_MemU(get_general_register(n) + lsl(get_general_register(m),1),1);
 		halfwords = halfwords << 1;
 		BranchWritePC(get_pc() + halfwords);
-		printf("	*****tbh");
+		//printf("	*****tbh");
 	}
 }
 
@@ -116,9 +120,11 @@ void ldrd(int i){
 		set_general_register(t,temp1);
 		temp2 = get_MemA(address + 4,4);
 		set_general_register(t2,temp2);
+#if DEBUG
 		printf("	Rt = 0x%X",get_general_register(t));
 		printf("	Rt2 = 0x%X",get_general_register(t2));
 		printf("	*****ldrd");
+#endif
 	}
 }
 
@@ -148,7 +154,7 @@ void strd(int i){
 			set_general_register(n,offset_addr);
 		set_MemA(address,4,get_general_register(t));
 		set_MemA(address + 4,4,get_general_register(t2));
-		printf("	*****strd");
+		//printf("	*****strd");
 	}
 }
 

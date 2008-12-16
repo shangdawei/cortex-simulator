@@ -60,7 +60,7 @@ return (result, carry_out, overflow);
 	else
 		result->overflow = 0;
 	result->result = sum;
-	printf("adc.result = %x, adc.carry = %x,adc.overflow = %x",result->result,result->carry_out,result->overflow);
+	//printf("adc.result = %x, adc.carry = %x,adc.overflow = %x",result->result,result->carry_out,result->overflow);
 	return result;
 }
 

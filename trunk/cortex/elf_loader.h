@@ -45,4 +45,5 @@
 #define PROT_READ		(1 << 2)
 
 bool load_elf(char *p);
+void initial_entry(int entry);
 #endif

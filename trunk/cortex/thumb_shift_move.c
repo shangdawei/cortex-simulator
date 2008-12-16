@@ -86,7 +86,7 @@ void thumb_mov_reg_t2(short ins)
 	
 	/************* set or cle flags **********/
 	
-	if(result & 0x8000 !=0)
+	if((result & 0x8000) !=0)
 		set_flag_n();
 	else
 		cle_flag_n();
@@ -100,7 +100,7 @@ void thumb_mov_reg_t2(short ins)
 		set_flag_c();
 	else
 		cle_flag_c();
-	printf("*********thumb_mov_reg_t2***********\n");
+	//printf("*********thumb_mov_reg_t2***********\n");
 				
 }
 
@@ -119,7 +119,7 @@ void thumb_lsl_imm5(short ins)
 	if(!InITBlock())
 	{
 		/********* set or cle flags ************/
-		if(rc->result & 0x8000 !=0)
+		if((rc->result & 0x8000) !=0)
 			set_flag_n();
 		else
 			cle_flag_n();
@@ -135,7 +135,7 @@ void thumb_lsl_imm5(short ins)
 			cle_flag_c();
 		
 	}
-	printf("*********thumb_lsl_imm5***********\n");
+	//printf("*********thumb_lsl_imm5***********\n");
 	
 }
 
@@ -153,7 +153,7 @@ void thumb_lsr_imm5(short ins)
 	if(!InITBlock())
 	{
 		/********* set or cle flags ************/
-		if(rc->result & 0x8000 !=0)
+		if((rc->result & 0x8000) !=0)
 			set_flag_n();
 		else
 			cle_flag_n();
@@ -169,7 +169,7 @@ void thumb_lsr_imm5(short ins)
 			cle_flag_c();
 		
 	}
-	printf("*********thumb_lsr_imm5***********\n");
+	//printf("*********thumb_lsr_imm5***********\n");
 	
 }
 
@@ -187,7 +187,7 @@ void thumb_asr_imm5(short ins)
 	if(!InITBlock())
 	{
 		/********* set or cle flags ************/
-		if(rc->result & 0x8000 !=0)
+		if((rc->result & 0x8000) !=0)
 			set_flag_n();
 		else
 			cle_flag_n();
@@ -203,7 +203,7 @@ void thumb_asr_imm5(short ins)
 			cle_flag_c();
 		
 	}
-	printf("*********thumb_asr_imm5***********\n");
+	//printf("*********thumb_asr_imm5***********\n");
 }
 
 

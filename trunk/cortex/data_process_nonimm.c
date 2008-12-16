@@ -17,6 +17,7 @@ void data_pro_con_shift(int instruction)
 	int shift,index;
 	func f_ptr;
 	*((int *)(&dataProConShift)) = instruction;
+#if DEBUG
 	printf("data_pro_con_shift: 0x%X \n",instruction);
 	printf("Operate Code : 0x%x \n", dataProConShift.op);
 	printf("S: 0x%x \n", dataProConShift.s);
@@ -24,11 +25,12 @@ void data_pro_con_shift(int instruction)
 	printf("Rd: 0x%x \n", dataProConShift.rd);
 	printf("Rm: 0x%x \n", dataProConShift.rm);
 	printf("type: 0x%x \n",dataProConShift.type);
+#endif
 	shift=decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	printf("shift: 0x%x \n",shift);
+	//printf("shift: 0x%x \n",shift);
 
 	index = dataProConShift.op;
-	printf("index : %d", index);
+	//printf("index : %d", index);
 
 	if(dataProConShift.pass1)
 	{
@@ -49,7 +51,7 @@ void data_pro_con_shift(int instruction)
 	}else if((dataProConShift.op == 0xd) &&(dataProConShift.rd ==0xf)&&(dataProConShift.s==1 )){
 		index = dataProConShift.op+16;
 	}
-	printf("index is %d", index);
+	//printf("index is %d", index);
 	f_ptr=(void *)data_pro_con_s[index];
 	f_ptr(instruction);
 }
@@ -61,12 +63,14 @@ void reg_ctrl_shift(int instruction)
 	func f_ptr;
 	*((int *)(&regCtrlShift)) = instruction;
 	opcode=decode_imm5(regCtrlShift.op,regCtrlShift.op2);
+	#if DEBUG
 	printf("reg_ctrl_shift: 0x%X \n",instruction);
 	printf("Operate Code : 0x%x \n", opcode);
 	printf("S: 0x%x \n", regCtrlShift.s);
 	printf("Rn: 0x%x \n", regCtrlShift.rn);
 	printf("Rd: 0x%x \n", regCtrlShift.rd);
 	printf("Rm: 0x%x \n", regCtrlShift.rm);
+#endif
 
 	if(regCtrlShift.op2)
 	{
@@ -74,7 +78,7 @@ void reg_ctrl_shift(int instruction)
 		return;
 	}
 	index = regCtrlShift.op;
-	printf("index : %d", index);
+	//printf("index : %d", index);
 
 
 	f_ptr=(void *)reg_ctrl_s[index];
@@ -85,12 +89,14 @@ void sign_unsign_extend(int instruction)
 	int index;
 	func f_ptr;
 	*((int *)(&signUnsignExtend)) = instruction;
+#if DEBUG
 	printf("sign_unsign_extend: 0x%X \n",instruction);
 	printf("Operate Code : 0x%x \n",signUnsignExtend.op);
 	printf("Rn: 0x%x \n", signUnsignExtend.rn);
 	printf("Rd: 0x%x \n", signUnsignExtend.rd);
 	printf("Rm: 0x%x \n", signUnsignExtend.rm);
 	printf("rot: 0x%x \n",signUnsignExtend.rot);
+#endif
 
 	if(signUnsignExtend.rn!=0xf)
 	{
@@ -104,7 +110,7 @@ void sign_unsign_extend(int instruction)
 	}
 
 	index = signUnsignExtend.op;
-	printf("index : %d", index);
+	//printf("index : %d", index);
 
 
 	f_ptr=(void *)sign_unsign_e[index];
@@ -113,12 +119,14 @@ void sign_unsign_extend(int instruction)
 void simd_add_sub(int instruction)
 {
 	*((int *)(&SIMDAddSub)) = instruction;
+#if DEBUG
 	printf("simd_add_sub: 0x%X \n",instruction);
 	printf("Operate Code : 0x%x \n",SIMDAddSub.op);
 	printf("Rn: 0x%x \n", SIMDAddSub.rn);
 	printf("Rd: 0x%x \n", SIMDAddSub.rd);
 	printf("Rm: 0x%x \n", SIMDAddSub.rm);
 	printf("prefix: 0x%x \n",SIMDAddSub.prefix);
+#endif
 
 }
 void other_three_reg_data_pro(int instruction)
@@ -127,11 +135,13 @@ void other_three_reg_data_pro(int instruction)
 	func f_ptr;
 	*((int *)(&otherThreeRegDataPro)) = instruction;
 	opcode=decode_imm5(otherThreeRegDataPro.op,otherThreeRegDataPro.op2);
+#if DEBUG
 	printf("other_three_reg_data_pro: 0x%X \n",instruction);
 	printf("Operate Code : 0x%x \n",opcode);
 	printf("Rn: 0x%x \n", otherThreeRegDataPro.rn);
 	printf("Rd: 0x%x \n", otherThreeRegDataPro.rd);
 	printf("Rm: 0x%x \n", otherThreeRegDataPro.rm);
+#endif
 
 	if(otherThreeRegDataPro.op==1)
 	{
@@ -154,6 +164,7 @@ void bit32_multiply_acc(int instruction)
 	int index;
 	func f_ptr;
 	*((int *)(&bit32MultiplyAcc)) = instruction;
+#if DEBUG
 	printf("bit32_multiply_acc: 0x%X \n",instruction);
 	printf("Op : 0x%x \n",bit32MultiplyAcc.op);
 	printf("Op2 : 0x%x \n",bit32MultiplyAcc.op2);
@@ -161,6 +172,7 @@ void bit32_multiply_acc(int instruction)
 	printf("Rd: 0x%x \n", bit32MultiplyAcc.rd);
 	printf("Rm: 0x%x \n", bit32MultiplyAcc.rm);
 	printf("Racc: 0x%x \n", bit32MultiplyAcc.racc);
+#endif
 
 	if(bit32MultiplyAcc.op||bit32MultiplyAcc.op2>1)
 	{
@@ -189,6 +201,7 @@ void bit64_multiply(int instruction)
 	int index;
 	func f_ptr;
 	*((int *)(&bit64Multiply)) = instruction;
+#if DEBUG
 	printf("bit64_multiply: 0x%X \n",instruction);
 	printf("Op : 0x%x \n",bit64Multiply.op);
 	printf("Op2 : 0x%x \n",bit64Multiply.op2);
@@ -196,6 +209,7 @@ void bit64_multiply(int instruction)
 	printf("Rdlo: 0x%x \n", bit64Multiply.rdlo);
 	printf("Rdhi: 0x%x \n", bit64Multiply.rdhi);
 	printf("Rm: 0x%x \n", bit64Multiply.rm);
+#endif
 	switch(bit64Multiply.op)
 	{
 	case 0:
@@ -862,7 +876,7 @@ APSR.V = overflow;
 	apsr_c = apsr_c >> 29;
 	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
 	shifted = shift(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c);
-	printf("addwithcarry(%x,%x,1)",~get_general_register(dataProConShift.rn),shifted);
+	//printf("addwithcarry(%x,%x,1)",~get_general_register(dataProConShift.rn),shifted);
 	result = addwithcarry(~get_general_register(dataProConShift.rn),shifted,1);
 #if DEBUG
 	printf(" imm3 = %x",dataProConShift.imm3);
@@ -2014,7 +2028,7 @@ result<31:8> = SignExtend(R[m]<7:0>, 24);
 result<7:0> = R[m]<15:8>;
 R[d] = result;
 */
-	unsigned int r1=0,r2=0,result=0,source,flag,temp;
+	unsigned int r1=0,r2=0,result=0,source,temp;
 	*((int *)(&otherThreeRegDataPro)) = i;
 	if(Bad_Reg(otherThreeRegDataPro.rd)||Bad_Reg(otherThreeRegDataPro.rm)||(otherThreeRegDataPro.rn!=otherThreeRegDataPro.rm))
 	{
@@ -2187,8 +2201,8 @@ R[dLo] = result<31:0>;
 	rn = get_general_register(bit64Multiply.rn);
 	rm = get_general_register(bit64Multiply.rm);
 	result = rn*rm;
-	set_general_register(bit64Multiply.rdhi,(result&0xffffffff00000000)>>32);
-	set_general_register(bit64Multiply.rdlo,(result&0x00000000ffffffff));
+	set_general_register(bit64Multiply.rdhi,(int)((result&0xffffffff00000000)>>32));
+	set_general_register(bit64Multiply.rdlo,(int)(result&0x00000000ffffffff));
 #if DEBUG_I
 	printf(" R[dHi] = %d",get_general_register(bit64Multiply.rdhi));
 	printf(" R[dLo] = %d",get_general_register(bit64Multiply.rdlo));
@@ -2268,8 +2282,8 @@ R[dLo] = result<31:0>;
 	rn = get_general_register(bit64Multiply.rn);
 	rm = get_general_register(bit64Multiply.rm);
 	result = rn*rm;
-	set_general_register(bit64Multiply.rdhi,(result&0xffffffff00000000)>>32);
-	set_general_register(bit64Multiply.rdlo,(result&0x00000000ffffffff));
+	set_general_register(bit64Multiply.rdhi,(int)((result&0xffffffff00000000)>>32));
+	set_general_register(bit64Multiply.rdlo,(int)(result&0x00000000ffffffff));
 #if DEBUG_I
 	printf(" R[dHi] = %d",get_general_register(bit64Multiply.rdhi));
 	printf(" R[dLo] = %d",get_general_register(bit64Multiply.rdlo));
@@ -2353,8 +2367,8 @@ R[dLo] = result<31:0>;
 	//rh=rh<<32;
 	//rl=rh|rl;
 	result=rn*rm+((rh<<32)|rl);
-	set_general_register(bit64Multiply.rdhi,(result&0xffffffff00000000)>>32);
-	set_general_register(bit64Multiply.rdlo,(result&0x00000000ffffffff));
+	set_general_register(bit64Multiply.rdhi,(int)((result&0xffffffff00000000)>>32));
+	set_general_register(bit64Multiply.rdlo,(int)(result&0x00000000ffffffff));
 #if DEBUG_I
 	printf(" R[dHi] = %d",rh);
 	printf(" R[dLo] = %d",rl);
@@ -2390,8 +2404,8 @@ R[dLo] = result<31:0>;
 	rh = get_general_register(bit64Multiply.rdhi);
 	rl = get_general_register(bit64Multiply.rdlo);
 	result = rn*rm+(rh<<32|rl);
-	set_general_register(bit64Multiply.rdhi,(result&0xffffffff00000000)>>32);
-	set_general_register(bit64Multiply.rdlo,(result&0x00000000ffffffff));
+	set_general_register(bit64Multiply.rdhi,(int)((result&0xffffffff00000000)>>32));
+	set_general_register(bit64Multiply.rdlo,(int)(result&0x00000000ffffffff));
 #if DEBUG_I
 	printf(" R[dHi] = %d",rh);
 	printf(" R[dLo] = %d",rl);

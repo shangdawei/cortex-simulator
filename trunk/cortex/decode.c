@@ -129,7 +129,7 @@ void decode(unsigned int instruction){
 		if( (instruction & table[index].mask) == table[index].value){
 			int* point =(int *) table[index].point;
 			if(point > (int *)table && point <(int *)(table +MAXSIZE*4)){ 
-				index=(point-(int *)table);
+				index=(int)(point-(int *)table);
 #if DEBUG
 		printf("The point to skip in the table is %d the index is : %d\n", point, index);
 #endif

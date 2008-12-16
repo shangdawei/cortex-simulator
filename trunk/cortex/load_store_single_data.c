@@ -7,9 +7,11 @@ void ls_single_pc_12m(int instruction){
 	int index;
 	func f_ptr;
 	*((int *)(&LsSinglePc)) = instruction;
+#if DEBUG
 	printf("ls_single_pc_12m: 0x%X \n",instruction);
 	printf("Rn: 0x%x \n", LsSinglePc.rn);
 	printf("Rt: 0x%x \n", LsSinglePc.rt);
+#endif
 	if(LsSinglePc.s == 0 && LsSinglePc.size == 2)
 		index = 0;
 	else if(LsSinglePc.s == 0 && LsSinglePc.size == 0)
@@ -22,7 +24,7 @@ void ls_single_pc_12m(int instruction){
 		index = 4;
 	else
 		index = 5;
-	printf("index is %d", index);
+	//printf("index is %d", index);
 	f_ptr=(void *)ls_single_pc[index];
 	f_ptr(instruction);
 }
@@ -31,9 +33,11 @@ void ls_single_rnadd_12m(int instruction){
 	int index;
 	func f_ptr;
 	*((int *)(&LsSingleRnAdd)) = instruction;
+#if DEBUG
 	printf("ls_single_pc_12m: 0x%X \n",instruction);
 	printf("Rn: 0x%x \n", LsSingleRnAdd.rn);
 	printf("Rt: 0x%x \n", LsSingleRnAdd.rt);
+#endif
 	if(LsSingleRnAdd.s == 0 && LsSingleRnAdd.size == 2 && LsSingleRnAdd.l == 1)
 		index = 0;
 	else if(LsSingleRnAdd.s == 0 && LsSingleRnAdd.size == 0 && LsSingleRnAdd.l == 1)
@@ -52,7 +56,7 @@ void ls_single_rnadd_12m(int instruction){
 		index = 7;
 	else
 		index = 8;
-	printf("index is %d", index);
+	//printf("index is %d", index);
 	f_ptr=(void *)ls_single_rnadd[index];
 	f_ptr(instruction);
 
@@ -62,9 +66,11 @@ void ls_single_rnminus_8m(int instruction){
 	int index;
 	func f_ptr;
 	*((int *)(&LsSingleRnMinus)) = instruction;
+#if DEBUG
 	printf("ls_single_pc_12m: 0x%X \n",instruction);
 	printf("Rn: 0x%x \n", LsSingleRnMinus.rn);
 	printf("Rt: 0x%x \n", LsSingleRnMinus.rt);
+#endif
 	if(LsSingleRnMinus.s == 0 && LsSingleRnMinus.size == 2 && LsSingleRnMinus.l == 1)
 		index = 0;
 	else if(LsSingleRnMinus.s == 0 && LsSingleRnMinus.size == 0 && LsSingleRnMinus.l == 1)
@@ -83,7 +89,7 @@ void ls_single_rnminus_8m(int instruction){
 		index = 7;
 	else
 		index = 8;
-	printf("index is %d", index);
+	//printf("index is %d", index);
 	f_ptr=(void *)ls_single_rnminus[index];
 	f_ptr(instruction);
 
@@ -93,9 +99,11 @@ void ls_single_rnpri_8m(int instruction){
 	int index;
 	func f_ptr;
 	*((int *)(&LsSingleRnPri)) = instruction;
+#if DEBUG
 	printf("ls_single_pc_12m: 0x%X \n",instruction);
 	printf("Rn: 0x%x \n", LsSingleRnPri.rn);
 	printf("Rt: 0x%x \n", LsSingleRnPri.rt);
+#endif
 	if(LsSingleRnPri.s == 0 && LsSingleRnPri.size == 2 && LsSingleRnPri.l == 1)
 		index = 0;
 	else if(LsSingleRnPri.s == 0 && LsSingleRnPri.size == 0 && LsSingleRnPri.l == 1)
@@ -114,7 +122,7 @@ void ls_single_rnpri_8m(int instruction){
 		index = 7;
 	else
 		index = 8;
-	printf("index is %d", index);
+	//printf("index is %d", index);
 	f_ptr=(void *)ls_single_rnpri[index];
 	f_ptr(instruction);
 
@@ -124,9 +132,11 @@ void ls_single_rnpost_8m(int instruction){
 	int index;
 	func f_ptr;
 	*((int *)(&LsSingleRnPost)) = instruction;
+#if DEBUG
 	printf("ls_single_pc_12m: 0x%X \n",instruction);
 	printf("Rn: 0x%x \n", LsSingleRnPost.rn);
 	printf("Rt: 0x%x \n", LsSingleRnPost.rt);
+#endif
 	if(LsSingleRnPost.s == 0 && LsSingleRnPost.size == 2 && LsSingleRnPost.l == 1)
 		index = 0;
 	else if(LsSingleRnPost.s == 0 && LsSingleRnPost.size == 0 && LsSingleRnPost.l == 1)
@@ -145,7 +155,7 @@ void ls_single_rnpost_8m(int instruction){
 		index = 7;
 	else
 		index = 8;
-	printf("index is %d", index);
+	//printf("index is %d", index);
 	f_ptr=(void *)ls_single_rnpost[index];
 	f_ptr(instruction);
 
@@ -155,9 +165,11 @@ void ls_single_rnpre_8m(int instruction){
 	int index;
 	func f_ptr;
 	*((int *)(&LsSingleRnPre)) = instruction;
+#if DEBUG
 	printf("ls_single_pc_12m: 0x%X \n",instruction);
 	printf("Rn: 0x%x \n", LsSingleRnPre.rn);
 	printf("Rt: 0x%x \n", LsSingleRnPre.rt);
+#endif
 	if(LsSingleRnPre.s == 0 && LsSingleRnPre.size == 2 && LsSingleRnPre.l == 1)
 		index = 0;
 	else if(LsSingleRnPre.s == 0 && LsSingleRnPre.size == 0 && LsSingleRnPre.l == 1)
@@ -176,7 +188,7 @@ void ls_single_rnpre_8m(int instruction){
 		index = 7;
 	else
 		index = 8;
-	printf("index is %d", index);
+	//printf("index is %d", index);
 	f_ptr=(void *)ls_single_rnpre[index];
 	f_ptr(instruction);
 
@@ -186,9 +198,11 @@ void ls_single_rnshift(int instruction){
 	int index;
 	func f_ptr;
 	*((int *)(&LsSingleRnShift)) = instruction;
+#if DEBUG
 	printf("ls_single_pc_12m: 0x%X \n",instruction);
 	printf("Rn: 0x%x \n", LsSingleRnShift.rn);
 	printf("Rt: 0x%x \n", LsSingleRnShift.rt);
+#endif
 	if(LsSingleRnShift.s == 0 && LsSingleRnShift.size == 2 && LsSingleRnShift.l == 1)
 		index = 0;
 	else if(LsSingleRnShift.s == 0 && LsSingleRnShift.size == 0 && LsSingleRnShift.l == 1)
@@ -207,24 +221,24 @@ void ls_single_rnshift(int instruction){
 		index = 7;
 	else
 		index = 8;
-	printf("index is %d", index);
+	//printf("index is %d", index);
 	f_ptr=(void *)ls_single_rnsh[index];
 	f_ptr(instruction);
 
 }
 
 void ls_single_reserved1(int instruction){
-	printf("ls_single_reserved1: 0x%X \n",instruction);
+	//printf("ls_single_reserved1: 0x%X \n",instruction);
 
 }
 
 void ls_single_reserved2(int instruction){
-	printf("ls_single_reserved2: 0x%X \n",instruction);
+	//printf("ls_single_reserved2: 0x%X \n",instruction);
 
 }
 
 void ls_single_reserved3(int instruction){
-	printf("ls_single_reserved3: 0x%X \n",instruction);
+	//printf("ls_single_reserved3: 0x%X \n",instruction);
 
 }
 
@@ -258,8 +272,8 @@ void ldr_lit(int i){
 			result = get_MemU(address,4);
 			set_general_register(rt,result);
 		}
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldr_lit\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldr_lit\n");
 	}
 }
 
@@ -285,8 +299,8 @@ void ldrb_lit(int i){
 		}
 		result = get_MemU(address,1);
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrb_lit\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrb_lit\n");
 	}
 }
 
@@ -315,8 +329,8 @@ void ldrsb_lit(int i){
 		if(LsSinglePc.s && temp)
 			result = result | 0xFFFFFF00;
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrsb_lit\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrsb_lit\n");
 	}
 }
 
@@ -342,8 +356,8 @@ void ldrh_lit(int i){
 		}
 		result = get_MemU(address,2);
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrh_lit\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrh_lit\n");
 	}
 }
 
@@ -372,8 +386,8 @@ void ldrsh_lit(int i){
 		if(LsSinglePc.s && temp)
 			result = result | 0xFFFF0000;
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrsh_lit\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrsh_lit\n");
 	}
 }
 
@@ -399,8 +413,8 @@ void ldr_imm(int i){
 			result = get_MemU(address,4);
 			set_general_register(rt,result);
 		}
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldr_imm\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldr_imm\n");
 	}
 }
 
@@ -418,8 +432,8 @@ void ldrb_imm(int i){
 		address = get_general_register(rn) + imm32;
 		result =  get_MemU(address,1);
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrb_imm\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrb_imm\n");
 	}
 }
 
@@ -440,8 +454,8 @@ void ldrsb_imm(int i){
 		if(LsSingleRnAdd.s && temp)
 			result = result | 0xFFFFFF00;
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrsb_imm\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrsb_imm\n");
 	}
 }
 
@@ -459,8 +473,8 @@ void ldrh_imm(int i){
 		address = get_general_register(rn) + imm32;
 		result = get_MemU(address,2);
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrh_imm\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrh_imm\n");
 	}
 }
 
@@ -481,8 +495,8 @@ void ldrsh_imm(int i){
 		if(LsSingleRnAdd.s && temp)
 			result = result | 0xFFFF0000;
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrsh_imm\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrsh_imm\n");
 	}
 }
 
@@ -502,8 +516,8 @@ void str_imm(int i){
 		result = get_general_register(rt);
 		//printf("	%X",result);
 		set_MemU(address,4,result);
-		printf("	Memory unit is %X",get_MemU(address,4));
-		printf("	******str_imm\n");
+		//printf("	Memory unit is %X",get_MemU(address,4));
+		//printf("	******str_imm\n");
 	}
 }
 
@@ -520,8 +534,8 @@ void strb_imm(int i){
 	else{
 		address = get_general_register(rn) + imm32;
 		set_MemU(address,1,get_general_register(rt));
-		printf("	Memory unit is %X",get_MemU(address,1));
-		printf("	******strb_imm\n");
+		//printf("	Memory unit is %X",get_MemU(address,1));
+		//printf("	******strb_imm\n");
 	}
 }
 
@@ -538,8 +552,8 @@ void strh_imm(int i){
 	else{
 		address = get_general_register(rn) + imm32;
 		set_MemU(address,2,get_general_register(rt));
-		printf("	Memory unit is %X",get_MemU(address,2));
-		printf("	******strh_imm\n");
+		//printf("	Memory unit is %X",get_MemU(address,2));
+		//printf("	******strh_imm\n");
 	}
 }
 
@@ -565,8 +579,8 @@ void ldr_neg_imm(int i){
 			result = get_MemU(address,4);
 			set_general_register(rt,result);
 		}
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldr_neg_imm\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldr_neg_imm\n");
 	}
 }
 
@@ -584,8 +598,8 @@ void ldrb_neg_imm(int i){
 		address = get_general_register(rn) - imm32;
 		result = get_MemU(address,1);
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrb_neg_imm\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrb_neg_imm\n");
 	}
 }
 
@@ -606,8 +620,8 @@ void ldrsb_neg_imm(int i){
 		if(LsSingleRnMinus.s && temp)
 			result = result | 0xFFFFFF00;
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrsb_neg_imm\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrsb_neg_imm\n");
 	}
 }
 
@@ -625,8 +639,8 @@ void ldrh_neg_imm(int i){
 		address = get_general_register(rn) - imm32;
 		result = get_MemU(address,2);
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrh_neg_imm\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrh_neg_imm\n");
 	}
 }
 
@@ -647,8 +661,8 @@ void ldrsh_neg_imm(int i){
 		if(LsSingleRnMinus.s && temp)
 			result = result | 0xFFFF0000;
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrsh_neg_imm\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrsh_neg_imm\n");
 	}
 }
 
@@ -666,8 +680,8 @@ void str_neg_imm(int i){
 		address = get_general_register(rn) - imm32;
 		result = get_general_register(rt);
 		set_MemU(address,4,result);
-		printf("	Memory unit is %X",get_MemU(address,4));
-		printf("	******str_neg_imm\n");
+		//printf("	Memory unit is %X",get_MemU(address,4));
+		//printf("	******str_neg_imm\n");
 	}
 }
 
@@ -684,8 +698,8 @@ void strb_neg_imm(int i){
 	else{
 		address = get_general_register(rn) - imm32;
 		set_MemU(address,1,get_general_register(rt));
-		printf("	Memory unit is %X",get_MemU(address,1));
-		printf("	******strb_neg_imm\n");
+		//printf("	Memory unit is %X",get_MemU(address,1));
+		//printf("	******strb_neg_imm\n");
 	}
 }
 
@@ -702,8 +716,8 @@ void strh_neg_imm(int i){
 	else{
 		address = get_general_register(rn) - imm32;
 		set_MemU(address,2,get_general_register(rt));
-		printf("	Memory unit is %X",get_MemU(address,2));
-		printf("	******strh_neg_imm\n");
+		//printf("	Memory unit is %X",get_MemU(address,2));
+		//printf("	******strh_neg_imm\n");
 	}
 }
 
@@ -721,8 +735,8 @@ void ldrt(int i){
 		address = get_general_register(rn) + imm32;
 		result = get_MemU(address,4);//didn't consider MemU_unpriv!
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrt\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrt\n");
 	}
 }
 
@@ -738,8 +752,8 @@ void ldrbt(int i){
 		address = get_general_register(rn) + imm32;
 		result = get_MemU(address,1);
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrbt\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrbt\n");
 	}
 }
 
@@ -758,8 +772,8 @@ void ldrsbt(int i){
 		if(LsSingleRnPri.s && temp)
 			result = result | 0xFFFFFF00;
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrsbt\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrsbt\n");
 	}
 }
 
@@ -775,8 +789,8 @@ void ldrht(int i){
 		address = get_general_register(rn) + imm32;
 		result = get_MemU(address,2);
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrht\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrht\n");
 	}
 }
 
@@ -795,8 +809,8 @@ void ldrsht(int i){
 		if(LsSingleRnPri.s && temp)
 			result = result | 0xFFFF0000;
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrsht\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrsht\n");
 	}
 }
 
@@ -812,8 +826,8 @@ void strt(int i){
 		address = get_general_register(rn) + imm32;
 		result = get_general_register(rt);
 		set_MemU(address,4,result);
-		printf("	Memory unit is %X",get_MemU(address,4));
-		printf("	******strt\n");
+		//printf("	Memory unit is %X",get_MemU(address,4));
+		//printf("	******strt\n");
 	}
 }
 
@@ -828,8 +842,8 @@ void strbt(int i){
 	else{
 		address = get_general_register(rn) + imm32;
 		set_MemU(address,1,get_general_register(rt));
-		printf("	Memory unit is %X",get_MemU(address,1));
-		printf("	******strbt\n");
+		//printf("	Memory unit is %X",get_MemU(address,1));
+		//printf("	******strbt\n");
 	}
 }
 
@@ -844,8 +858,8 @@ void strht(int i){
 	else{
 		address = get_general_register(rn) + imm32;
 		set_MemU(address,2,get_general_register(rt));
-		printf("	Memory unit is %X",get_MemU(address,2));
-		printf("	******strht\n");
+		//printf("	Memory unit is %X",get_MemU(address,2));
+		//printf("	******strht\n");
 	}
 }
 
@@ -878,9 +892,9 @@ void ldr_post(int i){
 			result = get_MemU(address,4);
 			set_general_register(rt,result);
 		}
-		printf("	Rn = %X",get_general_register(rn));
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldr_post\n");
+		//printf("	Rn = %X",get_general_register(rn));
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldr_post\n");
 	}
 }
 
@@ -901,9 +915,9 @@ void ldrb_post(int i){
 		set_general_register(rn,offset_addr);
 		result = get_MemU(address,1);
 		set_general_register(rt,result);
-		printf("	Rn = %X",get_general_register(rn));
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrb_post\n");
+		//printf("	Rn = %X",get_general_register(rn));
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrb_post\n");
 	}
 }
 
@@ -927,9 +941,9 @@ void ldrsb_post(int i){
 		if(LsSingleRnPost.s && temp)
 			result = result | 0xFFFFFF00;
 		set_general_register(rt,result);
-		printf("	Rn = %X",get_general_register(rn));
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrsb_post\n");
+		//printf("	Rn = %X",get_general_register(rn));
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrsb_post\n");
 	}
 }
 
@@ -950,9 +964,9 @@ void ldrh_post(int i){
 		set_general_register(rn,offset_addr);
 		result = get_MemU(address,2);
 		set_general_register(rt,result);
-		printf("	Rn = %X",get_general_register(rn));
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrh_post\n");
+		//printf("	Rn = %X",get_general_register(rn));
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrh_post\n");
 	}
 }
 
@@ -976,9 +990,9 @@ void ldrsh_post(int i){
 		if(LsSingleRnPost.s && temp)
 			result = result | 0xFFFF0000;
 		set_general_register(rt,result);
-		printf("	Rn = %X",get_general_register(rn));
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrsh_post\n");
+		//printf("	Rn = %X",get_general_register(rn));
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrsh_post\n");
 	}
 }
 
@@ -1001,8 +1015,8 @@ void str_post(int i){
 		set_general_register(rn,offset_addr);
 		result = get_general_register(rt);
 		set_MemU(address,4,result);
-		printf("	Memory unit is %X",get_MemU(address,4));
-		printf("	******str_post\n");
+		//printf("	Memory unit is %X",get_MemU(address,4));
+		//printf("	******str_post\n");
 	}
 }
 
@@ -1024,8 +1038,8 @@ void strb_post(int i){
 		address = get_general_register(rn);
 		set_general_register(rn,offset_addr);
 		set_MemU(address,1,get_general_register(rt));
-		printf("	Memory unit is %X",get_MemU(address,1));
-		printf("	******strb_post\n");
+		//printf("	Memory unit is %X",get_MemU(address,1));
+		//printf("	******strb_post\n");
 	}
 }
 
@@ -1047,8 +1061,8 @@ void strh_post(int i){
 		address = get_general_register(rn);
 		set_general_register(rn,offset_addr);
 		set_MemU(address,2,get_general_register(rt));
-		printf("	Memory unit is %X",get_MemU(address,2));
-		printf("	******strh_post\n");
+		//printf("	Memory unit is %X",get_MemU(address,2));
+		//printf("	******strh_post\n");
 	}
 }
 
@@ -1081,9 +1095,9 @@ void ldr_pre(int i){
 			result = get_MemU(address,4);
 			set_general_register(rt,result);
 		}
-		printf("	Rn = %X",get_general_register(rn));
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldr_pre\n");
+		//printf("	Rn = %X",get_general_register(rn));
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldr_pre\n");
 	}
 }
 
@@ -1104,9 +1118,9 @@ void ldrb_pre(int i){
 		set_general_register(rn,offset_addr);
 		result = get_MemU(address,1);
 		set_general_register(rt,result);
-		printf("	Rn = %X",get_general_register(rn));
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrb_pre\n");
+		//printf("	Rn = %X",get_general_register(rn));
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrb_pre\n");
 	}
 }
 
@@ -1130,9 +1144,9 @@ void ldrsb_pre(int i){
 		if(LsSingleRnPre.s && temp)
 			result = result | 0xFFFFFF00;
 		set_general_register(rt,result);
-		printf("	Rn = %X",get_general_register(rn));
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrsb_pre\n");
+		//printf("	Rn = %X",get_general_register(rn));
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrsb_pre\n");
 	}
 }
 
@@ -1153,9 +1167,9 @@ void ldrh_pre(int i){
 		set_general_register(rn,offset_addr);
 		result = get_MemU(address,2);
 		set_general_register(rt,result);
-		printf("	Rn = %X",get_general_register(rn));
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrh_pre\n");
+		//printf("	Rn = %X",get_general_register(rn));
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrh_pre\n");
 	}
 }
 
@@ -1179,9 +1193,9 @@ void ldrsh_pre(int i){
 		if(LsSingleRnPre.s && temp)
 			result = result | 0xFFFF0000;
 		set_general_register(rt,result);
-		printf("	Rn = %X",get_general_register(rn));
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrsh_pre\n");
+		//printf("	Rn = %X",get_general_register(rn));
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrsh_pre\n");
 	}
 }
 
@@ -1204,8 +1218,8 @@ void str_pre(int i){
 		set_general_register(rn,offset_addr);
 		result = get_general_register(rt);
 		set_MemU(address,4,result);
-		printf("	Memory unit is %X",get_MemU(address,4));
-		printf("	******str_pre\n");
+		//printf("	Memory unit is %X",get_MemU(address,4));
+		//printf("	******str_pre\n");
 	}
 }
 
@@ -1227,8 +1241,8 @@ void strb_pre(int i){
 		address = offset_addr;
 		set_general_register(rn,offset_addr);
 		set_MemU(address,1,get_general_register(rt));
-		printf("	Memory unit is %X",get_MemU(address,1));
-		printf("	******strb_pre\n");
+		//printf("	Memory unit is %X",get_MemU(address,1));
+		//printf("	******strb_pre\n");
 	}
 }
 
@@ -1250,8 +1264,8 @@ void strh_pre(int i){
 		address = offset_addr;
 		set_general_register(rn,offset_addr);
 		set_MemU(address,2,get_general_register(rt));
-		printf("	Memory unit is %X",get_MemU(address,2));
-		printf("	******strh_pre\n");
+		//printf("	Memory unit is %X",get_MemU(address,2));
+		//printf("	******strh_pre\n");
 	}
 }
 
@@ -1280,8 +1294,8 @@ void ldr_reg(int i){
 			result = get_MemU(address,4);
 			set_general_register(rt,result);
 		}
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldr_reg\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldr_reg\n");
 	}
 }
 
@@ -1300,8 +1314,8 @@ void ldrb_reg(int i){
 		address = get_general_register(rn) + lsl(get_general_register(rm),shift_n);
 		result = get_MemU(address,1);
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrb_reg\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrb_reg\n");
 	}
 }
 
@@ -1323,8 +1337,8 @@ void ldrsb_reg(int i){
 		if(LsSingleRnShift.s && temp)
 			result = result | 0xFFFFFF00;
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrsb_reg\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrsb_reg\n");
 	}
 }
 
@@ -1343,8 +1357,8 @@ void ldrh_reg(int i){
 		address = get_general_register(rn) + lsl(get_general_register(rm),shift_n);
 		result = get_MemU(address,2);
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrh_reg\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrh_reg\n");
 	}
 }
 
@@ -1366,8 +1380,8 @@ void ldrsh_reg(int i){
 		if(LsSingleRnShift.s && temp)
 			result = result | 0xFFFF0000;
 		set_general_register(rt,result);
-		printf("	Rt = %X",get_general_register(rt));
-		printf("	******ldrsh_reg\n");
+		//printf("	Rt = %X",get_general_register(rt));
+		//printf("	******ldrsh_reg\n");
 	}
 }
 
@@ -1386,8 +1400,8 @@ void str_reg(int i){
 		address = get_general_register(rn) + lsl(get_general_register(rm),shift_n);
 		result = get_general_register(rt);
 		set_MemU(address,4,result);
-		printf("	Memory unit is %X",get_MemU(address,4));
-		printf("	******str_reg\n");
+		//printf("	Memory unit is %X",get_MemU(address,4));
+		//printf("	******str_reg\n");
 	}
 }
 
@@ -1405,8 +1419,8 @@ void strb_reg(int i){
 	else{
 		address = get_general_register(rn) + lsl(get_general_register(rm),shift_n);
 		set_MemU(address,1,get_general_register(rt));
-		printf("	Memory unit is %X",get_MemU(address,1));
-		printf("	******strb_reg\n");
+		//printf("	Memory unit is %X",get_MemU(address,1));
+		//printf("	******strb_reg\n");
 	}
 }
 
@@ -1424,8 +1438,8 @@ void strh_reg(int i){
 	else{
 		address = get_general_register(rn) + lsl(get_general_register(rm),shift_n);
 		set_MemU(address,2,get_general_register(rt));
-		printf("	Memory unit is %X",get_MemU(address,2));
-		printf("	******strh_reg\n");
+		//printf("	Memory unit is %X",get_MemU(address,2));
+		//printf("	******strh_reg\n");
 	}
 }
 

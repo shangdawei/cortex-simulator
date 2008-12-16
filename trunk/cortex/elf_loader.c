@@ -6,12 +6,12 @@ bool load_elf(char *p)
 	int a=100;
 	int sizeof_prog_headers;
 	int memory_entry;
-	int i,j,k;
-	int buffer_num;
+	int i;
+//	int buffer_num;
 	int elf_prot;
 	int buffer_size;
 	int buffer_flag;
-	char* segment;
+//	char* segment;
 	char* p_memory;
 
 	Elf32_Ehdr file_header;// = (Elf32_Ehdr)malloc(sizeof(Elf32_Ehdr))
@@ -23,10 +23,10 @@ bool load_elf(char *p)
 	if(input==NULL)
 	{
 		printf("\nerror on open elf file!");
-		getch();
+		getchar();
 		exit(1);
 	}
-	ret = fread( (char *)(&file_header), sizeof(Elf32_Ehdr), 1, input );
+	ret = (int)fread( (char *)(&file_header), sizeof(Elf32_Ehdr), 1, input );
 	if (!(	(file_header.e_ident[0] == 0x7F) &&
 	(file_header.e_ident[1] == 'E') &&
 	(file_header.e_ident[2] == 'L') &&
@@ -46,7 +46,7 @@ bool load_elf(char *p)
 	fseek(input,file_header.e_phoff,SEEK_SET);
 
 	//	read the elf file programheaders to the prog_headers array
-	ret = fread(prog_headers,file_header.e_phentsize,file_header.e_phnum,input);
+	ret = (int)fread(prog_headers,file_header.e_phentsize,file_header.e_phnum,input);
 	if(ret == -1)
 	{
 		printf("Read Program Header Error!");
@@ -75,11 +75,11 @@ bool load_elf(char *p)
 		buffer_size = elf_phdr->p_filesz;
 		//load the segments into different spaces
 		if( elf_phdr->p_paddr >= FLASH_BEGIN && elf_phdr->p_paddr <= FLASH_END)
-			p_memory = flash + elf_phdr->p_paddr;
+			p_memory = (char*)(flash + elf_phdr->p_paddr);
 		else if ( elf_phdr->p_paddr >= SRAM_BEGIN && elf_phdr->p_paddr <= SRAM_END )
-			p_memory = sram + elf_phdr->p_paddr - SRAM_BEGIN;
+			p_memory = (char*)(sram + elf_phdr->p_paddr - SRAM_BEGIN);
 		buffer_flag = elf_phdr->p_offset;
-		ret = fread(p_memory, buffer_size, 1, input);
+		ret = (int)fread(p_memory, buffer_size, 1, input);
 
 		if(ret != 1 && buffer_size !=0)
 		{
@@ -90,10 +90,7 @@ bool load_elf(char *p)
 	return true;
 }
 
-int initial_entry(int entry)
+void initial_entry(int entry)
 {
-//	char* p_memory;
-//	p_memory = (char *)flash +entry;
-//	entry--;
 	set_pc(entry);
 }
