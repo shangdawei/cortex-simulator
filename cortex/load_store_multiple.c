@@ -7,8 +7,8 @@ void ls_multiple(int instruction){
 	int index;
 	func f_ptr;
 	*((int *)(&LdmDbEa)) = instruction;
-	printf("ls_multiple: 0x%X \n",instruction);
-	printf("Rn: 0x%x \n", LdmDbEa.rn);
+	//printf("ls_multiple: 0x%X \n",instruction);
+	//printf("Rn: 0x%x \n", LdmDbEa.rn);
 	if(LdmDbEa.vu == 2 && LdmDbEa.l == 1)
 		index = 0;
 	else if(LdmDbEa.vu == 1 && LdmDbEa.l == 1 && LdmDbEa.rn != 13)
@@ -23,13 +23,13 @@ void ls_multiple(int instruction){
 		index = 5;
 	else
 		index = 6;
-	printf("index is %d", index);
+	//printf("index is %d", index);
 	f_ptr=(void *)ls_multi[index];
 	f_ptr(instruction);
 }
 
 void ls_multiple_reserved(int instruction){
-	printf("ls_multiple_reserved: 0x%X \n",instruction);
+	//printf("ls_multiple_reserved: 0x%X \n",instruction);
 }
 
 //Load Multiple Decrement Before (Load Multiple Empty Ascending) loads multiple registers from sequential memory locations using an address from a base register.
@@ -71,10 +71,12 @@ void ldm_db_ea(int i){
 		assert(address == originalRn);
 		for(j = 0;j <= 12;j++)
 			printf("	R[%d] = 0x%X",j,get_general_register(j));
+#if DEBUG
 		printf("	SP = 0x%X",get_sp());
 		printf("	LR = 0x%X",get_lr());
 		printf("	PC = 0x%X",get_pc());
 		printf("	*****ldm_db_ea\n");
+#endif
 	}
 }
 
@@ -115,12 +117,14 @@ void ldm_ia_fd(int i){
 			address = address + 4;
 		}
 		assert(address == originalRn + 4*BitCount(registers));
+#if DEBUG
 		for(j = 0;j <= 12;j++)
 			printf("	R[%d] = 0x%X",j,get_general_register(j));
 		printf("	SP = 0x%X",get_sp());
 		printf("	LR = 0x%X",get_lr());
 		printf("	PC = 0x%X",get_pc());
 		printf("	*****ldm_ia_fd\n");
+#endif
 	}
 }
 
@@ -154,12 +158,14 @@ void pop(int i){
 			address = address + 4;
 		}
 		assert(address == originalSP + 4*BitCount(registers));
+#if DEBUG
 		for(j = 0;j <= 12;j++)
 			printf("	R[%d] = 0x%X",j,get_general_register(j));
 		printf("	SP = 0x%X",get_sp());
 		printf("	LR = 0x%X",get_lr());
 		printf("	PC = 0x%X",get_pc());
 		printf("	*****pop\n");
+#endif
 	}
 }
 
@@ -183,9 +189,9 @@ void push(int i){
 		assert(address == originalSP);
 		for(j = 0;j <= 14;j++){
 			address = address - 4;
-			printf("	0x%X",get_MemA(address,4));
+			//printf("	0x%X",get_MemA(address,4));
 		}
-		printf("	*****push\n");
+		//printf("	*****push\n");
 	}
 }
 
@@ -221,9 +227,9 @@ void stm_db_fd(int i){
 		assert(address == originalRn);
 		for(j = 0;j <= 14;j++){
 			address = address - 4;
-			printf("	0x%X",get_MemA(address,4));
+			//printf("	0x%X",get_MemA(address,4));
 		}
-		printf("	*****stm_db_fd\n");
+		//printf("	*****stm_db_fd\n");
 	}
 }
 
@@ -259,8 +265,8 @@ void stm_ia_ea(int i){
 		assert(address == originalRn + 4*BitCount(registers));
 		for(j = 0;j <= 14;j++){
 			address = address - 4;
-			printf("	0x%X",get_MemA(address,4));
+			//printf("	0x%X",get_MemA(address,4));
 		}
-		printf("	*****stm_ia_ea\n");
+		//printf("	*****stm_ia_ea\n");
 	}
 }

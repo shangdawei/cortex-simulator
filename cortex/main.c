@@ -1,5 +1,6 @@
 #include "fetch.h"
 #include "decode.h"
+#include "thumb_decode.h"
 #include "elf_loader.h"
 
 int main(){
@@ -14,8 +15,8 @@ int main(){
 	while(1){
 
 		unsigned int instruction= get_MemU(get_pc()& 0xfffffffe,2);
-		if(get_pc()==0x48d){
-			printf("kldssl");
+		if(get_pc()==0x17b){
+			printf("kldssl\n");
 		}
 
 	//	instruction &= 0x0ffff;
@@ -61,7 +62,7 @@ int main(){
 //						set_pc(get_pc()+2);
 //					state=0;
 				}
-				printf("------------------------------------------------------------- \n");
+//				printf("------------------------------------------------------------- \n");
 				#ifdef bool
 				printf("hello world!\n");
 				#endif

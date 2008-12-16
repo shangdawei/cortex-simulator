@@ -86,14 +86,14 @@ void thumb_decode(unsigned int instruction){
 	printf("The mask  is %X \n", thumbtable[index].mask);
 	printf("The result after & is %X \n",instruction & thumbtable[index].mask);
 	printf("The value is %X \n",thumbtable[index].value);
-	printf("The point is %d \n", thumbtable[index].point);
+	printf("The point is %d \n", (int)thumbtable[index].point);
 #endif	
 		if( (instruction & thumbtable[index].mask) == thumbtable[index].value){
 			int* point =(int *) thumbtable[index].point;
 			if(point > (int *)thumbtable && point <(int *)(thumbtable +MAXSIZE*4)){ 
-				index=(point-(int *)thumbtable);
+				index=(int)(point-(int *)thumbtable);
 #if DEBUG
-		printf("The point to skip in the table is %d the index is : %d\n", point, index);
+		printf("The point to skip in the table is %d the index is : %d\n", (int)point, index);
 #endif
 			}else{
 				func_ptr p = (func_ptr)point;

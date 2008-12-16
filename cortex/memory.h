@@ -72,8 +72,8 @@ void set_MemU(int address, int bytes, int value);
 
 /*
 The Cortex-M3 memory map has two 32-MB alias regions that map to two 1-MB bit-band regions:
-â€¢ Accesses to the 32-MB SRAM alias region map to the 1-MB SRAM bit-band region.
-â€¢ Accesses to the 32-MB peripheral alias region map to the 1-MB peripheral bit-band region.
+â€?Accesses to the 32-MB SRAM alias region map to the 1-MB SRAM bit-band region.
+â€?Accesses to the 32-MB peripheral alias region map to the 1-MB peripheral bit-band region.
 
 Writing to a word in the alias region has the same effect as a read-modify-write
 operation on the targeted bit in the bit-band region.

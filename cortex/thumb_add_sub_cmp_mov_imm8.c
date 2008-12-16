@@ -32,7 +32,7 @@ void thumb_mov_imm8(short ins)
 	
 	if(!InITBlock())
 	{
-		if(result & 0x8000 !=0)
+		if((result & 0x8000) !=0)
 			set_flag_n();
 		else
 			cle_flag_n();
@@ -47,7 +47,7 @@ void thumb_mov_imm8(short ins)
 		else
 			cle_flag_c();
 	}
-	printf("*********thumb_mov_imm8***********\n");
+	//printf("*********thumb_mov_imm8***********\n");
 }
 
 
@@ -83,7 +83,7 @@ void thumb_cmp_imm8(short ins)
 		else
 			cle_flag_v();			
 	}
-	printf("*********thumb_cmp_imm8***********\n");
+	//printf("*********thumb_cmp_imm8***********\n");
 }
 
 void thumb_add_imm8(short ins)
@@ -101,7 +101,7 @@ void thumb_add_imm8(short ins)
 	
 	if(!InITBlock())
 	{
-		if(result->result & 0x8000 !=0)
+		if((result->result & 0x8000) !=0)
 			set_flag_n();
 		else
 			cle_flag_n();
@@ -121,7 +121,7 @@ void thumb_add_imm8(short ins)
 		else
 			cle_flag_v();			
 	}
-	printf("*********thumb_add_imm8***********\n");
+	//printf("*********thumb_add_imm8***********\n");
 	
 }
 
@@ -141,7 +141,7 @@ void thumb_sub_imm8(short ins)
 	
 	if(!InITBlock())
 	{
-		if(result->result & 0x8000 !=0)
+		if((result->result & 0x8000) !=0)
 			set_flag_n();
 		else
 			cle_flag_n();
@@ -161,7 +161,7 @@ void thumb_sub_imm8(short ins)
 		else
 			cle_flag_v();			
 	}
-	printf("*********thumb_sub_imm8***********\n");
+	//printf("*********thumb_sub_imm8***********\n");
 	
 }
 

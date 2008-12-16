@@ -11,9 +11,12 @@ void thumb_sepecial_data_pro(short instruction)
 	func f_ptr;
 	*((short*) (&SpecialDataProcessing)) = instruction;
 	index  = SpecialDataProcessing.op;
+#if DEBUG
+
 	printf("thumb_sepecial_data_pro : 0x%x\n", instruction);
 	printf("Rdn : 0x%x, Rm : 0x%x, DN : 0x%x, Op : 0x%x\n",
 		SpecialDataProcessing.rdn, SpecialDataProcessing.rm, SpecialDataProcessing.dn, SpecialDataProcessing.op);
+#endif
 	f_ptr = special_data_processing[index];
 	f_ptr(instruction);
 }
@@ -50,7 +53,7 @@ void thumb_add_reg(short instruction)
 			set_general_register(rd, r->result);
 		free(r);
 	}
-	printf("*********thumb_add_reg***********\n");
+	//printf("*********thumb_add_reg***********\n");
 }
 
 void thumb_cmp_reg(short instruction)
@@ -75,7 +78,7 @@ void thumb_cmp_reg(short instruction)
 		if (r->carry_out) set_flag_c(); else cle_flag_c();
 		if (r->overflow) set_flag_v(); else cle_flag_v();
 	}
-	printf("*********thumb_cmp_reg***********\n");
+	//printf("*********thumb_cmp_reg***********\n");
 }
 
 void thumb_mov_reg(short instruction)
@@ -92,5 +95,5 @@ void thumb_mov_reg(short instruction)
 	}else{
 		set_general_register(rd, result);
 	}
-	printf("*********thumb_mov_reg***********\n");
+	//printf("*********thumb_mov_reg***********\n");
 }

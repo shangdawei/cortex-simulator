@@ -1,4 +1,5 @@
 #include "memory.h"
+#include "register.h"
 
 PAM_item cortex_PAM[4] = {
 	{0x400263c0,0x00000001,0x00000000,0x00000001},//wheel
@@ -53,7 +54,9 @@ int get_memory(int address){
 	switch(memoryInfo->type){
 		case FLASH:
 			result = flash[memoryInfo->offset/4];
+#if DEBUG
 			printf("get_memory result:%d\n",result);
+#endif
 			break;
 		case SRAM:
 			result = sram[memoryInfo->offset/4];
@@ -82,7 +85,9 @@ void set_memory(int address, int value){
 	switch(memoryInfo->type){
 		case FLASH:
 			flash[memoryInfo->offset/4] = value;
+#if DEBUG
 			printf("set_memory result:flash[%d] = %d\n",memoryInfo->offset,flash[memoryInfo->offset/4]);
+#endif
 			break;
 		case SRAM:
 			sram[memoryInfo->offset/4]  = value;
@@ -149,7 +154,9 @@ int get_MemA(int address, int bytes)
 	default:	//invalid bytes
 		result = 0x00;			
 	}
+#if DEBUG
 	printf("get_MemA result:%d\n",result);
+#endif
 	return result;
 }
 
@@ -195,7 +202,9 @@ void set_MemA(int address, int bytes, int value)
 	default:	//invalid bytes
 		break;
 	}
+#if DEBUG
 	printf("set_MemA result:%d\n",*((int*)ptr));
+#endif
 } 
 
 
@@ -245,7 +254,9 @@ int get_MemU(int address, int bytes)
 	default:	//invalid bytes
 		result = 0x00;			
 	}
+#if DEBUG
 	printf("get_MemU result:%d\n",result);
+#endif
 	return result;
 }
 
@@ -291,7 +302,9 @@ void set_MemU(int address, int bytes, int value)
 	default:	//invalid bytes
 		break;
 	}
+#if DEBUG
 	printf("set_MemU result:%d\n",*((int*)ptr));
+#endif
 }
 //
 
@@ -374,7 +387,7 @@ It append some logs to a txt file,when the program modifies some special memory,
 */
 void PeriOut(int pc_reg, int address, int value)
 {
-	FILE *file = fopen("periout.dat", "at+");
+	FILE *file = fopen("periout.dat", "a+");
 	fprintf(file, "PC : 0x%x\tADD : 0x%x\tVAL : 0x%x\n", pc_reg, address, value);
 	fclose(file);
 }

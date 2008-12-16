@@ -20,6 +20,7 @@ void branch_instr(int instruction)
 {
 	func f_ptr;
 	*((int *)(&branch)) = instruction;
+#if DEBUG
 	printf("branch instruction: 0x%x \n",instruction);
 	printf("offset1 = %x\n",branch.off1);
 	printf("j2 = %x\n",branch.j2);
@@ -30,6 +31,7 @@ void branch_instr(int instruction)
 	printf("offset2 = %x\n",branch.off2);
 	printf("S = %x\n",branch.s);
 	printf("pass4 = %x\n",branch.pass4);
+#endif
 	f_ptr=(void*) branch_i[0];
 	f_ptr(instruction);
 
@@ -39,6 +41,7 @@ void branch_with_link(int instruction)
 {
 	func f_ptr;
 	*((int*)(&branchWithLink))=instruction;
+#if DEBUG
 	printf("branch with link instruction: 0x% \n",instruction);
 	printf("offset1 = %x\n",branchWithLink.off1);
 	printf("J2 = %x\n",branchWithLink.j2);
@@ -49,6 +52,7 @@ void branch_with_link(int instruction)
 	printf("offset2 = %x\n",branchWithLink.off2);
 	printf("S = %x\n",branchWithLink.s);
 	printf("pass4 = %x\n",branchWithLink.pass4);
+#endif
 	f_ptr=(void*)branch_with_l[0];
     f_ptr(instruction);
 
@@ -57,6 +61,7 @@ void conditional_branch(int instruction)
 {
 	func f_ptr;
 	*((int*)(&conditionalBranch))=instruction;
+#if DEBUG
 	printf("Conditional Branch instruction: 0x% \n",instruction);
 	printf("offset1 = %x\n",conditionalBranch.off1);
 	printf("J2 = %x\n",conditionalBranch.j2);
@@ -67,6 +72,7 @@ void conditional_branch(int instruction)
 	printf("cond = %x\n",conditionalBranch.cond);
 	printf("S = %x\n",conditionalBranch.s);
 	printf("pass3 = %x\n",conditionalBranch.pass3);
+#endif
 	f_ptr=(void*)conditional_b[0];
 	f_ptr(instruction);
 
@@ -75,6 +81,7 @@ void move_to_status(int instruction)
 {
 	func f_ptr;
 	*((int*)(&moveToStatus))=instruction;
+#if DEBUG
 	printf("move to status from register instruction: 0x% \n",instruction);
 	printf("SYSm = %x\n",moveToStatus.sysm);
 	printf("pass1 = %x\n",moveToStatus.pass1);
@@ -87,6 +94,7 @@ void move_to_status(int instruction)
 	printf("pass7 = %x\n",moveToStatus.pass7);
 	printf("pass8 = %x\n",moveToStatus.pass8);
 	printf("pass9 = %x\n",moveToStatus.pass9);
+#endif
 	f_ptr=(void*)move_to_s[0];
 	f_ptr(instruction);
 
@@ -96,6 +104,7 @@ void no_op_hints(int instruction)
 	int index;
 	func f_ptr;
 	*((int*)(&noOpHints))=instruction;
+#if DEBUG
 	printf("No operation & hints instruction: 0x%\n",instruction);
 	printf("hint = %x\n",noOpHints.hint);
 	printf("pass1 = %x\n",noOpHints.pass1);
@@ -109,6 +118,7 @@ void no_op_hints(int instruction)
 	printf("pass9 = %x\n",noOpHints.pass9);
 	printf("pass10 = %x\n",noOpHints.pass10);
 	printf("pass11 = %x\n",noOpHints.pass11);
+#endif
 
 	if(noOpHints.hint<=4)
 		index=noOpHints.hint;
@@ -131,6 +141,7 @@ void special_ctrl_operations(int instruction)
 	int index;
 	func f_ptr;
 	*((int*)(&specialCtrlOp))=instruction;
+#if DEBUG
 	printf("Special control operations instruction: 0x%x\n",instruction);
 	printf("option = %x\n",specialCtrlOp.option);
 	printf("opcode = %x\n",specialCtrlOp.opcode);
@@ -144,6 +155,7 @@ void special_ctrl_operations(int instruction)
 	printf("pass8 = %x\n",specialCtrlOp.pass8);
 	printf("pass9 = %x\n",specialCtrlOp.pass9);
 	printf("pass10 = %x\n",specialCtrlOp.pass10);
+#endif
 	
 	index=specialCtrlOp.opcode;
 	f_ptr=(void*) special_ctrl_o[index];
@@ -153,6 +165,7 @@ void move_to_reg(int instruction)
 {
 	func f_ptr;
 	*((int*)(&moveToReg))=instruction;
+#if DEBUG
 	printf("Move to register from status instruction:%x\n",instruction);
 	printf("SYSm = %x\n",moveToReg.sysm);
 	printf("Rd = %x\n",moveToReg.rd);
@@ -165,6 +178,7 @@ void move_to_reg(int instruction)
 	printf("pass7 = %x\n",moveToReg.pass7);
 	printf("pass8 = %x\n",moveToReg.pass8);
 	printf("pass9 = %x\n",moveToReg.pass9);
+#endif
 	f_ptr=(void*)move_to_r[0];
 	f_ptr(instruction);
 

@@ -7,7 +7,7 @@
  */
 #ifndef _DATA_PROCESS_NONIMM
 #define _DATA_PROCESS_NONIMM
-#define DEBUG_I 1
+#define DEBUG_I 0
 #include <stdio.h>
 #include "operators_built-in_func.h"
 #include "instruction.h"
