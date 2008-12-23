@@ -14,31 +14,26 @@ MemoryTranslate* addr_transfer(unsigned int address){
 	if((FLASH_BEGIN <= address)&&(FLASH_END >= address)){
 		result->type = FLASH;
 		result->offset = address&0x0003FFFF;
-
-		//printf("flash offset:%d access!\n",result->offset);
 	}
 	else if((SRAM_BEGIN <= address)&&(SRAM_END >= address)){
 		result->type = SRAM;
 		result->offset = address&0x0000FFFF;
-
-		//printf("sram address:%d access!\n",result->offset);
 	}
 	else if((SRAM_BB_BEGIN <= address)&&(SRAM_BB_END >= address)){
 		result->type = SRAM_BB;
 		result->offset = address&0x01FFFFFF;
-
-		//printf("sram bit-binding address:%d access!\n",result->offset);
 	}
 	else if((PERI_BEGIN <= address)&&(PERI_END >= address)){
 		result->type = PERI;
 		result->offset = address&0x000FFFFF;
-
-		//printf("peripheral address:%d access!\n",result->offset);
 	}
 	else if((PERI_BB_BEGIN <= address)&&(PERI_BB_END >= address)){
 		result->type = PERI_BB;
 		result->offset = address&0x01FFFFFF;
-		//printf("peripheral bit-binding address:%d access!\n",result->offset);
+	}
+	else if((NVIC_BEGIN <= address)&&(NVIC_END >= address)){
+		result->type = NVIC;
+		result->offset = address&0x00000fff;
 	}
 	else{
 		printf("memory address:%d access error!\n",result->offset);
@@ -54,29 +49,24 @@ int get_memory(int address){
 	switch(memoryInfo->type){
 		case FLASH:
 			result = flash[memoryInfo->offset/4];
-#if DEBUG
-			printf("get_memory result:%d\n",result);
-#endif
 			break;
 		case SRAM:
 			result = sram[memoryInfo->offset/4];
 			break;
 		case SRAM_BB:
-			//bit-binding in sram
 			break;
 		case PERI:
 			result = readPeri(AddConvert(address));
-			//result = peripheral[memoryInfo->offset/4];
 			break;
 		case PERI_BB:
-			//bit-binding in sram
+			break;
+		case NVIC:
+			result = nvic[memoryInfo->offset/4];
 			break;
 		default:
 			printf("memory address:%d access error in get_memory!\n",address);
 	}
 	return result;
-	//assert(address < MEM_SIZE);
-	//return memory[address];
 }
 
 void set_memory(int address, int value){
@@ -85,15 +75,11 @@ void set_memory(int address, int value){
 	switch(memoryInfo->type){
 		case FLASH:
 			flash[memoryInfo->offset/4] = value;
-#if DEBUG
-			printf("set_memory result:flash[%d] = %d\n",memoryInfo->offset,flash[memoryInfo->offset/4]);
-#endif
 			break;
 		case SRAM:
 			sram[memoryInfo->offset/4]  = value;
 			break;
 		case SRAM_BB:
-			//bit-binding in sram
 			break;
 		case PERI:
 			peripheral[memoryInfo->offset/4]  = value;
@@ -101,7 +87,9 @@ void set_memory(int address, int value){
 			writePeri(AddConvert(address),value);
 			break;
 		case PERI_BB:
-			//bit-binding in sram
+			break;
+		case NVIC:
+			nvic[memoryInfo->offset/4] = value;
 			break;
 		default:
 			printf("memory address:%d access error in get_memory!\n",address);
@@ -120,22 +108,20 @@ int get_MemA(int address, int bytes)
 	switch(memoryInfo->type){
 		case FLASH:
 			ptr = (char*)(&flash[memoryInfo->offset/4]);
-
 			break;
 		case SRAM:
 			ptr = (char*)(&sram[memoryInfo->offset/4]);
 			break;
 		case SRAM_BB:
-			//bit-binding in sram
 			return bit_binding_read(memoryInfo->offset,SRAM_BB);
-			break;
 		case PERI:
 			peripheral[memoryInfo->offset/4] = readPeri(AddConvert(address));
 			ptr = (char*)(&peripheral[memoryInfo->offset/4]);
 			break;
 		case PERI_BB:
-			//bit-binding in peripheral
 			return bit_binding_read(memoryInfo->offset,PERI_BB);
+		case NVIC:
+			ptr = (char*)(&nvic[memoryInfo->offset/4]);
 			break;
 		default:
 			printf("memory address:%d access error in get_MemA()!\n",address);
@@ -174,7 +160,6 @@ void set_MemA(int address, int bytes, int value)
 			ptr = (char*)(&sram[memoryInfo->offset/4]);
 			break;
 		case SRAM_BB:
-			//bit-binding in sram
 			bit_binding_write(memoryInfo->offset,SRAM_BB,value);
 			return;
 		case PERI:
@@ -185,6 +170,9 @@ void set_MemA(int address, int bytes, int value)
 		case PERI_BB:
 			bit_binding_write(memoryInfo->offset,PERI_BB,value);
 			return;
+		case NVIC:
+			ptr = (char*)(&nvic[memoryInfo->offset/4]);
+			break;
 		default:
 			printf("memory address:%d access error in set_MemA()!\n",address);
 	}
@@ -235,6 +223,9 @@ int get_MemU(int address, int bytes)
 			//bit-binding in peripheral cannot be Unaligned access
 			printf("PERI bit binding in set_MemU() is not permit");
 			return 0;
+		case NVIC:
+			ptr = (char*)nvic + memoryInfo->offset;
+			break;
 		default:
 			printf("memory address:%d access error in get_MemU()!\n",address);
 	}
@@ -285,6 +276,9 @@ void set_MemU(int address, int bytes, int value)
 			//bit-binding in peripheral cannot be Unaligned access
 			printf("peripheral bit binding in set_MemU() is not permit");
 			return;
+		case NVIC:
+			ptr = (char*)nvic + memoryInfo->offset;
+			break;
 		default:
 			printf("memory address:%d access error in get_MemU()!\n",address);
 	}

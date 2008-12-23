@@ -187,10 +187,10 @@ void push(int i){
 			}
 		}
 		assert(address == originalSP);
-		for(j = 0;j <= 14;j++){
-			address = address - 4;
+		//for(j = 0;j <= 14;j++){
+		//	address = address - 4;
 			//printf("	0x%X",get_MemA(address,4));
-		}
+		//}
 		//printf("	*****push\n");
 	}
 }

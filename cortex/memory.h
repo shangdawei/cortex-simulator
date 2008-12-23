@@ -11,6 +11,7 @@
 #define FLASH_SIZE		262144			//256K Flash					from 0x00000000 to 0x0003FFFF
 #define SRAM_SIZE		65536			//64K SRAM						from 0x20000000 to 0x2000FFFF
 #define PERI_SIZE		1048576			//1M peripheral device	 		from 0x40000000	to 0x400FFFFF
+#define NVIC_SIZE		128
 
 #define FLASH_BASE		0x00000000
 #define SRAM_BASE		0x20000000
@@ -26,6 +27,8 @@
 #define PERI_END		0x400FFFFF
 #define	PERI_BB_BEGIN	0x42000000
 #define PERI_BB_END		0x43FFFFFF
+#define NVIC_BEGIN		0xE000E000
+#define NVIC_END		0xE000EFFF
 
 //define that which memory array it access
 #define FLASH			0 
@@ -33,11 +36,13 @@
 #define SRAM_BB			2
 #define PERI			3
 #define PERI_BB			4
+#define NVIC			5
 
 //
 int flash[FLASH_SIZE];//={0,1,2,3,4,5,6,7,8,9,};
 int sram[SRAM_SIZE/4];// = {0xFFFFFFFF,};
 int peripheral[PERI_SIZE/4];// = {0x12345678,};
+int nvic[NVIC_SIZE/4];
 
 
 typedef struct{
@@ -81,6 +86,10 @@ operation on the targeted bit in the bit-band region.
 //address is in alias region, value is the to write in the address
 void bit_binding_write(int bitWordOffset, int bitBandBaseType, int value);
 int bit_binding_read(int bitWordOffset, int bitBandBaseType);
+
+
+
+
 
 //output the PERI datas to a file
 void PeriOut(int pc_reg, int address, int value);
