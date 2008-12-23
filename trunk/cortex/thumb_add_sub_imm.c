@@ -15,8 +15,8 @@ void thumb_add_sub_imm(short ins)
 	printf("shift_move: op is %d\n",DataAddSubImm.opc);
 	
 	#endif
-	
-	
+
+
 
 	p=(func)data_add_sub_imm_process[(int)DataAddSubImm.opc];
 	(p)(ins);

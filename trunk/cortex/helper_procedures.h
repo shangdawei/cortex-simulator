@@ -5,6 +5,11 @@
 #include "memory.h"
 typedef enum{false=0, true} bool;
 
+#define HANDLERMODE	0
+#define THREADMODE	1
+#define THREADPRI	2
+#define THREADUSER	3
+
 struct TWOWORD{
 	int word1;
 	int word2;
@@ -18,6 +23,7 @@ void BranchWritePC(int value);
 void BreakPoint();
 void BXWritePC(int value);
 void CallSupervisor();
+bool CheckPC();
 void ClearEventRegister();
 void ClearExclusiveMonitors();
 bool ConditionPassed(short cond);
