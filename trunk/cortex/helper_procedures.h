@@ -5,15 +5,21 @@
 #include "memory.h"
 typedef enum{false=0, true} bool;
 
-#define HANDLERMODE	0
-#define THREADMODE	1
-#define THREADPRI	2
-#define THREADUSER	3
+#define HANDLER 0
+#define THREAD 1
+
+bool mode;
+
 
 struct TWOWORD{
 	int word1;
 	int word2;
 }twoWord;
+
+bool GetMode();//set the mode as handler or thread
+bool SetMode(bool m);//return the mode,  1 stands for thread, 0 stands for thread
+
+
 
 void ALUWritePC(int value);
 int ArchVersion();
@@ -23,7 +29,6 @@ void BranchWritePC(int value);
 void BreakPoint();
 void BXWritePC(int value);
 void CallSupervisor();
-bool CheckPC();
 void ClearEventRegister();
 void ClearExclusiveMonitors();
 bool ConditionPassed(short cond);
