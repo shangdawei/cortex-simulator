@@ -431,7 +431,11 @@ void msr(int i)
 						If Mode == Thread then CONTROL<1> = R[n]<1>;
 
 				*/// question
+				
 				set_control((get_control()&0xFFFFFFFE)|(get_general_register(moveToStatus.rn)&0x01));
+				if(GetMode()==THREAD)
+					set_control((get_control()&0xFFFFFFFD)|(get_general_register(moveToStatus.rn)&0x02));
+
 			}
 		}
 
