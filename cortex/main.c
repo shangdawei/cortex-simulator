@@ -2,18 +2,19 @@
 #include "decode.h"
 #include "thumb_decode.h"
 #include "elf_loader.h"
+#include "device/common/device.h"
 
 int main(){
 	unsigned int instruction;
 
 	load_elf("testelf.elf");
-	//initalDevice();
+	initalDevice();
 	
 	while(1){
-		if(EventRegistered())
+		if(!doCircle())
 			EnterExc();
 
-		if(get_mode())
+		if(getMode())
 			if(ExcReturn())
 				ExitExc();
 
