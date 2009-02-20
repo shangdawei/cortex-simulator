@@ -199,6 +199,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\cortex\device\common\device.c"
+				>
+			</File>
+			<File
 				RelativePath="..\cortex\elf_loader.c"
 				>
 			</File>
@@ -216,6 +220,10 @@
 			</File>
 			<File
 				RelativePath="..\cortex\immediate_decode.c"
+				>
+			</File>
+			<File
+				RelativePath="..\cortex\win32\interface.c"
 				>
 			</File>
 			<File
