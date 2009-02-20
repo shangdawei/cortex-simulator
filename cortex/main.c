@@ -8,19 +8,17 @@ int main(){
 	unsigned int instruction;
 
 	load_elf("testelf.elf");
-	initalDevice();
+	//initalDevice();
 	
 	while(1){
-		if(!doCircle())
+		/*if(!doCircle())
 			EnterExc();
 
 		if(getMode())
 			if(ExcReturn())
-				ExitExc();
+				ExitExc();*/
 
 		instruction = get_MemU(get_pc()& 0xfffffffe,2);
-		if(get_pc()==0x17b)
-			printf("End\n");
 		if(instruction!=0){
 			if(((instruction & 0x0E800) == 0x0E800) ||
 						((instruction & 0x0F000) == 0x0F000)){
