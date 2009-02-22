@@ -1,4 +1,4 @@
-//Microsoft Developer Studio generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
 
@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Chinese (P.R.C.) resources
+// 中文(中华人民共和国) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 #ifdef _WIN32
@@ -27,18 +27,18 @@ LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE DISCARDABLE 
+1 TEXTINCLUDE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE DISCARDABLE 
+2 TEXTINCLUDE 
 BEGIN
     "#include ""afxres.h""\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE DISCARDABLE 
+3 TEXTINCLUDE 
 BEGIN
     "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
     "#define _AFX_NO_OLE_RESOURCES\r\n"
@@ -64,13 +64,20 @@ END
 // Menu
 //
 
-IDR_MAINFRAME MENU PRELOAD DISCARDABLE 
+IDR_MAINFRAME MENU 
 BEGIN
     POPUP "文件(&F)"
     BEGIN
-        MENUITEM "演示",                        ID_FILE_DEMO
-        MENUITEM SEPARATOR
-        MENUITEM "退出(&X)",                    ID_APP_EXIT
+        MENUITEM "退出(&X)",                      ID_APP_EXIT
+    END
+    POPUP "运行(&R)"
+    BEGIN
+        MENUITEM "步进电机运动仿真",                    ID_FILE_DEMO
+    END
+    POPUP "帮助(&H)"
+    BEGIN
+        MENUITEM "使用说明(&I)",                    ID_32778
+        MENUITEM "关于(&A)",                      ID_32779
     END
 END
 
@@ -80,7 +87,7 @@ END
 // Accelerator
 //
 
-IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
+IDR_MAINFRAME ACCELERATORS 
 BEGIN
     "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
     "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
@@ -98,7 +105,6 @@ BEGIN
 END
 
 
-#ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
 //
 // Version
@@ -121,18 +127,13 @@ BEGIN
     BEGIN
         BLOCK "080404b0"
         BEGIN
-            VALUE "Comments", "\0"
-            VALUE "CompanyName", "\0"
-            VALUE "FileDescription", "demo Microsoft 基础类应用程序\0"
-            VALUE "FileVersion", "1, 0, 0, 1\0"
-            VALUE "InternalName", "demo\0"
-            VALUE "LegalCopyright", "版权所有 (C) 2008\0"
-            VALUE "LegalTrademarks", "\0"
-            VALUE "OriginalFilename", "demo.EXE\0"
-            VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "demo 应用程序\0"
-            VALUE "ProductVersion", "1, 0, 0, 1\0"
-            VALUE "SpecialBuild", "\0"
+            VALUE "FileDescription", "demo Microsoft 基础类应用程序"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "demo"
+            VALUE "LegalCopyright", "版权所有 (C) 2008"
+            VALUE "OriginalFilename", "demo.EXE"
+            VALUE "ProductName", "demo 应用程序"
+            VALUE "ProductVersion", "1, 0, 0, 1"
         END
     END
     BLOCK "VarFileInfo"
@@ -141,45 +142,37 @@ BEGIN
     END
 END
 
-#endif    // !_MAC
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Dialog
 //
 
-IDD_DIALOG1 DIALOGEX 0, 0, 267, 157
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+IDD_DIALOG1 DIALOGEX 0, 0, 230, 134
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_TOOLWINDOW | WS_EX_CLIENTEDGE
+CAPTION "Stepper Motor Simulation"
 FONT 10, "System", 0, 0, 0x1
 BEGIN
-    PUSHBUTTON      "Exit",ID_OVER,230,138,30,12
-    EDITTEXT        IDC_EDIT_COORD,13,17,96,14,ES_READONLY | NOT WS_BORDER | 
-                    NOT WS_TABSTOP
-    EDITTEXT        IDC_EDIT_LW,13,85,111,12,ES_READONLY | NOT WS_BORDER | 
-                    NOT WS_TABSTOP
-    EDITTEXT        IDC_EDIT_RW,13,103,111,12,ES_READONLY | NOT WS_BORDER | 
-                    NOT WS_TABSTOP
-    CONTROL         "",IDC_STATIC_LED,"Static",SS_BITMAP | SS_SUNKEN | 
-                    WS_BORDER,7,135,15,15,WS_EX_CLIENTEDGE
-    PUSHBUTTON      "Start",IDC_LINK,194,138,29,12
-    EDITTEXT        IDC_PORT,132,23,128,103,ES_MULTILINE | ES_AUTOVSCROLL
-    CONTROL         "",IDC_STATIC_LED2,"Static",SS_BITMAP | SS_SUNKEN | 
-                    WS_BORDER,33,135,15,15,WS_EX_CLIENTEDGE
-    CONTROL         "",IDC_STATIC_LED3,"Static",SS_BITMAP | SS_SUNKEN | 
-                    WS_BORDER,52,135,15,15,WS_EX_CLIENTEDGE
-    CONTROL         "",IDC_STATIC_LED4,"Static",SS_BITMAP | SS_SUNKEN | 
-                    WS_BORDER,71,135,15,15,WS_EX_CLIENTEDGE
-    CONTROL         "",IDC_STATIC_LED5,"Static",SS_BITMAP | SS_SUNKEN | 
-                    WS_BORDER,90,135,15,15,WS_EX_CLIENTEDGE
-    GROUPBOX        "LEDS",IDC_STATIC,7,124,118,26
-    GROUPBOX        "Movement State",IDC_STATIC,7,55,118,64
-    EDITTEXT        IDC_EDIT_M,13,68,111,12,ES_READONLY | NOT WS_BORDER | 
-                    NOT WS_TABSTOP
-    GROUPBOX        "Steps",IDC_STATIC,7,7,118,45
-    EDITTEXT        IDC_EDIT_COORD2,13,35,96,14,ES_READONLY | NOT WS_BORDER | 
-                    NOT WS_TABSTOP
-    GROUPBOX        "Port Message",IDC_STATIC,129,7,131,123
+    PUSHBUTTON      "Exit",ID_OVER,41,115,30,12
+    EDITTEXT        IDC_EDIT_COORD,38,15,40,14,NOT WS_TABSTOP
+    EDITTEXT        IDC_EDIT_LW,45,78,56,12,NOT WS_TABSTOP
+    EDITTEXT        IDC_EDIT_RW,45,92,56,12,NOT WS_TABSTOP
+    CONTROL         "",IDC_STATIC_LED,"Static",SS_BITMAP | SS_SUNKEN,93,14,12,12
+    PUSHBUTTON      "Start",IDC_LINK,7,115,29,12
+    EDITTEXT        IDC_PORT,111,19,112,108,ES_MULTILINE
+    CONTROL         "",IDC_STATIC_LED2,"Static",SS_BITMAP | SS_SUNKEN,93,28,12,12
+    CONTROL         "",IDC_STATIC_LED3,"Static",SS_BITMAP | SS_SUNKEN,93,36,12,12
+    GROUPBOX        "Movement State",IDC_STATIC,7,55,100,53
+    EDITTEXT        IDC_EDIT_M,45,65,56,12,NOT WS_TABSTOP
+    GROUPBOX        "Steps",IDC_STATIC,7,7,83,45
+    EDITTEXT        IDC_EDIT_COORD2,38,31,40,14,NOT WS_TABSTOP
+    LTEXT           "Rotate",IDC_STATIC,11,17,22,8
+    LTEXT           "Forward",IDC_STATIC,11,33,27,8
+    LTEXT           "State",IDC_STATIC,15,67,18,8
+    LTEXT           "Lwheel",IDC_STATIC,15,80,24,8
+    LTEXT           "Rwheel",IDC_STATIC,15,93,25,8
+    LTEXT           "Port Message",IDC_STATIC,113,7,46,8
 END
 
 
@@ -189,14 +182,14 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO DISCARDABLE 
+GUIDELINES DESIGNINFO 
 BEGIN
     IDD_DIALOG1, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 260
+        RIGHTMARGIN, 223
         TOPMARGIN, 7
-        BOTTOMMARGIN, 150
+        BOTTOMMARGIN, 127
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -207,8 +200,8 @@ END
 // Bitmap
 //
 
-IDB_LEDON               BITMAP  DISCARDABLE     "res\\bitmap1.bmp"
-IDB_LEDOFF              BITMAP  DISCARDABLE     "res\\bmp00001.bmp"
+IDB_LEDON               BITMAP                  "res\\bitmap1.bmp"
+IDB_LEDOFF              BITMAP                  "res\\bmp00001.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -217,25 +210,25 @@ IDB_LEDOFF              BITMAP  DISCARDABLE     "res\\bmp00001.bmp"
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-AFX_IDI_STD_FRAME       ICON    DISCARDABLE     "res\\icon1.ico"
+AFX_IDI_STD_FRAME       ICON                    "res\\icon1.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // String Table
 //
 
-STRINGTABLE PRELOAD DISCARDABLE 
+STRINGTABLE 
 BEGIN
     IDR_MAINFRAME           "demo\n\nDemo\n\n\nDemo.Document\nDemo Document"
 END
 
-STRINGTABLE PRELOAD DISCARDABLE 
+STRINGTABLE 
 BEGIN
     AFX_IDS_APP_TITLE       "demo"
     AFX_IDS_IDLEMESSAGE     "就绪"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_INDICATOR_EXT        "扩展名"
     ID_INDICATOR_CAPS       "大写"
@@ -245,7 +238,7 @@ BEGIN
     ID_INDICATOR_REC        "记录"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_FILE_NEW             "建立新文档\n新建"
     ID_FILE_OPEN            "打开一个现有文档\n打开"
@@ -254,13 +247,13 @@ BEGIN
     ID_FILE_SAVE_AS         "将活动文档以一个新文件名保存\n另存为"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_APP_ABOUT            "显示程序信息，版本号和版权\n关于"
     ID_APP_EXIT             "退出应用程序；提示保存文档\n退出"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_FILE_MRU_FILE1       "打开该文档"
     ID_FILE_MRU_FILE2       "打开该文档"
@@ -280,18 +273,18 @@ BEGIN
     ID_FILE_MRU_FILE16      "打开该文档"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_NEXT_PANE            "切换到下一个窗格\n下一窗格"
     ID_PREV_PANE            "切换回前一个窗格\n前一窗格"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_WINDOW_SPLIT         "将活动的窗口分隔成窗格\n分隔"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_EDIT_CLEAR           "删除被选对象\n删除"
     ID_EDIT_CLEAR_ALL       "全部删除\n全部删除"
@@ -306,7 +299,7 @@ BEGIN
     ID_EDIT_REDO            "重新执行先前已撤消的操作\n重新执行"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     AFX_IDS_SCSIZE          "改变窗口大小"
     AFX_IDS_SCMOVE          "改变窗口位置"
@@ -317,13 +310,13 @@ BEGIN
     AFX_IDS_SCCLOSE         "关闭活动的窗口并提示保存所有文档"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     AFX_IDS_SCRESTORE       "把窗口恢复到正常大小"
     AFX_IDS_SCTASKLIST      "激活任务表"
 END
 
-#endif    // Chinese (P.R.C.) resources
+#endif    // 中文(中华人民共和国) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

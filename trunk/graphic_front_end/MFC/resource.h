@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by demo.rc
 //
 #define IDD_ABOUTBOX                    100
@@ -28,6 +28,8 @@
 #define ID_OPER_RIGHT                   32775
 #define ID_OPER_FORWARD                 32776
 #define ID_FILE_DEMO                    32777
+#define ID_32778                        32778
+#define ID_32779                        32779
 
 // Next default values for new objects
 // 
@@ -35,7 +37,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        135
-#define _APS_NEXT_COMMAND_VALUE         32778
+#define _APS_NEXT_COMMAND_VALUE         32780
 #define _APS_NEXT_CONTROL_VALUE         1008
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

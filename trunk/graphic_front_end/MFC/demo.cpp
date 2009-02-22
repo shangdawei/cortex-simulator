@@ -7,6 +7,7 @@
 #include "MainFrm.h"
 #include "demoDoc.h"
 #include "demoView.h"
+#include <windows.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -19,7 +20,6 @@ static char THIS_FILE[] = __FILE__;
 
 BEGIN_MESSAGE_MAP(CDemoApp, CWinApp)
 	//{{AFX_MSG_MAP(CDemoApp)
-	ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
 		// NOTE - the ClassWizard will add and remove mapping macros here.
 		//    DO NOT EDIT what you see in these blocks of generated code!
 	//}}AFX_MSG_MAP
@@ -47,6 +47,13 @@ CDemoApp theApp;
 
 BOOL CDemoApp::InitInstance()
 {
+	STARTUPINFO si;
+    PROCESS_INFORMATION pi;
+
+    ZeroMemory( &si, sizeof(si) );
+    si.cb = sizeof(si);
+    ZeroMemory( &pi, sizeof(pi) );
+
 	AfxEnableControlContainer();
 
 	// Standard initialization
@@ -90,64 +97,8 @@ BOOL CDemoApp::InitInstance()
 	m_pMainWnd->ShowWindow(SW_SHOW);
 	m_pMainWnd->UpdateWindow();
 	m_pMainWnd->SetWindowText("Demo");
+	if(!CreateProcess("simulator.exe",NULL,NULL,NULL,FALSE,0,NULL,NULL,&si,&pi)){
+	}
 
 	return TRUE;
 }
-
-
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
-
-class CAboutDlg : public CDialog
-{
-public:
-	CAboutDlg();
-
-// Dialog Data
-	//{{AFX_DATA(CAboutDlg)
-	enum { IDD = IDD_ABOUTBOX };
-	//}}AFX_DATA
-
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAboutDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
-
-// Implementation
-protected:
-	//{{AFX_MSG(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-};
-
-CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
-{
-	//{{AFX_DATA_INIT(CAboutDlg)
-	//}}AFX_DATA_INIT
-}
-
-void CAboutDlg::DoDataExchange(CDataExchange* pDX)
-{
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAboutDlg)
-	//}}AFX_DATA_MAP
-}
-
-BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-	//{{AFX_MSG_MAP(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-// App command to run the dialog
-void CDemoApp::OnAppAbout()
-{
-	CAboutDlg aboutDlg;
-	aboutDlg.DoModal();
-}
-
-/////////////////////////////////////////////////////////////////////////////
-// CDemoApp message handlers
-

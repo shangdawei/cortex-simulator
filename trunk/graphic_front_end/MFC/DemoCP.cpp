@@ -36,8 +36,6 @@ void DemoCP::DoDataExchange(CDataExchange* pDX)
 	//{{AFX_DATA_MAP(DemoCP)
 	DDX_Control(pDX, IDC_EDIT_COORD2, m_polar);
 	DDX_Control(pDX, IDC_EDIT_M, m_mstate);
-	DDX_Control(pDX, IDC_STATIC_LED5, m_led5);
-	DDX_Control(pDX, IDC_STATIC_LED4, m_led4);
 	DDX_Control(pDX, IDC_STATIC_LED3, m_led3);
 	DDX_Control(pDX, IDC_STATIC_LED2, m_led2);
 	DDX_Control(pDX, IDC_PORT, m_port);
@@ -69,7 +67,6 @@ LRESULT DemoCP::GetCoord(WPARAM wParam,LPARAM lParam)
 	
 	itoa((int)(pWnd->vpos_x/4),spos,10);
 	m_coord.SetSel(0,-1);
-	m_coord.ReplaceSel("转动步数 : ");
 	itoa(pWnd->lregs,spos,10);
 	m_coord.ReplaceSel(spos);
 	m_coord.ReplaceSel(" : ");
@@ -78,40 +75,39 @@ LRESULT DemoCP::GetCoord(WPARAM wParam,LPARAM lParam)
 
 	itoa(pWnd->steps,spos,10);
 	m_polar.SetSel(0,-1);
-	m_polar.ReplaceSel("前进步数 ：");
 	m_polar.ReplaceSel(spos);
 	if(pWnd->state_o != pWnd->rect_state){
 	if(pWnd->rect_state == 0){
 		m_mstate.SetSel(0,-1);
-		m_mstate.ReplaceSel("小车状态 ：前进");
+		m_mstate.ReplaceSel("Move forward");
 		m_lw.SetSel(0,-1);
-		m_lw.ReplaceSel("左轮状态 ：正转");
+		m_lw.ReplaceSel("Positive");
 		m_rw.SetSel(0,-1);
-		m_rw.ReplaceSel("右轮状态 ：正转");
+		m_rw.ReplaceSel("Positive");
 	}
 	else if(pWnd->rect_state == 1){
 		m_mstate.SetSel(0,-1);
-		m_mstate.ReplaceSel("小车状态 ：左转");
+		m_mstate.ReplaceSel("Turn left");
 		m_lw.SetSel(0,-1);
-		m_lw.ReplaceSel("左轮状态 ：反转");
+		m_lw.ReplaceSel("Reverse");
 		m_rw.SetSel(0,-1);
-		m_rw.ReplaceSel("右轮状态 ：正转");
+		m_rw.ReplaceSel("Positive");
 	}
 	else if(pWnd->rect_state == 2){
 		m_mstate.SetSel(0,-1);
-		m_mstate.ReplaceSel("小车状态 ：右转");
+		m_mstate.ReplaceSel("Turn right");
 		m_lw.SetSel(0,-1);
-		m_lw.ReplaceSel("左轮状态 ：正转");
+		m_lw.ReplaceSel("Positive");
 		m_rw.SetSel(0,-1);
-		m_rw.ReplaceSel("右轮状态 ：反转");
+		m_rw.ReplaceSel("Reverse");
 	}
 	else if(pWnd->rect_state == 3){
 		m_mstate.SetSel(0,-1);
-		m_mstate.ReplaceSel("小车状态 ：左转");
+		m_mstate.ReplaceSel("Back up");
 		m_lw.SetSel(0,-1);
-		m_lw.ReplaceSel("左轮状态 ：反转");
+		m_lw.ReplaceSel("Reverse");
 		m_rw.SetSel(0,-1);
-		m_rw.ReplaceSel("反转");
+		m_rw.ReplaceSel("Reverse");
 	}
 	}
 	if(pWnd->rect_state == 4)
@@ -120,11 +116,11 @@ LRESULT DemoCP::GetCoord(WPARAM wParam,LPARAM lParam)
 		stops = 0;
 	if(stops > 100){
 		m_mstate.SetSel(0,-1);
-		m_mstate.ReplaceSel("小车状态 ：停止");
+		m_mstate.ReplaceSel("Stop");
 		m_lw.SetSel(0,-1);
-		m_lw.ReplaceSel("左轮状态 ：停转");
+		m_lw.ReplaceSel("Run down");
 		m_rw.SetSel(0,-1);
-		m_rw.ReplaceSel("右轮状态 ：停转");
+		m_rw.ReplaceSel("Run down");
 	}
 	return 0;
 }
@@ -141,11 +137,11 @@ BOOL DemoCP::OnInitDialog()
 	bledoff = LoadBitmap(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDB_LEDOFF));
 	SetLEDS(0,0);
 	m_mstate.SetSel(0,-1);
-	m_mstate.ReplaceSel("小车状态 ：停止");
+	m_mstate.ReplaceSel("Stop");
 	m_lw.SetSel(0,-1);
-	m_lw.ReplaceSel("左轮状态 ：停转");
+	m_lw.ReplaceSel("Run down");
 	m_rw.SetSel(0,-1);
-	m_rw.ReplaceSel("右轮状态 ：停转");
+	m_rw.ReplaceSel("Run down");
 	return TRUE;
 }
 
@@ -163,14 +159,6 @@ LRESULT DemoCP::SetLEDS(WPARAM wParam,LPARAM lParam)
 		m_led3.SetBitmap(bledon);
 	else
 		m_led3.SetBitmap(bledoff);
-	if(pWnd->leds & 4)
-		m_led4.SetBitmap(bledon);
-	else
-		m_led4.SetBitmap(bledoff);
-	if(pWnd->leds & 8)
-		m_led5.SetBitmap(bledon);
-	else
-		m_led5.SetBitmap(bledoff);
 
 	return 0;
 }
@@ -189,7 +177,7 @@ LRESULT DemoCP::SetPort(WPARAM wParam,LPARAM lParam)
 	unsigned char bp;
 
 	port_lines++;
-	if(port_lines >100){
+	if(port_lines >12){
 		port_lines = 0;
 		m_port.SetSel(0,-1);
 	}

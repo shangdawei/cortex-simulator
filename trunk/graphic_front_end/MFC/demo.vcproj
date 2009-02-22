@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="demo"
 	ProjectGUID="{1E7F6688-A2BC-4517-8235-5303780F25CF}"
+	RootNamespace="demo"
 	Keyword="MFCProj"
 	>
 	<Platforms>
@@ -425,5 +426,9 @@
 		</File>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="demo.rc"
+		/>
 	</Globals>
 </VisualStudioProject>

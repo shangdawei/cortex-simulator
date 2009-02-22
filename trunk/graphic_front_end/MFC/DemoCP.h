@@ -34,8 +34,6 @@ public:
 	enum { IDD = IDD_DIALOG1 };
 	CEdit	m_polar;
 	CEdit	m_mstate;
-	CStatic	m_led5;
-	CStatic	m_led4;
 	CStatic	m_led3;
 	CStatic	m_led2;
 	CEdit	m_port;
