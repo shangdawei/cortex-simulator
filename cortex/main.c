@@ -9,6 +9,7 @@ int main(){
 
 	load_elf("testelf.elf");
 	//initalDevice();
+	getchar();
 	
 	while(1){
 		/*if(!doCircle())
