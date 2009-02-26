@@ -9,8 +9,8 @@ int main()
 	loadconfig("vbus", &des);
 	init_vbus(&des);
 
-	release_vbus();
 	getchar();
+	release_vbus();
 
 	return 0;
 }
