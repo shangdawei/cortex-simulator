@@ -54,15 +54,15 @@ bool win32_load_bus(char* busname)
 void win32_read_bus(int addr, char* data, int size)
 {
 	int i;
-	for(i = addr;i<size;i++)
-		data[i-addr] = pBuf[i];
+	for(i = 0;i<size;i++)
+		data[i] = pBuf[i+addr];
 }
 
 void win32_write_bus(int addr, char* data, int size)
 {
 	int i;
-	for(i = addr;i<size;i++)
-		pBuf[i] = data[i-addr];
+	for(i = 0;i<size;i++)
+		pBuf[i+addr] = data[i];
 }
 
 void win32_release_bus()
