@@ -79,13 +79,13 @@ void thumb_eor_reg(short i)
 	
 	//int carry;
 	
-	struct RESULTCARRY *rc;
+	struct RESULTCARRY *rc = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((short *)&DataProcReg)=i;
 	n = (unsigned)get_general_register((int)DataProcReg.Rdn);
 	m = (unsigned)get_general_register((int)DataProcReg.Rm);
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	rc=shift_c(m,SRType_None,0,apsr_c);
+	shift_c(m,SRType_None,0,apsr_c,rc);
 	//set_general_register((int)DataProcReg.Rdn, rc->result);
 	
 /*	if(ConditionPassed(15))
@@ -135,6 +135,7 @@ void thumb_eor_reg(short i)
 			cle_flag_c();
 	}
 	//printf("*********thumb_eor_reg***********\n");
+	free(rc);
 	
 }
 
@@ -142,7 +143,7 @@ void thumb_eor_reg(short i)
 
 void thumb_lsl_reg(short i)
 {
-	struct RESULTCARRY *rc;
+	struct RESULTCARRY *rc = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	
 	int result,shift;
 
@@ -151,7 +152,7 @@ void thumb_lsl_reg(short i)
 	shift=(get_general_register((int)DataProcReg.Rm) & 0xff);
 	
 	
-	rc=lsl_c(result,shift);
+	lsl_c(result,shift,rc);
 	
 	set_general_register((int)DataProcReg.Rdn, rc->result);
 	
@@ -176,13 +177,14 @@ void thumb_lsl_reg(short i)
 		
 	}
 	//printf("*********thumb_lsl_reg***********\n");
+	free(rc);
 }
 
    
 void thumb_lsr_reg(short i)
 {
 	
-	struct RESULTCARRY *rc;
+	struct RESULTCARRY *rc = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	unsigned result,shift,apsr_c;
 
 	*((short *)&DataProcReg)=i;
@@ -191,7 +193,7 @@ void thumb_lsr_reg(short i)
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;	
 	
-	rc=shift_c(result,SRType_LSR,shift,apsr_c);//lsr_c(result,shift);
+	shift_c(result,SRType_LSR,shift,apsr_c,rc);//lsr_c(result,shift);
 	
 	set_general_register((int)DataProcReg.Rdn, rc->result);
 	
@@ -221,7 +223,7 @@ void thumb_lsr_reg(short i)
 void thumb_asr_reg(short i)
 {
 	
-	struct RESULTCARRY *rc;
+	struct RESULTCARRY *rc = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	unsigned shift;
 	int result;
 
@@ -230,7 +232,7 @@ void thumb_asr_reg(short i)
 	shift=(unsigned)(get_general_register((int)DataProcReg.Rm) & 0xff);
 	
 	
-	rc=asr_c(result,shift);
+	asr_c(result,shift,rc);
 	
 	set_general_register((int)DataProcReg.Rdn, rc->result);
 	
@@ -255,6 +257,7 @@ void thumb_asr_reg(short i)
 		
 	}
 	//printf("*********thumb_asr_reg***********\n");
+	free(rc);
 }
 
 
@@ -263,14 +266,14 @@ void thumb_adc_reg(short i)
 {
 	unsigned m,n,carry;
 	
-	struct CALCULATECO *result;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	*((short *)&DataProcReg)=i;
 	n=(unsigned)get_general_register((int)DataProcReg.Rdn);
 	m=(unsigned)get_general_register((int)DataProcReg.Rm);
 	carry=(unsigned)get_flag_c();
 
 	
-	result=addwithcarry(m,n,carry);
+	addwithcarry(m,n,carry,result);
 	
 	set_general_register((int)DataProcReg.Rdn,result->result);
 	
@@ -297,6 +300,7 @@ void thumb_adc_reg(short i)
 			cle_flag_v();			
 	}
 	//printf("*********thumb_adc_reg***********\n");
+	free(result);
 }
 
 
@@ -304,7 +308,7 @@ void thumb_sbc_reg(short i)
 {
 	unsigned m,n,carry;
 	
-	struct CALCULATECO *result;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 
 	*((short *)&DataProcReg)=i;
 	n=(unsigned)get_general_register((int)DataProcReg.Rdn);
@@ -312,7 +316,7 @@ void thumb_sbc_reg(short i)
 	carry=(unsigned)get_flag_c();
 
 	
-	result=addwithcarry(n,~m,carry);
+	addwithcarry(n,~m,carry,result);
 	
 	set_general_register((int)DataProcReg.Rdn,result->result);
 	
@@ -339,13 +343,14 @@ void thumb_sbc_reg(short i)
 			cle_flag_v();			
 	}
 	//printf("*********thumb_sbc_reg***********\n");
+	free(result);
 }
 
 
 void thumb_ror_reg(short i)
 {
 	
-	struct RESULTCARRY *rc;
+	struct RESULTCARRY *rc = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	unsigned shift;
 	unsigned result;
 
@@ -354,7 +359,7 @@ void thumb_ror_reg(short i)
 	shift=(unsigned)(get_general_register((int)DataProcReg.Rm) & 0xff);
 	
 	
-	rc=ror_c(result,shift);
+	ror_c(result,shift,rc);
 	
 	set_general_register((int)DataProcReg.Rdn, rc->result);
 	
@@ -379,6 +384,7 @@ void thumb_ror_reg(short i)
 		
 	}
 	//printf("*********thumb_ror_reg***********\n");
+	free(rc);
 } 
    
 void thumb_tst_reg(short i)
@@ -420,14 +426,14 @@ void thumb_rsb_reg(short i)
 {
 	
 	unsigned n,m;
-	struct CALCULATECO *result;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 
 	*((short *)&DataProcReg)=i;
 	n=(unsigned)get_general_register((int)DataProcReg.Rm);
 	m=0;
 
 	
-	result=addwithcarry(~n,m,1);
+	addwithcarry(~n,m,1,result);
 	
 	set_general_register((int)DataProcReg.Rdn,result->result);
 	
@@ -454,6 +460,7 @@ void thumb_rsb_reg(short i)
 			cle_flag_v();			
 	}
 	//printf("*********thumb_rsb_reg***********\n");
+	free(result);
 }
 
 
@@ -461,14 +468,14 @@ void thumb_rsb_reg(short i)
 void thumb_cmp_reg_t1(short i)
 {
 	unsigned Rdn,Rm;
-	struct CALCULATECO *result;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 
 	*((short *)&DataProcReg)=i;
 	Rdn=get_general_register((int)DataProcReg.Rdn);
 	Rm=get_general_register((int)DataProcReg.Rm);
 	
 	
-	result=addwithcarry(Rdn,~Rm,1);
+	addwithcarry(Rdn,~Rm,1,result);
 	
 	if(ConditionPassed(15))
 	{
@@ -493,20 +500,21 @@ void thumb_cmp_reg_t1(short i)
 			cle_flag_v();			
 	}
 	//printf("*********thumb_cmp_reg_t1***********\n");
+	free(result);
 }
 
 
 void thumb_cmn_reg(short i)
 {
 	unsigned Rdn,Rm;
-	struct CALCULATECO *result;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 
 	*((short *)&DataProcReg)=i;
 	Rdn=get_general_register((int)DataProcReg.Rdn);
 	Rm=get_general_register((int)DataProcReg.Rm);
 	
 	
-	result=addwithcarry(Rdn,Rm,0);
+	addwithcarry(Rdn,Rm,0,result);
 	
 	if(ConditionPassed(15))
 	{
@@ -531,6 +539,7 @@ void thumb_cmn_reg(short i)
 			cle_flag_v();			
 	}
 	//printf("*********thumb_cmn_reg***********\n");
+	free(result);
 }
    
 void thumb_orr_reg(short i)

@@ -140,7 +140,7 @@ void add_with_carry_imm(int i){
 		source = get_general_register(dataProModified.rn);//get data from source register
 		apsr_c = get_flag_c();
 		apsr_c = apsr_c >> 29;
-		result = addwithcarry(source,imm,apsr_c);
+		addwithcarry(source,imm,apsr_c, result);
 		set_general_register(dataProModified.rd, result->result);//send data to destination register
 		if(dataProModified.s==1){
 			if(result->result & 0x80000000)//whether negative
@@ -169,6 +169,7 @@ void add_with_carry_imm(int i){
 		printf("********ADC{s}<c><q>	{<Rd>,} <Rn>, #<const>******* \n");
 #endif
 	}
+	free(result);
 }
 
 //This instruction adds an immediate value to a register value, and writes the result to the destination register.
@@ -181,7 +182,7 @@ void add_imm(int i){
 		printf("	it is unpredictable!");
 	else{	
 		source = get_general_register(dataProModified.rn);
-		result = addwithcarry(source,imm,0);
+		addwithcarry(source,imm,0, result);
 		set_general_register(dataProModified.rd, result->result);
 		if(dataProModified.s==1){
 			if(result->result & 0x80000000)
@@ -209,6 +210,7 @@ void add_imm(int i){
 		printf("	***add\n");
 #endif
 	}
+	free(result);
 }
 
 //This instruction performs a bitwise AND of a register value and an immediate value, and writes the result to the destination register.
@@ -216,7 +218,7 @@ void logical_and_imm(int i){
 	int source,result;
 	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+	ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8,imm);
 	if(Bad_Reg(dataProModified.rd) || Bad_Reg(dataProModified.rn))
 		printf("	it is unpredictable!");
 	else{
@@ -246,6 +248,7 @@ void logical_and_imm(int i){
 		printf("	***logical and\n");
 #endif
 	}
+	free(imm);
 }
 
 //Bit Clear (immediate) performs a bitwise AND of a register value and the complement of an immediate value, and writes the result to the destination register. 
@@ -253,7 +256,7 @@ void bit_clear_imm(int i){
 	int source,result;
 	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+	ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8,imm);
 	if(Bad_Reg(dataProModified.rd) || Bad_Reg(dataProModified.rn))
 		printf("	it is unpredictable!");
 	else{
@@ -283,6 +286,7 @@ void bit_clear_imm(int i){
 		printf("	***bit_clear\n");
 #endif
 	}
+	free(imm);
 }
 
 //Compare Negative (immediate) adds a register value and an immediate value. It updates the condition flags based on the result, and discards the result.
@@ -295,7 +299,7 @@ void compare_negative_imm(int i){
 		printf("	it is unpredictable!");
 	else{
 		source = get_general_register(dataProModified.rn);
-		result = addwithcarry(source,imm,0);
+		addwithcarry(source,imm,0, result);
 		if(result->result & 0x80000000)
 			set_flag_n();
 		else
@@ -316,6 +320,7 @@ void compare_negative_imm(int i){
 		//printf(" rd = %X",get_general_register(dataProModified.rd));
 		//printf("	***compare_negative\n");
 	}
+	free(result);
 }
 
 //Compare (immediate) subtracts an immediate value from a register value. It updates the condition flags based on the result, and discards the result.
@@ -328,7 +333,7 @@ void compare_imm(int i){
 		printf("	it is unpredictable!");
 	else{
 		source = get_general_register(dataProModified.rn);
-		result = addwithcarry(source,~imm,1);
+		addwithcarry(source,~imm,1, result);
 		if(result->result & 0x80000000)
 			set_flag_n();
 		else
@@ -349,6 +354,7 @@ void compare_imm(int i){
 		//printf(" rd = %X",get_general_register(dataProModified.rd));
 		//printf("	***compare\n");
 	}
+	free(result);
 }
 
 //Exclusive OR (immediate) performs a bitwise Exclusive OR of a register value and an immediate value, and writes the result to the destination register. 
@@ -356,7 +362,7 @@ void exclusive_or_imm(int i){
 	int source,result;
 	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+	ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8,imm);
 	if(Bad_Reg(dataProModified.rd) || Bad_Reg(dataProModified.rn))
 		printf("	it is unpredictable!");
 	else{
@@ -380,10 +386,8 @@ void exclusive_or_imm(int i){
 			else
 				set_flag_c();
 		}
-		//printf(" APSR = %X",get_apsr());
-		//printf(" rd = %X",get_general_register(dataProModified.rd));
-		//printf("	***exclusive or\n");
 	}
+	free(imm);
 }
 
 //Move (immediate) writes an immediate value to the destination register. 
@@ -391,7 +395,7 @@ void move_imm(int i){
 	int result;
 	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+	ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8,imm);
 	if(Bad_Reg(dataProModified.rd))
 		printf("	it is unpredictable!");
 	else{
@@ -413,10 +417,8 @@ void move_imm(int i){
 			else
 				set_flag_c();
 		}
-		//printf(" APSR = %X",get_apsr());
-		//printf(" rd = %X",get_general_register(dataProModified.rd));
-		//printf("	***move\n");
 	}
+	free(imm);
 }
 
 //Move Negative (immediate) writes the logical ones complement of an immediate value to the destination register. 
@@ -424,7 +426,7 @@ void move_negative_imm(int i){
 	int result;
 	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+	ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8,imm);
 	if(Bad_Reg(dataProModified.rd))
 		printf("	it is unpredictable!");
 	else{
@@ -456,6 +458,7 @@ void move_negative_imm(int i){
 		printf("	***move negative\n");
 #endif
 	}
+	free(imm);
 }
 
 //Logical OR NOT (immediate) performs a bitwise (inclusive) OR of a register value and the complement of an immediate value, and writes the result to the destination register.
@@ -463,7 +466,7 @@ void logical_or_not_imm(int i){
 	int source,result;
 	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+	ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8,imm);
 	if(Bad_Reg(dataProModified.rd) || dataProModified.rn == 13)
 		printf("	it is unpredictable!");
 	else{
@@ -490,7 +493,7 @@ void logical_or_not_imm(int i){
 		printf("	***logical or not\n");
 #endif
 	}
-
+	free(imm);
 }
 
 //Logical OR (immediate) performs a bitwise (inclusive) OR of a register value and an immediate value, and writes the result to the destination register. 
@@ -498,7 +501,7 @@ void logical_or_imm(int i){
 	int source,result;
 	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+	ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8,imm);
 	if(Bad_Reg(dataProModified.rd) || dataProModified.rn == 13)
 		printf("	it is unpredictable!");
 	else{
@@ -525,6 +528,7 @@ void logical_or_imm(int i){
 		printf("	***logical or\n");
 #endif
 	}
+	free(imm);
 }
 
 //Reverse Subtract (immediate) subtracts a register value from an immediate value, and writes the result to the destination register. 
@@ -537,7 +541,7 @@ void reverse_subtract_imm(int i){
 		printf("	it is unpredictable!");
 	else{
 		source = get_general_register(dataProModified.rn);
-		result = addwithcarry(~source,imm,1);
+		addwithcarry(~source,imm,1, result);
 		set_general_register(dataProModified.rd, result->result);
 		if(dataProModified.s==1){
 			if(result->result & 0x80000000)
@@ -565,6 +569,7 @@ void reverse_subtract_imm(int i){
 		printf("	***reverse subtract\n");
 #endif
 	}
+	free(result);
 }
 
 //Subtract with Carry (immediate) subtracts an immediate value and the value of NOT(Carry flag) from a register value, and writes the result to the destination register. 
@@ -580,7 +585,7 @@ void subtract_with_carry_imm(int i){
 		source = get_general_register(dataProModified.rn);
 		apsr_c = get_flag_c();
 		apsr_c = apsr_c >> 29;
-		result = addwithcarry(source,~imm,apsr_c);
+		addwithcarry(source,~imm,apsr_c, result);
 		set_general_register(dataProModified.rd, result->result);
 		if(dataProModified.s==1){
 			if(result->result & 0x80000000)
@@ -606,6 +611,7 @@ void subtract_with_carry_imm(int i){
 		printf("	***subtract with carry \n");
 #endif
 	}
+	free(result);
 }
 
 //This instruction subtracts an immediate value from a register value, and writes the result to the destination register. 
@@ -618,7 +624,7 @@ void subtract_imm(int i){
 		printf("	it is unpredictable!");
 	else{
 		source = get_general_register(dataProModified.rn);
-		result = addwithcarry(source,~imm,1);
+		addwithcarry(source,~imm,1, result);
 		set_general_register(dataProModified.rd, result->result);
 		if(dataProModified.s==1){
 			if(result->result & 0x80000000)
@@ -644,6 +650,7 @@ void subtract_imm(int i){
 		printf("	***subtract\n");
 #endif
 	}
+	free(result);
 }
 
 //Test Equivalence (immediate) performs an exclusive OR operation on a register value and an immediate value. 
@@ -651,7 +658,7 @@ void test_equal_imm(int i){
 	int source,result;
 	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+	ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8,imm);
 	if(Bad_Reg(dataProModified.rn))
 		printf("	it is unpredictable!");
 	else{
@@ -672,6 +679,7 @@ void test_equal_imm(int i){
 		//printf(" APSR = %X",get_apsr());
 		//printf("	***test equal\n");	
 	}
+	free(imm);
 }
 
 //Test (immediate) performs a logical AND operation on a register value and an immediate value.
@@ -679,7 +687,7 @@ void test_imm(int i){
 	int source,result;
 	struct RESULTCARRY *imm = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((int *)(&dataProModified)) = i;
-	imm = ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8);
+	ThumbExpandImm12WithC(dataProModified.imm1, dataProModified.imm3,dataProModified.imm8,imm);
 	if(Bad_Reg(dataProModified.rn))
 		printf("	it is unpredictable!");
 	else{
@@ -700,6 +708,7 @@ void test_imm(int i){
 		//printf(" APSR = %X",get_apsr());
 		//printf("	***test\n");
 	}
+	free(imm);
 }
 
 //This instruction adds an immediate value to a register value, and writes the result to the destination register.
@@ -712,7 +721,7 @@ void add_wide_imm(int i){
 		printf("	it is unpredictable!");
 	else{
 		source = get_general_register(dataProAdd.rn);
-		result = addwithcarry(source,imm,0);
+		addwithcarry(source,imm,0, result);
 		set_general_register(dataProAdd.rd, result->result);
 		#if DEBUG
 		printf(" APSR = %X",get_apsr());
@@ -720,6 +729,7 @@ void add_wide_imm(int i){
 		printf("	***add_wide\n");
 #endif
 	}
+	free(result);
 }
 
 //This instruction subtracts an immediate value from a register value, and writes the result to the destination register.
@@ -732,7 +742,7 @@ void sub_wide_imm(int i){
 		printf("	it is unpredictable!");
 	else{
 		source = get_general_register(dataProAdd.rn);
-		result = addwithcarry(source,~imm,1);
+		addwithcarry(source,~imm,1, result);
 		set_general_register(dataProAdd.rd, result->result);
 		#if DEBUG
 		printf(" APSR = %X",get_apsr());
@@ -740,6 +750,7 @@ void sub_wide_imm(int i){
 		printf("	***subtract_wide\n");
 #endif
 	}
+	free(result);
 }
 
 //Address to Register adds an immediate value to the PC value, and writes the result to the destination register.
@@ -969,13 +980,13 @@ void signed_lsl(int i){
 		//printf(" saturate_to = %d",saturate_to);
 		source = get_general_register(dataProBit.rn);
 		//printf(" source = %X",source);
-		shift_tn = decodeImmShift(0,imm);
+		decodeImmShift(0,imm,shift_tn);
 		//printf(" shift_n = %X",shift_n);
 		apsr_c = get_flag_c();
 		apsr_c = apsr_c >> 29;
 		operand = shift(source,shift_tn->carry,shift_tn->result,apsr_c);
 		//printf(" operand = %d",operand);
-		result = signedSatQ(operand,saturate_to);
+		signedSatQ(operand,saturate_to,result);
 		set_general_register(dataProBit.rd, result->result);//it exsit a problem.
 		if(result->carry)
 			set_flag_q();
@@ -1003,11 +1014,11 @@ void signed_asr(int i){
 		else{
 			saturate_to = dataProBit.imm5 + 1;
 			source = get_general_register(dataProBit.rn);
-			shift_tn = decodeImmShift(2,imm);
+			decodeImmShift(2,imm,shift_tn);
 			apsr_c = get_flag_c();
 			apsr_c = apsr_c >> 29;
 			operand = shift(source,shift_tn->carry,shift_tn->result,apsr_c);
-			result = signedSatQ(operand,saturate_to);
+			signedSatQ(operand,saturate_to,result);
 			set_general_register(dataProBit.rd, result->result);//it exsit a problem.
 			if(result->carry)
 				set_flag_q();
@@ -1016,6 +1027,8 @@ void signed_asr(int i){
 		}
 		//printf("	***signed_asr\n");
 	}
+	free(result);
+	free(shift_tn);
 }
 
 //Unsigned Bit Field Extract extracts any number of adjacent bits at any position from one register, zero extends them to 32 bits, and writes the result to the destination register.
@@ -1066,11 +1079,11 @@ void unsigned_lsl(int i){
 		imm = decode_shift(dataProBit.imm3,dataProBit.imm2);
 		saturate_to = dataProBit.imm5;
 		source = get_general_register(dataProBit.rn);
-		shift_tn = decodeImmShift(0,imm);
+		decodeImmShift(0,imm,shift_tn);
 		apsr_c = get_flag_c();
 		apsr_c = apsr_c >> 29;
 		operand = shift(source,shift_tn->carry,shift_tn->result,apsr_c);
-		result = unsignedSatQ(operand,saturate_to);
+		unsignedSatQ(operand,saturate_to,result);
 		set_general_register(dataProBit.rd, result->result);
 		if(result->carry)
 			set_flag_q();
@@ -1078,6 +1091,8 @@ void unsigned_lsl(int i){
 		//printf(" rd = %X",get_general_register(dataProBit.rd));
 		//printf("	***unsigned_lsl\n");
 	}
+	free(result);
+	free(shift_tn);
 }
 
 //Unsigned Saturate saturates an optionally-shifted signed value to a selected unsigned range.
@@ -1096,11 +1111,11 @@ void unsigned_asr(int i){
 		else{
 			saturate_to = dataProBit.imm5;
 			source = get_general_register(dataProBit.rn);
-			shift_tn = decodeImmShift(2,imm);
+			decodeImmShift(2,imm,shift_tn);
 			apsr_c = get_flag_c();
 			apsr_c = apsr_c >> 29;
 			operand = shift(source,shift_tn->carry,shift_tn->result,apsr_c);
-			result = unsignedSatQ(operand,saturate_to);
+			unsignedSatQ(operand,saturate_to,shift_tn);
 			set_general_register(dataProBit.rd, result->result);
 			if(result->carry)
 				set_flag_q();
@@ -1109,4 +1124,6 @@ void unsigned_asr(int i){
 		}
 		//printf("	***unsigned_asr\n");
 	}
+	free(shift_tn);
+	free(result);
 }

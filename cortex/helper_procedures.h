@@ -3,6 +3,11 @@
 
 #include "register.h"
 #include "memory.h"
+
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 typedef enum{false=0, true} bool;
 
 #define HANDLER 0

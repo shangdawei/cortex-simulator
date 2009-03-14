@@ -56,7 +56,7 @@ typedef struct{
 	1.which type of memory segment (flash, sram or peripheral) it belongs, 
 	2.the offset in the memory segment
 */
-MemoryTranslate* addr_transfer(unsigned int address);	//to jugde which memory array the given belongs, 
+void addr_transfer(unsigned int address, MemoryTranslate* result);	//to jugde which memory array the given belongs, 
 									//address is the mapped memory address, return value is the address in each memory array
 
 void memory_copy(int target, int destination, int num);

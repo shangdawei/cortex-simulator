@@ -34,8 +34,7 @@ struct IMM12{
 }imm12;
 
 //immediate expand with Carry
-struct RESULTCARRY* ThumbExpandImm12WithC(int i1,int i3,int i8){
-	struct RESULTCARRY *imm32 = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+void ThumbExpandImm12WithC(int i1,int i3,int i8, struct RESULTCARRY *imm32){
 	int temp,m,n;
 	int i = decode_imm12(i1,i3,i8);
 	*((int *)(&imm12)) = i;
@@ -69,16 +68,19 @@ struct RESULTCARRY* ThumbExpandImm12WithC(int i1,int i3,int i8){
 		//printf(" m = %x",m);
 		n = ((i & 0x000000FF)|0x00000080);
 		//printf(" n = %x",n);
-		imm32 = ror_c(n,m);
+		ror_c(n,m,imm32);
 		} 
 	//printf(" imm32 = %x",imm32);
-	return imm32;
 }
 
 //immediate expand with Carry
 int ThumbExpandImm12(int i1,int i3,int i8){
 	struct RESULTCARRY *imm32 = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
-	imm32 = ThumbExpandImm12WithC(i1,i3,i8);
-	return imm32->result;
+	int k;
+
+	ThumbExpandImm12WithC(i1,i3,i8,imm32);
+	k = imm32->result;
+	free(imm32);
+	return k;
 }
 #endif

@@ -9,8 +9,7 @@ PAM_item cortex_PAM[4] = {
 };
 
 
-MemoryTranslate* addr_transfer(unsigned int address){
-	MemoryTranslate* result = (MemoryTranslate*)malloc(sizeof(MemoryTranslate));
+void addr_transfer(unsigned int address, MemoryTranslate* result){
 	if((FLASH_BEGIN <= address)&&(FLASH_END >= address)){
 		result->type = FLASH;
 		result->offset = address&0x0003FFFF;
@@ -38,14 +37,13 @@ MemoryTranslate* addr_transfer(unsigned int address){
 	else{
 		printf("memory address:%d access error!\n",result->offset);
 	}
-	return result;
 }
 
 
 int get_memory(int address){
 	int result;
 	MemoryTranslate* memoryInfo = (MemoryTranslate*)malloc(sizeof(MemoryTranslate));
-	memoryInfo = addr_transfer(address);
+	addr_transfer(address, memoryInfo);
 	switch(memoryInfo->type){
 		case FLASH:
 			result = flash[memoryInfo->offset/4];
@@ -66,12 +64,13 @@ int get_memory(int address){
 		default:
 			printf("memory address:%d access error in get_memory!\n",address);
 	}
+	free(memoryInfo);
 	return result;
 }
 
 void set_memory(int address, int value){
 	MemoryTranslate* memoryInfo = (MemoryTranslate*)malloc(sizeof(MemoryTranslate));
-	memoryInfo = addr_transfer(address);
+	addr_transfer(address, memoryInfo);
 	switch(memoryInfo->type){
 		case FLASH:
 			flash[memoryInfo->offset/4] = value;
@@ -94,6 +93,7 @@ void set_memory(int address, int value){
 		default:
 			printf("memory address:%d access error in get_memory!\n",address);
 	}
+	free(memoryInfo);
 }
 
 
@@ -104,7 +104,7 @@ int get_MemA(int address, int bytes)
 	char* ptr;
 	MemoryTranslate* memoryInfo = (MemoryTranslate*)malloc(sizeof(MemoryTranslate));
 	address = address & 0xFFFFFFFC;													//make the address aligned
-	memoryInfo = addr_transfer(address);
+	addr_transfer(address, memoryInfo);
 	switch(memoryInfo->type){
 		case FLASH:
 			ptr = (char*)(&flash[memoryInfo->offset/4]);
@@ -143,6 +143,7 @@ int get_MemA(int address, int bytes)
 #if DEBUG
 	printf("get_MemA result:%d\n",result);
 #endif
+	free(memoryInfo);
 	return result;
 }
 
@@ -151,7 +152,7 @@ void set_MemA(int address, int bytes, int value)
 	char* ptr;
 	MemoryTranslate* memoryInfo = (MemoryTranslate*)malloc(sizeof(MemoryTranslate));
 	address = address & 0xFFFFFFFC;													//make the address aligned
-	memoryInfo = addr_transfer(address);
+	addr_transfer(address, memoryInfo);
 	switch(memoryInfo->type){
 		case FLASH:
 			ptr = (char*)(&flash[memoryInfo->offset/4]);
@@ -190,6 +191,7 @@ void set_MemA(int address, int bytes, int value)
 	default:	//invalid bytes
 		break;
 	}
+	free(memoryInfo);
 #if DEBUG
 	printf("set_MemA result:%d\n",*((int*)ptr));
 #endif
@@ -203,7 +205,7 @@ int get_MemU(int address, int bytes)
 	int result;
 	char* ptr;
 	MemoryTranslate* memoryInfo = (MemoryTranslate*)malloc(sizeof(MemoryTranslate));
-	memoryInfo = addr_transfer(address);
+	addr_transfer(address, memoryInfo);
 	switch(memoryInfo->type){
 		case FLASH:
 			ptr = (char*)flash + memoryInfo->offset;
@@ -248,6 +250,7 @@ int get_MemU(int address, int bytes)
 #if DEBUG
 	printf("get_MemU result:%d\n",result);
 #endif
+	free(memoryInfo);
 	return result;
 }
 
@@ -255,7 +258,7 @@ void set_MemU(int address, int bytes, int value)
 {
 	char* ptr;
 	MemoryTranslate* memoryInfo = (MemoryTranslate*)malloc(sizeof(MemoryTranslate));
-	memoryInfo = addr_transfer(address);
+	addr_transfer(address, memoryInfo);
 	switch(memoryInfo->type){
 		case FLASH:
 			ptr = (char*)flash + memoryInfo->offset;
@@ -296,6 +299,7 @@ void set_MemU(int address, int bytes, int value)
 	default:	//invalid bytes
 		break;
 	}
+	free(memoryInfo);
 #if DEBUG
 	printf("set_MemU result:%d\n",*((int*)ptr));
 #endif

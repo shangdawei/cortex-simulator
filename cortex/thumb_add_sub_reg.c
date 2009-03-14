@@ -33,12 +33,12 @@ void thumb_add_reg_t1(short ins)
 	
 	int n;
 	int m;
-	struct CALCULATECO *result;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	*((short *)&DataAddSubReg)=ins;
 	n=get_general_register((int)DataAddSubReg.Rn);
 	m=get_general_register((int)DataAddSubReg.Rm);
 
-	result=addwithcarry(m,n,0);
+	addwithcarry(m,n,0,result);
 	
 	set_general_register((int)DataAddSubReg.Rd,result->result);
 	
@@ -65,6 +65,7 @@ void thumb_add_reg_t1(short ins)
 			cle_flag_v();			
 	}
 	//printf("*********thumb_add_reg_t1***********\n");
+	free(result);
 }
 
 
@@ -72,7 +73,7 @@ void thumb_sub_reg(short ins)
 {
 	
 	
-	struct CALCULATECO *result;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	
 	int n;
 	int m;
@@ -81,7 +82,7 @@ void thumb_sub_reg(short ins)
 	m=get_general_register((int)DataAddSubReg.Rm);
 
 	
-	result=addwithcarry(n,~m,1);
+	addwithcarry(n,~m,1,result);
 	
 	set_general_register((int)DataAddSubReg.Rd,result->result);
 	
@@ -108,6 +109,7 @@ void thumb_sub_reg(short ins)
 			cle_flag_v();			
 	}
 	//printf("*********thumb_sub_reg***********\n");
+	free(result);
 }
 
 

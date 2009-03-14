@@ -107,12 +107,12 @@ void thumb_mov_reg_t2(short ins)
 void thumb_lsl_imm5(short ins)
 {
 	int result;
-	struct RESULTCARRY *rc;//=lsl_c(result,(int)DataShiftMove.imm5);
+	struct RESULTCARRY *rc = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));//=lsl_c(result,(int)DataShiftMove.imm5);
 
 	*((short*)&DataShiftMove)=ins;	
 	
 	result=get_general_register((int)DataShiftMove.Rm);
-	rc = lsl_c(result,(int)DataShiftMove.imm5);
+	lsl_c(result,(int)DataShiftMove.imm5,rc);
 	set_general_register((int)DataShiftMove.Rd, rc->result);
 	
 	
@@ -142,11 +142,11 @@ void thumb_lsl_imm5(short ins)
 void thumb_lsr_imm5(short ins)
 {
 	unsigned int result;
-	struct RESULTCARRY *rc;
+	struct RESULTCARRY *rc = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 
 	*((short *)&DataShiftMove)=ins;		
 	result=(unsigned)get_general_register((int)DataShiftMove.Rm);			
-	rc = lsr_c(result,(unsigned)DataShiftMove.imm5);
+	lsr_c(result,(unsigned)DataShiftMove.imm5,rc);
 	set_general_register((int)DataShiftMove.Rd, (int)rc->result);
 	
 	
@@ -170,17 +170,18 @@ void thumb_lsr_imm5(short ins)
 		
 	}
 	//printf("*********thumb_lsr_imm5***********\n");
+	free(rc);
 	
 }
 
 void thumb_asr_imm5(short ins)
 {
 	int result;
-	struct RESULTCARRY *rc;
+	struct RESULTCARRY *rc = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	*((short *)&DataShiftMove)=ins;
 		
 	result=get_general_register((int)DataShiftMove.Rm);
-	rc = asr_c(result,(unsigned)DataShiftMove.imm5);
+	asr_c(result,(unsigned)DataShiftMove.imm5,rc);
 	set_general_register((int)DataShiftMove.Rd, rc->result);
 	
 	
@@ -204,6 +205,7 @@ void thumb_asr_imm5(short ins)
 		
 	}
 	//printf("*********thumb_asr_imm5***********\n");
+	free(rc);
 }
 
 

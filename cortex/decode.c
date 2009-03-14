@@ -142,6 +142,7 @@ void decode(unsigned int instruction){
 			index++;
 		}
 	}
+	_CrtDumpMemoryLeaks();
 }
 
 

@@ -26,7 +26,7 @@ void thumb_add_reg(short instruction)
 	int rd, rn, rm;
 	//int flag;
 	int shift_t, shift_n, shifted;
-	struct CALCULATECO* r;
+	struct CALCULATECO* r = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	//flag = 0;
 	*((short*) (&SpecialDataProcessing)) = instruction;
 	rm = SpecialDataProcessing.rm;
@@ -42,11 +42,11 @@ void thumb_add_reg(short instruction)
 	shift_n = 0;
 	shifted = shift(get_general_register(rm), shift_t, shift_n, get_flag_c());
 	if (rd == 13 || rm == 13){						
-		r = addwithcarry((unsigned int)get_general_register($SP), (unsigned int)shifted, 0);
+		addwithcarry((unsigned int)get_general_register($SP), (unsigned int)shifted, 0,r);
 		set_general_register(rd, r->result);
 		free(r);
 	}else{			
-		r = addwithcarry((unsigned int)get_general_register(rn), (unsigned int)shifted, 0);
+		addwithcarry((unsigned int)get_general_register(rn), (unsigned int)shifted, 0,r);
 		if (rd == $PC)
 			ALUWritePC(r->result);
 		else
@@ -60,7 +60,7 @@ void thumb_cmp_reg(short instruction)
 {
 	int rn, rm;
 	int shift_t, shift_n, shifted;
-	struct CALCULATECO* r;
+	struct CALCULATECO* r = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	*((short*) (&SpecialDataProcessing)) = instruction;
 	rm = SpecialDataProcessing.rm;
 	rn = SpecialDataProcessing.rdn + 8 * SpecialDataProcessing.dn;
@@ -72,12 +72,13 @@ void thumb_cmp_reg(short instruction)
 		printf("    it is unpredictable!\n");
 	else{
 		shifted = shift(get_general_register(rm), shift_t, shift_n, get_flag_c());		
-		r = addwithcarry((unsigned int)get_general_register(rn), ((unsigned int) ~shifted), 1);
+		addwithcarry((unsigned int)get_general_register(rn), ((unsigned int) ~shifted), 1,r);
 		if (r->result & 0x80000000) set_flag_n(); else cle_flag_n();
 		if (!r->result) set_flag_z(); else cle_flag_z();
 		if (r->carry_out) set_flag_c(); else cle_flag_c();
 		if (r->overflow) set_flag_v(); else cle_flag_v();
 	}
+	free(r);
 	//printf("*********thumb_cmp_reg***********\n");
 }
 

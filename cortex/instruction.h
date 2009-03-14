@@ -12,32 +12,32 @@
  *to handle the shift_rotate
  *
  */ 
-struct RESULTCARRY* lsl_c(unsigned x,unsigned n);
-struct RESULTCARRY* lsr_c(unsigned x,unsigned n);
-struct RESULTCARRY* asr_c(int x,unsigned n);
+void lsl_c(unsigned x,unsigned n, struct RESULTCARRY* result_lsl_c);
+void lsr_c(unsigned x,unsigned n, struct RESULTCARRY* result_lsr_c);
+void asr_c(int x,unsigned n,struct RESULTCARRY *result_asr_c);
 int lsl(unsigned x,unsigned n);
 int lsr(unsigned x,unsigned n);
 int asr(int x,unsigned n);
-struct RESULTCARRY* ror_c(unsigned x,unsigned n);
-struct RESULTCARRY* rol_c(unsigned x,unsigned n);
-struct RESULTCARRY* rrx_c(unsigned x,unsigned c_in);
+void ror_c(unsigned x,unsigned n,struct RESULTCARRY* result_ror_c);
+void rol_c(unsigned x,unsigned n, struct RESULTCARRY* res);
+void rrx_c(unsigned x,unsigned c_in,struct RESULTCARRY* result_rrx_c);
 int ror(unsigned x,unsigned n);
 int rol(unsigned x,unsigned n);
 int rrx(unsigned x,unsigned n);
-struct RESULTCARRY* decodeImmShift(int type,int imm5);
-struct RESULTCARRY* shift_c(int value,int type,int n,int carry_in);
+void decodeImmShift(int type,int imm5,struct RESULTCARRY *immshift );
+void shift_c(int value,int type,int n,int carry_in,struct RESULTCARRY *result_shiftc);
 int shift(int value,int type,int n,int carry_in);
 //int min(int x,int y);
 //int max(int x,int y);
-struct RESULTCARRY* signedSatQ(int i,int j);
-struct RESULTCARRY* unsignedSatQ(int i,int j);
+void signedSatQ(int i,int j,struct RESULTCARRY* result);
+void unsignedSatQ(int i,int j,struct RESULTCARRY* result);
 int signedSat(int i,int j);
 int unsignedSat(int i,int j);
 /**
  *to handle the calculate
  *
  */ 
-struct CALCULATECO* addwithcarry(unsigned m,unsigned n,unsigned carry_in);
+void addwithcarry(unsigned m,unsigned n,unsigned carry_in, struct CALCULATECO *result);
 unsigned align(unsigned x,unsigned y);
 /**
  *to handle the immediate decode
@@ -48,7 +48,7 @@ int decode_imm12(int i1,int i3,int i8);
 int decode_imm16(int i1,int i4,int i3,int i8);
 int decode_bitOperation(int i3,int i2,int i5);
 int decode_shift(int i3,int i2);
-struct RESULTCARRY* ThumbExpandImm12WithC(int i1,int i3,int i8);
+void ThumbExpandImm12WithC(int i1,int i3,int i8,struct RESULTCARRY *imm32);
 int ThumbExpandImm12(int i1,int i3,int i8);
 /**
  *
