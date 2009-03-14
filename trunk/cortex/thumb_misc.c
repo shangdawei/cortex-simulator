@@ -199,8 +199,9 @@ void thumb_add_to_sp(short i) {
 
 	d = addToSpOrPc.rd;							// d = UInt(Rd);
 	imm32 = addToSpOrPc.imm8<<2;				// imm32 = ZeroExtend(imm8:'00', 32);
-	result = addwithcarry(get_sp(), imm32, 0);	// (result, carry, overflow) = AddWithCarry(SP, imm32, '0');
+	addwithcarry(get_sp(), imm32, 0,result);	// (result, carry, overflow) = AddWithCarry(SP, imm32, '0');
 	set_general_register(d, result->result);	//  R[d] = result;
+	free(result);
 }
 
 /*
@@ -213,8 +214,9 @@ void thumb_increment_stack_pointer(short i) {
 
 	d = 13;										// d = 13;
 	imm32 = adjustStackPointer.imm7<<2;			// imm32 = ZeroExtend(imm7:'00', 32);
-	result = addwithcarry(get_sp(), imm32, 0);	// (result, carry, overflow) = AddWithCarry(SP, imm32, '0');
+	addwithcarry(get_sp(), imm32, 0,result);	// (result, carry, overflow) = AddWithCarry(SP, imm32, '0');
 	set_general_register(d, result->result);	// R[d] = result;
+	free(result);
 }
 
 /*
@@ -228,8 +230,9 @@ void thumb_decrement_stack_pointer(short i) {
 
 	d = 13;										// d = 13;
 	imm32 = adjustStackPointer.imm7<<2;			// imm32 = ZeroExtend(imm7:'00', 32);
-	result = addwithcarry(get_sp(), ~imm32, 1);	// (result, carry, overflow) = AddWithCarry(SP, NOT(imm32), '1');
+	addwithcarry(get_sp(), ~imm32, 1,result);	// (result, carry, overflow) = AddWithCarry(SP, NOT(imm32), '1');
 	set_general_register(d, result->result);	// R[d] = result;
+	free(result);
 }
 
 /*

@@ -87,6 +87,7 @@ bool load_elf(char *p)
 		}
 	}
 	initial_entry(file_header.e_entry);
+	free(prog_headers);
 	return true;
 }
 

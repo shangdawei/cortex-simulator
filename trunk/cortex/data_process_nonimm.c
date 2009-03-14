@@ -321,10 +321,12 @@ APSR.C = carry;
 	struct RESULTCARRY *shift_tn,*shift_carry;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
+	shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
-	shift_carry = shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c);
+	decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2),shift_tn);
+	shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c,shift_carry);
     source = get_general_register(dataProConShift.rn);//get data from source register
 	result = source & shift_carry->result;
 	set_general_register(dataProConShift.rd, result);//send data to destination register
@@ -359,6 +361,8 @@ APSR.C = carry;
 	printf("	***and_reg\n");	
 	printf("********AND {S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
 #endif
+	free(shift_carry);
+	free(shift_tn);
 }
 
 void bic_reg(int i)
@@ -380,10 +384,12 @@ APSR.C = carry;
 	struct RESULTCARRY *shift_tn,*shift_carry;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
+	shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
-	shift_carry = shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c);
+	shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2),shift_tn);
+	shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c,shift_carry);
     source = get_general_register(dataProConShift.rn);//get data from source register
 	result = source & (~shift_carry->result);
 #if DEBUG
@@ -418,6 +424,8 @@ APSR.C = carry;
 	printf("	***bic_reg\n");	
 	printf("********BIC{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
 #endif
+	free(shift_carry);
+	free(shift_tn);
 }
 void orr_reg(int i)
 {
@@ -437,10 +445,12 @@ APSR.C = carry;
 	struct RESULTCARRY *shift_tn,*shift_carry;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
+	shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
-	shift_carry = shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c);
+	shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2),shift_tn);
+	shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c,shift_carry);
     source = get_general_register(dataProConShift.rn);//get data from source register
 	result = source|shift_carry->result;
 #if DEBUG
@@ -476,6 +486,8 @@ APSR.C = carry;
 	printf("	***orr_reg\n");	
 	printf("********ORR{S}<c><q> {<Rd>,} <Rn>, <Rm> {,<shift>}******* \n");
 #endif
+	free(shift_carry);
+	free(shift_tn);
 }
 
 
@@ -497,11 +509,13 @@ APSR.C = carry;
 	struct RESULTCARRY *shift_tn,*shift_carry;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
+	shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
 	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shift_tn = decodeImmShift(dataProConShift.type,shift_n);
-	shift_carry = shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c);
+	shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	decodeImmShift(dataProConShift.type,shift_n,shift_tn);
+	shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c,shift_carry);
     source = get_general_register(dataProConShift.rn);//get data from source register
 	result = get_general_register(dataProConShift.rm)|(~shift_carry->result);
 	set_general_register(dataProConShift.rd,result);
@@ -539,6 +553,8 @@ APSR.C = carry;
 	printf("	***orn_reg\n");	
 	printf("********ORN{S}<c><q> {<Rd>,} <Rn>, <Rm> {,<shift>}******* \n");
 #endif
+	free(shift_carry);
+	free(shift_tn);
 }
 void eor_reg(int i)
 {
@@ -556,10 +572,12 @@ APSR.C = carry;
 	struct RESULTCARRY *shift_tn,*shift_carry;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
+	shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
-	shift_carry = shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c);
+	shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2),shift_tn);
+	shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c,shift_carry);
     source = get_general_register(dataProConShift.rn);//get data from source register
 	result = source^shift_carry->result;
 #if DEBUG
@@ -596,6 +614,8 @@ APSR.C = carry;
 	printf("	***eor_reg\n");	
 	printf("********EOR{S}<c><q> {<Rd>,} <Rn>, <Rm> {,<shift>}******* \n");
 #endif
+	free(shift_carry);
+	free(shift_tn);
 }
 void add_reg(int i)
 {
@@ -615,15 +635,16 @@ APSR.C = carry;
 APSR.V = overflow;
 */
 	int shifted;
-	struct CALCULATECO *result;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	struct RESULTCARRY *shift_tn;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
+	shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2),shift_tn);
 	shifted = shift(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c);
-	result = addwithcarry(get_general_register(dataProConShift.rn),shifted,0);
+	addwithcarry(get_general_register(dataProConShift.rn),shifted,0,result);
 #if DEBUG
 	printf(" imm3 = %x",dataProConShift.imm3);
 	printf(" imm2 = %x",dataProConShift.imm2);
@@ -663,6 +684,8 @@ APSR.V = overflow;
 	printf("	***add_reg\n");	
 	printf("********ADD{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
 #endif
+	free(result);
+	free(shift_tn);
 }
 
 void adc_reg(int i)
@@ -680,15 +703,16 @@ APSR.C = carry;
 APSR.V = overflow;
 */
 	int shifted;
-	struct CALCULATECO *result;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	struct RESULTCARRY *shift_tn;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
+	shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2),shift_tn);
 	shifted = shift(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c);
-	result = addwithcarry(get_general_register(dataProConShift.rn),shifted,apsr_c);
+	addwithcarry(get_general_register(dataProConShift.rn),shifted,apsr_c, result);
 #if DEBUG
 	printf(" imm3 = %x",dataProConShift.imm3);
 	printf(" imm2 = %x",dataProConShift.imm2);
@@ -725,6 +749,8 @@ APSR.V = overflow;
 	printf("	***adc_reg\n");	
 	printf("********ADC{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
 #endif
+	free(result);
+	free(shift_tn);
 }
 
 void sbc_reg(int i)
@@ -742,15 +768,16 @@ APSR.C = carry;
 APSR.V = overflow;
 */
 	int shifted;
-	struct CALCULATECO *result;
+	struct CALCULATECO *result  = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	struct RESULTCARRY *shift_tn;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
+	shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2),shift_tn);
 	shifted = shift(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c);
-	result = addwithcarry(get_general_register(dataProConShift.rn),~shifted,apsr_c);
+	addwithcarry(get_general_register(dataProConShift.rn),~shifted,apsr_c, result);
 #if DEBUG
 	printf(" imm3 = %x",dataProConShift.imm3);
 	printf(" imm2 = %x",dataProConShift.imm2);
@@ -789,6 +816,8 @@ APSR.V = overflow;
 	printf("	***sbc_reg\n");	
 	printf("********SBC{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
 #endif
+	free(result);
+	free(shift_tn);
 }
 void sub_reg(int i)
 {
@@ -805,15 +834,16 @@ APSR.C = carry;
 APSR.V = overflow;
 */
 	int shifted;
-	struct CALCULATECO *result;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	struct RESULTCARRY *shift_tn;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
+	shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2),shift_tn);
 	shifted = shift(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c);
-	result = addwithcarry(get_general_register(dataProConShift.rn),~shifted,1);
+	addwithcarry(get_general_register(dataProConShift.rn),~shifted,1,result);
 #if DEBUG_I
 	printf(" imm3 = %x",dataProConShift.imm3);
 	printf(" imm2 = %x",dataProConShift.imm2);
@@ -852,6 +882,8 @@ APSR.V = overflow;
 	printf("	***sub_reg\n");	
 	printf("********SUB{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
 #endif
+	free(result);
+	free(shift_tn);
 }
 void rsb_reg(int i)
 {
@@ -868,16 +900,17 @@ APSR.C = carry;
 APSR.V = overflow;
 */
 	int shifted;
-	struct CALCULATECO *result;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	struct RESULTCARRY *shift_tn;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
+	shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2),shift_tn);
 	shifted = shift(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c);
 	//printf("addwithcarry(%x,%x,1)",~get_general_register(dataProConShift.rn),shifted);
-	result = addwithcarry(~get_general_register(dataProConShift.rn),shifted,1);
+	addwithcarry(~get_general_register(dataProConShift.rn),shifted,1,result);
 #if DEBUG
 	printf(" imm3 = %x",dataProConShift.imm3);
 	printf(" imm2 = %x",dataProConShift.imm2);
@@ -916,6 +949,8 @@ APSR.V = overflow;
 	printf("	***rsb_reg\n");	
 	printf("********RSB{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
 #endif
+	free(result);
+	free(shift_tn);
 }
 void tst_reg(int i)
 {
@@ -936,8 +971,10 @@ APSR.C = carry;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
 	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shift_tn = decodeImmShift(dataProConShift.type,shift_n);
-	shift_carry = shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c);
+	shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	decodeImmShift(dataProConShift.type,shift_n,shift_tn);
+	shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c,shift_carry);
     source = get_general_register(dataProConShift.rn);//get data from source register
 	result = source & shift_carry->result;
 #if DEBUG
@@ -969,6 +1006,8 @@ APSR.C = carry;
 	printf("	***tst_reg\n");	
 	printf("********TST{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
 #endif
+	free(shift_carry);
+	free(shift_tn);
 }
 void mov_reg(int i)
 {
@@ -979,10 +1018,12 @@ in fact, this function includes 6 different instructions(MOV,LSL,LSR,ASR,ROR,RRX
 	struct RESULTCARRY *shift_tn,*shift_carry;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
+	shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
 	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shift_tn = decodeImmShift(dataProConShift.type,shift_n);
+	shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	decodeImmShift(dataProConShift.type,shift_n,shift_tn);
 	//shift_carry = shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c);
     source = get_general_register(dataProConShift.rn);//get data from source register
 	switch(dataProConShift.type)
@@ -1053,7 +1094,7 @@ APSR.Z = IsZeroBit(result);
 APSR.C = carry;
 // APSR.V unchanged
 */
-			shift_carry = shift_c(get_general_register(dataProConShift.rm),SRType_LSL,shift_n,apsr_c);
+			shift_c(get_general_register(dataProConShift.rm),SRType_LSL,shift_n,apsr_c,shift_carry);
 			set_general_register(dataProConShift.rd, shift_carry->result);
 			if(dataProConShift.s)
 			{
@@ -1112,7 +1153,7 @@ APSR.Z = IsZeroBit(result);
 APSR.C = carry;
 // APSR.V unchanged
 */
-		shift_carry = shift_c(get_general_register(dataProConShift.rm),SRType_LSR,shift_n,apsr_c);
+		shift_c(get_general_register(dataProConShift.rm),SRType_LSR,shift_n,apsr_c,shift_carry);
 		set_general_register(dataProConShift.rd, shift_carry->result);
 		if(dataProConShift.s)
 		{
@@ -1158,7 +1199,7 @@ APSR.Z = IsZeroBit(result);
 APSR.C = carry;
 // APSR.V unchanged
 */
-		shift_carry = shift_c(get_general_register(dataProConShift.rm),SRType_ASR,shift_n,apsr_c);
+		shift_c(get_general_register(dataProConShift.rm),SRType_ASR,shift_n,apsr_c,shift_carry);
 		set_general_register(dataProConShift.rd, shift_carry->result);
 		if(dataProConShift.s)
 		{
@@ -1206,7 +1247,7 @@ APSR.Z = IsZeroBit(result);
 APSR.C = carry;
 // APSR.V unchanged
 */
-		shift_carry = shift_c(get_general_register(dataProConShift.rm),SRType_ROR,shift_n,apsr_c);
+		shift_c(get_general_register(dataProConShift.rm),SRType_ROR,shift_n,apsr_c,shift_carry);
 		set_general_register(dataProConShift.rd, shift_carry->result);
 		if(dataProConShift.s)
 		{
@@ -1253,7 +1294,7 @@ APSR.Z = IsZeroBit(result);
 APSR.C = carry;
 // APSR.V unchanged
 */
-		shift_carry = shift_c(get_general_register(dataProConShift.rm),SRType_RRX,1,apsr_c);
+		shift_c(get_general_register(dataProConShift.rm),SRType_RRX,1,apsr_c,shift_carry);
 		set_general_register(dataProConShift.rd, shift_carry->result);
 		if(dataProConShift.s)
 		{
@@ -1295,6 +1336,8 @@ APSR.C = carry;
 	printf("	***mov_reg\n");	
 	printf("********Move, and immediate shift instructions******* \n");
 #endif
+	free(shift_carry);
+	free(shift_tn);
 }
 void mvn_reg(int i)
 {
@@ -1314,11 +1357,14 @@ APSR.C = carry;
 	struct RESULTCARRY *shift_tn,*shift_carry;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
+
+	shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
 	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shift_tn = decodeImmShift(dataProConShift.type,shift_n);
-	shift_carry = shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c);
+	decodeImmShift(dataProConShift.type,shift_n,shift_tn);
+	shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c,shift_carry);
     source = get_general_register(dataProConShift.rn);//get data from source register
 	result = ~shift_carry->result;
 	set_general_register(dataProConShift.rd,result);
@@ -1357,6 +1403,8 @@ APSR.C = carry;
 	printf("	***mvn_reg\n");	
 	printf("********MVN{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
 #endif
+	free(shift_carry);
+	free(shift_tn);
 }
 void teq_reg(int i)
 {
@@ -1375,11 +1423,14 @@ APSR.C = carry;
 	struct RESULTCARRY *shift_tn,*shift_carry;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
+
+	shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
 	shift_n = decode_imm5(dataProConShift.imm3,dataProConShift.imm2);
-	shift_tn = decodeImmShift(dataProConShift.type,shift_n);
-	shift_carry = shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c);
+	decodeImmShift(dataProConShift.type,shift_n,shift_tn);
+	shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c,shift_carry);
     source = get_general_register(dataProConShift.rn);//get data from source register
 	result = get_general_register(dataProConShift.rn)^shift_carry->result;
 #if DEBUG
@@ -1415,6 +1466,8 @@ APSR.C = carry;
 	printf("	***teq_reg\n");	
 	printf("********TEQ{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
 #endif
+	free(shift_carry);
+	free(shift_tn);
 }
 void cmn_reg(int i)
 {
@@ -1434,10 +1487,12 @@ APSR.C = carry;
 	struct RESULTCARRY *shift_tn,*shift_carry;
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
+	shift_carry = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
-	shift_carry = shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c);
+	decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2),shift_tn);
+	shift_c(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c,shift_carry);
     source = get_general_register(dataProConShift.rn);//get data from source register
 	result = ~shift_carry->result;
 	set_general_register(dataProConShift.rd,result);
@@ -1473,6 +1528,8 @@ APSR.C = carry;
 	printf("	***cmn_reg\n");	
 	printf("********CMN{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
 #endif
+	free(shift_carry);
+	free(shift_tn);
 }
 void cmp_reg(int i)
 {
@@ -1487,15 +1544,15 @@ APSR.C = carry;
 APSR.V = overflow;
 */
 	int shifted;
-	struct CALCULATECO *result;
-	struct RESULTCARRY *shift_tn;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
+	struct RESULTCARRY *shift_tn = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	unsigned apsr_c;
 	*((int *)(&dataProConShift)) = i;
 	apsr_c = get_flag_c();
 	apsr_c = apsr_c >> 29;
-	shift_tn = decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2));
+	decodeImmShift(dataProConShift.type,decode_imm5(dataProConShift.imm3,dataProConShift.imm2),shift_tn);
 	shifted = shift(get_general_register(dataProConShift.rm),shift_tn->carry,shift_tn->result,apsr_c);
-	result = addwithcarry(get_general_register(dataProConShift.rn),~shifted,1);
+	addwithcarry(get_general_register(dataProConShift.rn),~shifted,1,result);
 #if DEBUG
 	printf(" imm3 = %x",dataProConShift.imm3);
 	printf(" imm2 = %x",dataProConShift.imm2);
@@ -1535,6 +1592,8 @@ APSR.V = overflow;
 	printf("	***cmp_reg\n");	
 	printf("********CMP{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
 #endif
+	free(result);
+	free(shift_tn);
 }
 
 
@@ -1566,7 +1625,7 @@ APSR.C = carry;
 	apsr_c = apsr_c >> 29;
 	shift_n = regCtrlShift.rm<<24>>24;
     source = get_general_register(regCtrlShift.rn);//get data from source register
-	shift_carry = shift_c(source,SRType_LSL,shift_n,apsr_c);
+	shift_c(source,SRType_LSL,shift_n,apsr_c,shift_carry);
 	result = shift_carry->result;
 	set_general_register(regCtrlShift.rd,result);
 #if DEBUG_I
@@ -1596,6 +1655,7 @@ APSR.C = carry;
 	printf("	***lsl_reg\n");	
 	printf("********LSL{S}<c>.W <Rd>,<Rn>,<Rm>{,<shift>}******* \n");
 #endif
+	free(shift_carry);
 }
 void lsr_reg(int i)
 {
@@ -1619,7 +1679,7 @@ APSR.C = carry;
 	apsr_c = apsr_c >> 29;
 	shift_n = regCtrlShift.rm<<24>>24;
     source = get_general_register(regCtrlShift.rn);//get data from source register
-	shift_carry = shift_c(source,SRType_LSR,shift_n,apsr_c);
+	shift_c(source,SRType_LSR,shift_n,apsr_c,shift_carry);
 	result = shift_carry->result;
 	set_general_register(regCtrlShift.rd,result);
 #if DEBUG_I
@@ -1648,6 +1708,7 @@ APSR.C = carry;
 	printf(" rd = %x",get_general_register(dataProConShift.rd));
 	printf("	***lsr_reg\n");	
 #endif
+	free(shift_carry);
 }
 void asr_reg(int i)
 {
@@ -1671,7 +1732,7 @@ APSR.C = carry;
 	apsr_c = apsr_c >> 29;
 	shift_n = regCtrlShift.rm<<24>>24;
     source = get_general_register(regCtrlShift.rn);//get data from source register
-	shift_carry = shift_c(source,SRType_ASR,shift_n,apsr_c);
+	shift_c(source,SRType_ASR,shift_n,apsr_c,shift_carry);
 	result = shift_carry->result;
 	set_general_register(regCtrlShift.rd,result);
 #if DEBUG_I
@@ -1700,6 +1761,7 @@ APSR.C = carry;
 	printf(" rd = %x",get_general_register(regCtrlShift.rd));
 	printf("	***asr_reg\n");	
 #endif
+	free(shift_carry);
 }
 void ror_reg(int i)
 {
@@ -1722,7 +1784,7 @@ APSR.C = carry;
 	apsr_c = apsr_c >> 29;
 	shift_n = regCtrlShift.rm<<24>>24;
     source = get_general_register(regCtrlShift.rm);//get data from source register
-	shift_carry = shift_c(source,SRType_ROR,shift_n,apsr_c);
+	shift_c(source,SRType_ROR,shift_n,apsr_c,shift_carry);
 	result = shift_carry->result;
 	set_general_register(regCtrlShift.rd,result);
 #if DEBUG_I

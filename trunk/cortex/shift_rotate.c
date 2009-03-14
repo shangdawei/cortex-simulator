@@ -4,9 +4,9 @@
 #include "stdio.h"
 #include "instruction.h"
 
-struct RESULTCARRY* lsl_c(unsigned x,unsigned n){
+void lsl_c(unsigned x,unsigned n, struct RESULTCARRY* result_lsl_c){
 	unsigned c_out;
-	struct RESULTCARRY *result_lsl_c = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+
 	for(; n > 0; n--)
 	{
 		c_out = x;
@@ -15,12 +15,10 @@ struct RESULTCARRY* lsl_c(unsigned x,unsigned n){
 	c_out = (c_out & 0x80000000) >> 31;
 	result_lsl_c->result = x;
 	result_lsl_c->carry = c_out;
-	return result_lsl_c;
 }
 
-struct RESULTCARRY* lsr_c(unsigned x,unsigned n){
+void lsr_c(unsigned x,unsigned n,struct RESULTCARRY* result_lsr_c){
 	unsigned c_out;
-	struct RESULTCARRY *result_lsr_c = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	for(; n > 0; n--)
 	{
 		c_out = x;
@@ -28,12 +26,11 @@ struct RESULTCARRY* lsr_c(unsigned x,unsigned n){
 	}
 	result_lsr_c->result = x;
 	result_lsr_c->carry = c_out;
-	return result_lsr_c;
 }
 
-struct RESULTCARRY* asr_c(int x,unsigned n){
+void asr_c(int x,unsigned n,struct RESULTCARRY *result_asr_c){
 	unsigned c_out;
-	struct RESULTCARRY *result_asr_c = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+
 	for(; n > 0; n--)
 	{
 		c_out = x;
@@ -42,40 +39,47 @@ struct RESULTCARRY* asr_c(int x,unsigned n){
 	c_out = c_out & 0x00000001;
 	result_asr_c->result = x;
 	result_asr_c->carry = c_out;
-	return result_asr_c;	
 }
 
 int lsl(unsigned x,unsigned n){
 	struct RESULTCARRY* result = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	int k;
 	if(n == 0)
 		result->result = x;
 	else
-		result = lsl_c(x,n);
-	return result->result;
+		lsl_c(x,n,result);
+	k = result->result;
+	free(result);
+	return k;
 }
 
 int lsr(unsigned x,unsigned n){
 	struct RESULTCARRY* result = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	int k;
 	if(n == 0)
 		result->result = x;
 	else
-		result = lsr_c(x,n);
-	return result->result;
+		lsr_c(x,n,result);
+	k = result->result;
+	free(result);
+	return k;
 }
 
 int asr(int x,unsigned n){
 	struct RESULTCARRY* result = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+	int k;
 	if(n == 0)
 		result->result = x;
 	else
-		result = asr_c(x,n);
-	return result->result;
+		asr_c(x,n,result);
+	k= result->result;
+	free(result);
+	return k;
 }
 
-struct RESULTCARRY* ror_c(unsigned x,unsigned n){
+void ror_c(unsigned x,unsigned n, struct RESULTCARRY* result_ror_c){
 	unsigned m = n % 32;
 	unsigned result, c_out;
-	struct RESULTCARRY* result_ror_c = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	if(m == 0)
 		result = x;
 	else
@@ -85,13 +89,11 @@ struct RESULTCARRY* ror_c(unsigned x,unsigned n){
 	c_out = (c_out & 0x80000000) >> 31;			//	so only can be a 1 or 0, so does rol_c, rrx_c....
 	result_ror_c->result = result;
 	result_ror_c->carry = c_out;
-	return result_ror_c;
 }
 
-struct RESULTCARRY* rol_c(unsigned x,unsigned n){
+void rol_c(unsigned x,unsigned n,struct RESULTCARRY* result_rol_c){
 	unsigned m = n % 32;
 	unsigned result, c_out;
-	struct RESULTCARRY* result_rol_c = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	if(m == 0)
 		result = x;
 	else
@@ -100,41 +102,49 @@ struct RESULTCARRY* rol_c(unsigned x,unsigned n){
 	c_out = c_out & 0x00000001;
 	result_rol_c->result = result;
 	result_rol_c->carry = c_out;
-	return result_rol_c;
 }
 
-struct RESULTCARRY* rrx_c(unsigned x,unsigned c_in){
+void rrx_c(unsigned x,unsigned c_in,struct RESULTCARRY* result_rrx_c){
 	unsigned result, c_out;
-	struct RESULTCARRY* result_rrx_c = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	result = (c_in << 31) | (x >> 1);
 	c_out = x;
 	c_out = c_out & 0x00000001;
 	result_rrx_c->result = result;
 	result_rrx_c->carry = c_out;
-	return result_rrx_c;
 }
 
 int ror(unsigned x,unsigned n){
 	struct RESULTCARRY* result = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
-	result = ror_c(x,n);
-	return result->result;
+	int k;
+
+	ror_c(x,n,result);
+	k = result->result;
+	free(result);
+
+	return k;
 }
 
 int rol(unsigned x,unsigned n){
 	struct RESULTCARRY* result = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
-	result = rol_c(x,n);
-	return result->result;
+	int k;
+	rol_c(x,n,result);
+	k = result->result;
+	free(result);
+	return k;
 }
 
 int rrx(unsigned x,unsigned n){
 	struct RESULTCARRY* result = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
-	result = rrx_c(x,n);
-	return result->result;
+	int k;
+	rrx_c(x,n,result);
+	k = result->result;
+	free(result);
+	return k;
 }
 
-struct RESULTCARRY* decodeImmShift(int type,int imm5){
+void decodeImmShift(int type,int imm5,struct RESULTCARRY *immshift ){
 	int shift_n,shift_t;
-	struct RESULTCARRY *immshift = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+
 	if((type == 0) && (imm5 == 0)){
 		shift_t = SRType_None;
 		shift_n = imm5;
@@ -172,11 +182,9 @@ struct RESULTCARRY* decodeImmShift(int type,int imm5){
 		printf("type error");
 		immshift->result = 0;
 		immshift->carry = 0;
-		return immshift;
 	}
 	immshift->result = shift_n;
 	immshift->carry = shift_t;
-	return immshift;
 }
 /*
 in register.h
@@ -187,8 +195,7 @@ in register.h
 #define SRType_ROR	4
 #define SRType_RRX	5
 */
-struct RESULTCARRY* shift_c(int value,int type,int n,int carry_in){
-	struct RESULTCARRY *result_shiftc = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+void shift_c(int value,int type,int n,int carry_in,struct RESULTCARRY *result_shiftc){
 	switch(type){
 		case SRType_None:{
 			result_shiftc->result = value;
@@ -202,34 +209,31 @@ struct RESULTCARRY* shift_c(int value,int type,int n,int carry_in){
 				//set_carry(carry_in);
 			}
 			else
-				result_shiftc = lsl_c(value,n);
+				lsl_c(value,n,result_shiftc);
 		}break;
 		case SRType_LSR:
-			result_shiftc = lsr_c(value,n);
+			lsr_c(value,n,result_shiftc);
 			break;
 		case SRType_ASR:
-			result_shiftc = asr_c(value,n);
+			asr_c(value,n,result_shiftc);
 			break;
 		case SRType_ROR:
-			result_shiftc = ror_c(value,n);
+			ror_c(value,n,result_shiftc);
 			break;
 		case SRType_RRX:
-			result_shiftc = rrx_c(value,carry_in);
+			rrx_c(value,carry_in,result_shiftc);
 			break;
 	}
-//#ifdef DEBUG
-//	printf(" shiftc_result = %d",result);
-//	printf(" shiftc_carry = %d",carry);
-//#endif
-//	result_shiftc->result = result;
-//	result_shiftc->carry = carry;
-	return result_shiftc;
 }
 
 int shift(int value,int type,int n,int carry_in){
 	struct RESULTCARRY* result = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
-	result = shift_c(value,type,n,carry_in);
-	return result->result;
+	int k;
+
+	shift_c(value,type,n,carry_in,result);
+	k = result->result;
+	free(result);
+	return k;
 }
 
 //int min(int x,int y){
@@ -244,9 +248,8 @@ int shift(int value,int type,int n,int carry_in){
 //	return z;
 //}
 
-struct RESULTCARRY* signedSatQ(int i,int j){
+void signedSatQ(int i,int j,struct RESULTCARRY* signedsatq){
 	int saturated_i,result,k,m;
-	struct RESULTCARRY* signedsatq = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
 	m = 1;
 	saturated_i = min(max(i,-(1<<(j-1))),(1<<(j-1))-1);
 	for(k = j-1;k > 0;k--){
@@ -259,12 +262,11 @@ struct RESULTCARRY* signedSatQ(int i,int j){
 		signedsatq->carry = 1;
 	else
 		signedsatq->carry = 0;
-	return signedsatq;
 }
 
-struct RESULTCARRY* unsignedSatQ(int i,int j){
+void unsignedSatQ(int i,int j,struct RESULTCARRY* unsignedsatq){
 	int saturated_i,result,k,m;
-	struct RESULTCARRY* unsignedsatq = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
+
 	m = 1;
 	saturated_i = min(max(i,0),(1<<j)-1);
 	for(k = j-1;k > 0;k--){
@@ -277,18 +279,25 @@ struct RESULTCARRY* unsignedSatQ(int i,int j){
 		unsignedsatq->carry = 1;
 	else
 		unsignedsatq->carry = 0;
-	return unsignedsatq;
 }
 
 int signedSat(int i,int j){
 	struct RESULTCARRY* result = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
-	result = signedSatQ(i,j);
-	return result->result;
+	int k;
+	signedSatQ(i,j,result);
+	k = result->result;
+	free(result);
+	return k;
 }
 
 int unsignedSat(int i,int j){
 	struct RESULTCARRY* result = (struct RESULTCARRY*)malloc(sizeof(struct RESULTCARRY));
-	result = unsignedSatQ(i,j);
-	return result->result;
+	int k;
+
+	unsignedSatQ(i,j,result);
+	k = result->result;
+
+	free(result);
+	return k;
 }
 #endif

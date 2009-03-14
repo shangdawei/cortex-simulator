@@ -53,13 +53,13 @@ void thumb_mov_imm8(short ins)
 
 void thumb_cmp_imm8(short ins)
 {
-	struct CALCULATECO *result;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	unsigned imm;
 	unsigned Rdn;
 	*((short *)&DataAddSubCmpMovImm8)=ins;
 	imm =(unsigned)DataAddSubCmpMovImm8.imm8;
 	Rdn=(unsigned)get_general_register(DataAddSubCmpMovImm8.Rdn);		
-	result=(struct CALCULATECO *)addwithcarry(Rdn,~imm,1);
+	addwithcarry(Rdn,~imm,1,result);
 	
 	if(!InITBlock())
 	{
@@ -84,18 +84,19 @@ void thumb_cmp_imm8(short ins)
 			cle_flag_v();			
 	}
 	//printf("*********thumb_cmp_imm8***********\n");
+	free(result);
 }
 
 void thumb_add_imm8(short ins)
 {
 	
-	struct CALCULATECO *result;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	unsigned imm;
 	unsigned Rdn;
 	*((short *)&DataAddSubCmpMovImm8)=ins;
 	imm=(unsigned)DataAddSubCmpMovImm8.imm8;
 	Rdn=(unsigned)get_general_register(DataAddSubCmpMovImm8.Rdn);
-	result=(struct CALCULATECO *)addwithcarry(Rdn,imm,0);
+	addwithcarry(Rdn,imm,0,result);
 	
 	set_general_register((int)DataAddSubCmpMovImm8.Rdn,result->result);
 	
@@ -122,20 +123,21 @@ void thumb_add_imm8(short ins)
 			cle_flag_v();			
 	}
 	//printf("*********thumb_add_imm8***********\n");
+	free(result);
 	
 }
 
 void thumb_sub_imm8(short ins)
 {
 	
-	struct CALCULATECO *result;
+	struct CALCULATECO *result = (struct CALCULATECO*)malloc(sizeof(struct CALCULATECO));
 	unsigned imm;
 	unsigned Rdn;
 	*((short *)&DataAddSubCmpMovImm8)=ins;
 	imm=(unsigned)DataAddSubCmpMovImm8.imm8;
 	Rdn=(unsigned)get_general_register(DataAddSubCmpMovImm8.Rdn);
 	
-	result=(struct CALCULATECO *)addwithcarry(Rdn,~imm,1);
+	addwithcarry(Rdn,~imm,1,result);
 	
 	set_general_register((int)DataAddSubCmpMovImm8.Rdn,result->result);
 	
@@ -162,6 +164,7 @@ void thumb_sub_imm8(short ins)
 			cle_flag_v();			
 	}
 	//printf("*********thumb_sub_imm8***********\n");
+	free(result);
 	
 }
 
