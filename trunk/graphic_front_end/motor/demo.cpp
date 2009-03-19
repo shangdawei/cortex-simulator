@@ -97,8 +97,6 @@ BOOL CDemoApp::InitInstance()
 	m_pMainWnd->ShowWindow(SW_SHOW);
 	m_pMainWnd->UpdateWindow();
 	m_pMainWnd->SetWindowText("Demo");
-	if(!CreateProcess("simulator.exe",NULL,NULL,NULL,FALSE,0,NULL,NULL,&si,&pi)){
-	}
 
 	return TRUE;
 }

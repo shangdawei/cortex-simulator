@@ -8,7 +8,10 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
+#ifndef __FT_1987__
+#define __FT_1987__
 typedef enum{false=0, true} bool;
+#endif
 
 #define HANDLER 0
 #define THREAD 1

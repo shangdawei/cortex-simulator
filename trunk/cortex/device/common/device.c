@@ -2,8 +2,6 @@
 
 int initalDevice()
 {
-	device_list->nextdevice = 0;
-	initalBuffer();
 	return 0;
 }
 

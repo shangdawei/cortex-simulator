@@ -4,11 +4,6 @@
 #ifndef _EXCEPTIONS
 #define _EXCEPTIONS
 
-#include <stdio.h>
-#include "instruction.h"
-#include "Memory.h"
-#include "device/common/device.h"
-
 #define SET_ENABLE_REGS_BASE	0xE000E100
 #define CLR_ENABLE_REGS_BASE	0xE000E180
 #define SET_PEND_REGS_BASE		0xE000E200
@@ -16,6 +11,16 @@
 #define PRIORITY_REGS_BASE		0xE000E400
 #define ACTIVE_REGS_BASE		0xE000E300
 #define ICSR					0xE000ED04	//Interrupt Control and State Register
+
+typedef struct INT_nd{
+	int INT_ID;
+	int priority;
+	int exec;
+	struct INT_nd *nextINT;
+}INT_nd;
+
+int newINT;
+int isINT;//	1 : Handler mode (in INT),		0 : Thread mode (not in INT)
 
 //MemManage are listed by all instructions that perform explicit data memory access
 void MemManage(void);
@@ -35,6 +40,10 @@ void DebugMonitor(void);
 //HardFault exceptions can arise from escalation of faults listed against an instruction, but are not 
 //themselves listed.
 void HardFault(void);
+
+void doEvent();
+void exitEvent();
+int INTover();
 
 int NVIC_getVectorTable();
 int NVIC_ICSR_getINT();

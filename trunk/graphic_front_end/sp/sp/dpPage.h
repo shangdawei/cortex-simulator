@@ -20,4 +20,9 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnPaint();
+	
+	long arrow_x,arrow_y;
+	float angle, arrow_r;
+public:
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
