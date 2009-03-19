@@ -203,6 +203,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\cortex\device\device_INTcontrol.c"
+				>
+			</File>
+			<File
+				RelativePath="..\cortex\device\device_leds.c"
+				>
+			</File>
+			<File
+				RelativePath="..\cortex\device\device_motor.c"
+				>
+			</File>
+			<File
 				RelativePath="..\cortex\elf_loader.c"
 				>
 			</File>
@@ -255,6 +267,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\cortex\processor.c"
+				>
+			</File>
+			<File
 				RelativePath="..\cortex\register.c"
 				>
 			</File>
@@ -302,6 +318,14 @@
 				RelativePath="..\cortex\thumb_special_data_pro.c"
 				>
 			</File>
+			<File
+				RelativePath="..\cortex\vbus-dev\vbus_interface.c"
+				>
+			</File>
+			<File
+				RelativePath="..\cortex\vbus-dev\win32\vbus_win32.c"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Í·ÎÄ¼þ"
@@ -318,6 +342,22 @@
 			</File>
 			<File
 				RelativePath="..\cortex\decode.h"
+				>
+			</File>
+			<File
+				RelativePath="..\cortex\device\common\device.h"
+				>
+			</File>
+			<File
+				RelativePath="..\cortex\device\device_INTcontrol.h"
+				>
+			</File>
+			<File
+				RelativePath="..\cortex\device\device_leds.h"
+				>
+			</File>
+			<File
+				RelativePath="..\cortex\device\device_motor.h"
 				>
 			</File>
 			<File
@@ -369,6 +409,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\cortex\processor.h"
+				>
+			</File>
+			<File
 				RelativePath="..\cortex\register.h"
 				>
 			</File>
@@ -406,6 +450,14 @@
 			</File>
 			<File
 				RelativePath="..\cortex\thumb_special_data_pro.h"
+				>
+			</File>
+			<File
+				RelativePath="..\cortex\vbus-dev\vbus_interface.h"
+				>
+			</File>
+			<File
+				RelativePath="..\cortex\vbus-dev\win32\vbus_win32.h"
 				>
 			</File>
 		</Filter>

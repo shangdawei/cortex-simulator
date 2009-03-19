@@ -3,14 +3,9 @@
 
 #include "../../win32/interface.h"
 #include "../../memory.h"
+#include "../../helper_procedures.h"
 
 #define NINT 20
-
-typedef struct{
-	int memory_addr;
-	int device_addr;
-	int addr_length;
-}MemTran;
 
 typedef struct INTpend{
 	int INT_ID;
@@ -19,16 +14,18 @@ typedef struct INTpend{
 	struct INTpend *nextINT;
 }INTpend;
 
-typedef struct DeviceDes{
-	int device_ID;
-	MemTran *memtran_table;
+typedef struct deviceDes{
+	char dname[128];
+	unsigned int memlist[128];
+	void (*devDo)();
+	void (*devInital)();
 
-	struct DeviceDes *nextdevice;
-}DeviceDes;
+	struct deviceDes *nextdev;
+}deviceDes;
 
 static int INTlist[NINT];
 
-static DeviceDes *device_list;
+static deviceDes *device_list;
 static int ndevice;
 
 static INTpend *Pending;//event pending queue

@@ -5,6 +5,7 @@
 #include "../exceptions.h"
 #include "../register.h"
 #include "../device/common/device.h"
+#include "../helper_procedures.h"
 
 bool initalBuffer();
 bool eventUpdate();
